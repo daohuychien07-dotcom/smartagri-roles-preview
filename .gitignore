@@ -1,0 +1,9 @@
+# Hệ điều hành
+Thumbs.db
+.DS_Store
+desktop.ini
+
+# Editor / IDE
+.vscode/
+.idea/
+*.log
