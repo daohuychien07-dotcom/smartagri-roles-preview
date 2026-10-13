@@ -116,7 +116,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (ham) ham.addEventListener('click', () => document.body.classList.toggle('collapsed'));
 
   // Nút chưa làm (demo)
-  document.querySelectorAll('.nav-item[data-page="users"], .nav-item[data-page="settings"]').forEach(n => {
+  document.querySelectorAll('.nav-item[data-page="settings"]').forEach(n => {
     n.addEventListener('click', () => showToast('Trang này đang được phát triển (demo)'));
   });
 

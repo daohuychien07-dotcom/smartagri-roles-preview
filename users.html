@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SmartAgri - Quản lý tài khoản người dùng</title>
+  <meta name="description" content="Trang quản lý tài khoản người dùng, phân quyền và xét duyệt của hệ thống CropMate AI (SmartAgri)">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+  <link rel="stylesheet" href="css/users.css">
+  <script src="js/users.js" defer></script>
+</head>
+<body>
+
+  <!-- ================= SIDEBAR ================= -->
+  <aside class="sidebar">
+    <div class="logo">
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M12 2v20" stroke="#15803d" stroke-width="1.8" stroke-linecap="round"/>
+        <path d="M12 6C9 6 6.5 4.5 6 2c3 0 5.5 1.5 6 4z" fill="#16a34a"/>
+        <path d="M12 6c3 0 5.5-1.5 6-4-3 0-5.5 1.5-6 4z" fill="#15803d"/>
+        <path d="M12 11c-3.5 0-6.5-1.8-7.2-4.5C8.2 6.5 11 8.3 12 11z" fill="#22c55e"/>
+        <path d="M12 11c3.5 0 6.5-1.8 7.2-4.5C15.8 6.5 13 8.3 12 11z" fill="#16a34a"/>
+        <path d="M12 16.5c-3.8 0-7-2-7.8-5C7.8 12 10.8 13.8 12 16.5z" fill="#86efac"/>
+        <path d="M12 16.5c3.8 0 7-2 7.8-5-3.6.5-6.6 2.3-7.8 5z" fill="#22c55e"/>
+      </svg>
+      <span>SmartAgri</span>
+    </div>
+
+    <nav class="nav" aria-label="Điều hướng chính">
+      <a href="dashboard.html" class="nav-item" data-page="dashboard">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v16a2 2 0 0 0 2 2h16"/><path d="M7 13l3-3 4 4 5-6"/></svg>
+        <span class="label">Dashboard</span>
+      </a>
+      <a href="index.html" class="nav-item" data-page="crops">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 20A7 7 0 0 1 4 13c0-4 3-8 9-9 5-1 7-1 7-1s0 2-1 7c-1 6-5 9-8 10z"/><path d="M12 12c-2 2-4 5-4 8"/></svg>
+        <span class="label">Danh mục cây trồng</span>
+      </a>
+      <a href="users.html" class="nav-item active" data-page="users">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        <span class="label">Tài khoản người dùng</span>
+      </a>
+      <button type="button" class="nav-item" data-page="settings">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        <span class="label">Cấu hình hệ thống</span>
+      </button>
+    </nav>
+
+    <button type="button" class="logout-btn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      <span class="label">Đăng xuất</span>
+    </button>
+
+    <footer class="side-footer">
+      <p>&copy; 2026 SmartAgri</p>
+      <ul>
+        <li><a href="#" onclick="return false;">Hỗ trợ</a></li>
+        <li><a href="#" onclick="return false;">Điều khoản</a></li>
+      </ul>
+    </footer>
+  </aside>
+
+  <!-- ================= MAIN ================= -->
+  <main>
+    <header>
+      <button type="button" class="hamburger" id="hamburger" title="Thu gọn menu">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+      <div class="header-titles">
+        <h1>Quản lý tài khoản người dùng</h1>
+        <p>Kiểm soát an ninh, phân quyền và cấp tài khoản cho người dùng hệ thống.</p>
+      </div>
+      <div class="header-user">
+        <button type="button" class="bell" title="Thông báo">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          <span class="badge">3</span>
+        </button>
+        <div class="user-chip">
+          <div class="avatar" aria-label="Ảnh đại diện quản trị viên">AD</div>
+          <span class="role">Admin</span>
+          <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+      </div>
+    </header>
+
+    <section class="content users" aria-label="Nội dung quản lý tài khoản">
+
+      <!-- ===== Toolbar lọc ===== -->
+      <section class="users-toolbar" aria-label="Bộ lọc và tìm kiếm">
+        <div class="search-box">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.5" y2="16.5"/></svg>
+          <input type="text" id="searchInput" placeholder="Tìm kiếm theo Họ và tên / Email / Số điện thoại" autocomplete="off">
+        </div>
+        <div class="filter-field">
+          <label for="roleFilter">Vai trò</label>
+          <div class="select-wrap">
+            <select id="roleFilter" aria-label="Lọc theo vai trò">
+              <option value="">Tất cả</option>
+              <option value="Nông dân">Nông dân</option>
+              <option value="Chuyên gia">Chuyên gia</option>
+              <option value="Điều phối HTX">Điều phối HTX</option>
+              <option value="Admin">Admin</option>
+            </select>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+        </div>
+        <div class="filter-field">
+          <label for="statusFilter">Trạng thái</label>
+          <div class="select-wrap">
+            <select id="statusFilter" aria-label="Lọc theo trạng thái">
+              <option value="">Tất cả</option>
+              <option value="active">Đang hoạt động</option>
+              <option value="pending">Đang chờ duyệt</option>
+              <option value="locked">Đã khóa</option>
+            </select>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+        </div>
+        <button type="button" class="btn-ghost green" id="btnRefresh">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+          Làm mới
+        </button>
+      </section>
+
+      <!-- ===== Danh sách ===== -->
+      <div class="list-head">
+        <h2 class="list-title">Danh sách người dùng</h2>
+        <p class="list-hint" id="listHint" hidden></p>
+      </div>
+
+      <!-- Bulk actions -->
+      <div class="bulk-bar" id="bulkBar" hidden>
+        <span id="bulkCount">0 đã chọn</span>
+        <div class="bulk-actions">
+          <button type="button" class="btn-mini red" id="bulkLock">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            Khóa tài khoản
+          </button>
+          <button type="button" class="btn-mini green" id="bulkUnlock">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/></svg>
+            Mở khóa
+          </button>
+        </div>
+      </div>
+
+      <section class="table-card" aria-label="Bảng tài khoản người dùng">
+        <table id="userTable">
+          <thead>
+            <tr>
+              <th class="col-check"><input type="checkbox" id="selectAll" aria-label="Chọn tất cả"></th>
+              <th class="col-avatar">Avatar</th>
+              <th>Họ và tên</th>
+              <th>Email / SĐT</th>
+              <th>Vai trò</th>
+              <th>Ngày đăng ký</th>
+              <th>Trạng thái</th>
+              <th>Thao tác</th>
+            </tr>
+          </thead>
+          <tbody id="userTbody"></tbody>
+        </table>
+      </section>
+
+      <!-- ===== Pagination ===== -->
+      <div class="table-foot">
+        <span id="rangeText" class="range-text"></span>
+        <div class="pager">
+          <label class="page-size">Hiển thị
+            <select id="pageSize" aria-label="Số dòng mỗi trang">
+              <option value="5">5</option>
+              <option value="10" selected>10</option>
+              <option value="25">25</option>
+            </select>
+          </label>
+          <div class="pager-btns" id="pagerBtns"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ================= MODAL: KHÓA TÀI KHOẢN ================= -->
+  <div class="modal-backdrop" id="lockBackdrop">
+    <div class="modal modal-sm" role="dialog" aria-modal="true" aria-labelledby="lockTitle">
+      <button type="button" class="modal-close" id="lockClose" aria-label="Đóng">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+      <h2 id="lockTitle">
+        <span class="lock-ic red"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span>
+        Khóa tài khoản
+      </h2>
+      <p class="modal-lead">Bạn có chắc chắn muốn khóa tài khoản của <b id="lockTarget">người dùng này</b>?</p>
+      <form id="lockForm" novalidate>
+        <div class="form-field full" id="f-lockReason">
+          <label for="lockReason">Lý do khóa tài khoản <span class="req">*</span></label>
+          <textarea id="lockReason" rows="3" placeholder="Ví dụ: Vi phạm điều khoản sử dụng, nghi ngờ gian lận..."></textarea>
+          <span class="err-msg">Vui lòng nhập lý do khóa tài khoản</span>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn-cancel" id="lockCancel">Hủy</button>
+          <button type="submit" class="btn-save danger">Khóa tài khoản</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ================= MODAL: ĐỔI VAI TRÒ ================= -->
+  <div class="modal-backdrop" id="roleBackdrop">
+    <div class="modal modal-sm" role="dialog" aria-modal="true" aria-labelledby="roleTitle">
+      <button type="button" class="modal-close" id="roleClose" aria-label="Đóng">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+      <h2 id="roleTitle">
+        <span class="lock-ic green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 11h-6"/></svg></span>
+        Đổi vai trò
+      </h2>
+      <p class="modal-lead">Chọn vai trò mới cho <b id="roleTarget">người dùng này</b>.</p>
+      <form id="roleForm" novalidate>
+        <div class="form-field full">
+          <label for="roleSelect">Vai trò</label>
+          <select id="roleSelect">
+            <option value="Nông dân">Nông dân</option>
+            <option value="Chuyên gia">Chuyên gia</option>
+            <option value="Điều phối HTX">Điều phối HTX</option>
+            <option value="Admin">Admin</option>
+          </select>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn-cancel" id="roleCancel">Hủy</button>
+          <button type="submit" class="btn-save">Lưu vai trò</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+    <span id="toastMsg"></span>
+  </div>
+
+</body>
+</html>
