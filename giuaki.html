@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SmartAgri - Quản lý danh mục cây trồng &amp; Sâu bệnh</title>
+  <meta name="description" content="Trang quản trị danh mục cây trồng & sâu bệnh của hệ thống CropMate AI (SmartAgri)">
+  <style>
+/* ============================================================
+   SmartAgri - Quản lý danh mục cây trồng & Sâu bệnh
+   CropMate AI - CSE122 BTL
+   ============================================================ */
+
+:root {
+  --green-900: #14532d;
+  --green-800: #166534;
+  --green-700: #15803d;
+  --green-600: #16a34a;
+  --green-500: #22c55e;
+  --green-100: #dcfce7;
+  --green-50: #f0fdf4;
+  --yellow-700: #a16207;
+  --yellow-600: #ca8a04;
+  --yellow-100: #fef9c3;
+  --gray-900: #111827;
+  --gray-700: #374151;
+  --gray-500: #6b7280;
+  --gray-400: #9ca3af;
+  --gray-300: #d1d5db;
+  --gray-200: #e5e7eb;
+  --gray-100: #f3f4f6;
+  --gray-50: #f9fafb;
+  --red-600: #dc2626;
+  --red-500: #ef4444;
+  --red-100: #fee2e2;
+  --radius: 10px;
+  --shadow: 0 1px 3px rgba(0, 0, 0, .08);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: "Segoe UI", "Be Vietnam Pro", "Inter", -apple-system, sans-serif;
+  background: var(--gray-50);
+  color: var(--gray-900);
+  font-size: 14px;
+  display: flex;
+  min-height: 100vh;
+}
+
+/* ============ SIDEBAR ============ */
+.sidebar {
+  width: 260px;
+  background: #fff;
+  border-right: 1px solid var(--gray-200);
+  display: flex;
+  flex-direction: column;
+  padding: 20px 16px;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  flex-shrink: 0;
+}
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 8px 24px;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--green-800);
+}
+.logo svg { width: 36px; height: 36px; }
+.nav { display: flex; flex-direction: column; gap: 6px; flex: 1; }
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border-radius: var(--radius);
+  color: var(--gray-700);
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  background: none;
+  font-size: 14px;
+  text-align: left;
+  transition: background .15s, color .15s;
+}
+.nav-item svg { width: 20px; height: 20px; flex-shrink: 0; }
+.nav-item:hover { background: var(--gray-100); }
+.nav-item.active { background: var(--green-700); color: #fff; }
+.logout-btn {
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  padding: 14px; border-radius: var(--radius);
+  border: 1px solid var(--green-700); color: var(--green-700);
+  background: #fff; font-weight: 600; font-size: 14px; cursor: pointer;
+  transition: background .15s;
+}
+.logout-btn:hover { background: var(--green-50); }
+.logout-btn svg { width: 18px; height: 18px; }
+
+/* Footer nhỏ trong sidebar */
+.side-footer {
+  margin-top: 14px;
+  padding: 14px 8px 4px;
+  border-top: 1px solid var(--gray-200);
+  color: var(--gray-400);
+  font-size: 12px;
+}
+.side-footer p { margin-bottom: 6px; }
+.side-footer ul { list-style: none; display: flex; gap: 12px; }
+.side-footer a { color: var(--gray-400); text-decoration: none; }
+.side-footer a:hover { color: var(--green-700); }
+
+/* ============ HEADER ============ */
+main { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+header {
+  background: #fff;
+  border-bottom: 1px solid var(--gray-200);
+  padding: 18px 32px;
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+.hamburger {
+  border: none; background: none; cursor: pointer; padding: 6px;
+  color: var(--gray-500); margin-top: 4px;
+}
+.hamburger svg { width: 22px; height: 22px; }
+.header-titles { flex: 1; }
+.header-titles h1 { font-size: 24px; color: var(--green-800); font-weight: 700; }
+.header-titles p { color: var(--gray-500); margin-top: 6px; font-size: 14px; }
+.header-user { display: flex; align-items: center; gap: 16px; }
+.bell {
+  position: relative; border: none; background: none; cursor: pointer;
+  color: var(--gray-700); padding: 6px;
+}
+.bell svg { width: 24px; height: 24px; }
+.bell .badge {
+  position: absolute; top: 0; right: 0;
+  background: var(--yellow-600); color: #fff;
+  font-size: 10px; font-weight: 700;
+  min-width: 16px; height: 16px; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center; padding: 0 3px;
+}
+.user-chip { display: flex; align-items: center; gap: 10px; }
+.avatar {
+  width: 42px; height: 42px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--green-600), var(--green-800));
+  color: #fff; font-weight: 700; font-size: 14px;
+  display: flex; align-items: center; justify-content: center;
+  border: 2px solid var(--gray-200);
+}
+.user-chip .role { color: var(--gray-500); font-size: 13px; }
+.chev { color: var(--gray-400); width: 16px; height: 16px; }
+
+/* ============ CONTENT ============ */
+.content { padding: 24px 32px; flex: 1; }
+.content-top {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 20px; gap: 16px; flex-wrap: wrap;
+}
+.tabs { display: flex; gap: 32px; border-bottom: 2px solid var(--gray-200); }
+.tab {
+  border: none; background: none; cursor: pointer;
+  font-size: 16px; font-weight: 600; color: var(--gray-700);
+  padding: 10px 4px; margin-bottom: -2px;
+  border-bottom: 2px solid transparent;
+}
+.tab.active { color: var(--green-700); border-bottom-color: var(--green-700); }
+.tab:hover:not(.active) { color: var(--green-700); }
+.btn-primary {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--green-700); color: #fff;
+  border: none; border-radius: var(--radius);
+  padding: 12px 20px; font-size: 14px; font-weight: 600; cursor: pointer;
+  transition: background .15s;
+}
+.btn-primary:hover { background: var(--green-800); }
+.btn-primary svg { width: 16px; height: 16px; }
+
+/* ============ TOOLBAR ============ */
+.toolbar {
+  display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin-bottom: 16px;
+}
+.search-box {
+  flex: 1; min-width: 260px; position: relative;
+}
+.search-box svg {
+  position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+  width: 18px; height: 18px; color: var(--gray-400);
+}
+.search-box input {
+  width: 100%; padding: 11px 14px 11px 42px;
+  border: 1px solid var(--gray-200); border-radius: var(--radius);
+  font-size: 14px; outline: none; background: #fff;
+}
+.search-box input:focus { border-color: var(--green-600); box-shadow: 0 0 0 3px var(--green-100); }
+.select-wrap { position: relative; }
+.select-wrap select {
+  appearance: none; padding: 11px 38px 11px 14px;
+  border: 1px solid var(--gray-200); border-radius: var(--radius);
+  font-size: 14px; background: #fff; color: var(--gray-700);
+  outline: none; cursor: pointer; min-width: 160px;
+}
+.select-wrap select:focus { border-color: var(--green-600); }
+.select-wrap svg {
+  position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+  width: 16px; height: 16px; color: var(--gray-500); pointer-events: none;
+}
+.btn-ghost {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: #fff; border: 1px solid var(--gray-200); border-radius: var(--radius);
+  padding: 11px 16px; font-size: 14px; font-weight: 500; color: var(--gray-700);
+  cursor: pointer;
+}
+.btn-ghost:hover { background: var(--gray-100); }
+.btn-ghost svg { width: 16px; height: 16px; }
+.btn-ghost.green { color: var(--green-700); border-color: var(--green-100); }
+
+/* ============ TABLE ============ */
+.table-card {
+  background: #fff; border: 1px solid var(--gray-200);
+  border-radius: var(--radius); overflow-x: auto;
+}
+table { width: 100%; border-collapse: collapse; }
+thead th {
+  text-align: left; font-size: 13px; color: var(--gray-700);
+  font-weight: 600; padding: 14px 16px;
+  border-bottom: 1px solid var(--gray-200);
+  background: var(--gray-50); white-space: nowrap;
+}
+tbody td { padding: 18px 16px; border-bottom: 1px solid var(--gray-100); vertical-align: middle; }
+tbody tr:last-child td { border-bottom: none; }
+tbody tr:hover { background: var(--gray-50); }
+.mono { font-variant-numeric: tabular-nums; color: var(--gray-700); }
+.badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 5px 12px; border-radius: 999px; font-size: 13px; font-weight: 600;
+  white-space: nowrap;
+}
+.badge::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+.badge.active { background: var(--green-100); color: var(--green-800); }
+.badge.archived { background: var(--gray-100); color: var(--gray-500); }
+.badge.disabled { background: var(--yellow-100); color: var(--yellow-700); }
+.row-actions { display: flex; flex-direction: column; gap: 6px; align-items: flex-start; }
+.btn-edit {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: #fff; border: 1px solid var(--green-700); color: var(--green-700);
+  border-radius: 8px; padding: 6px 14px; font-size: 13px; font-weight: 600; cursor: pointer;
+}
+.btn-edit:hover { background: var(--green-50); }
+.btn-edit svg { width: 13px; height: 13px; }
+.btn-link {
+  background: none; border: none; cursor: pointer;
+  color: var(--yellow-600); font-size: 13px; font-weight: 600; padding: 2px 0;
+}
+.btn-link:hover { text-decoration: underline; }
+.btn-link.restore { color: var(--green-700); }
+.empty-state { text-align: center; padding: 48px 16px; color: var(--gray-400); }
+
+/* ============ MODAL ============ */
+.modal-backdrop {
+  position: fixed; inset: 0; background: rgba(17, 24, 39, .45);
+  display: none; align-items: center; justify-content: center;
+  z-index: 50; padding: 24px;
+}
+.modal-backdrop.open { display: flex; }
+.modal {
+  background: #fff; border-radius: 14px;
+  width: 100%; max-width: 980px; max-height: 90vh; overflow-y: auto;
+  padding: 28px 32px; position: relative;
+}
+.modal h2 { font-size: 18px; font-weight: 700; margin-bottom: 22px; }
+.modal-close {
+  position: absolute; top: 20px; right: 20px;
+  border: none; background: none; cursor: pointer; color: var(--gray-500);
+}
+.modal-close svg { width: 20px; height: 20px; }
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px 24px; }
+.form-field { display: flex; flex-direction: column; gap: 8px; }
+.form-field.full { grid-column: 1 / -1; }
+.form-field label { font-size: 14px; font-weight: 500; color: var(--gray-700); }
+.form-field label .req { color: var(--red-500); }
+.form-field input, .form-field select {
+  padding: 12px 14px; border: 1px solid var(--gray-300); border-radius: 8px;
+  font-size: 14px; outline: none; width: 100%; background: #fff;
+}
+.form-field input:focus, .form-field select:focus { border-color: var(--green-600); box-shadow: 0 0 0 3px var(--green-100); }
+.form-field.error input, .form-field.error select { border-color: var(--red-500); background: #fffafa; }
+.err-msg { color: var(--red-600); font-size: 13px; display: none; }
+.form-field.error .err-msg { display: block; }
+.cycle-inputs { display: flex; align-items: center; gap: 10px; }
+.cycle-inputs input { flex: 1; }
+.cycle-sep { color: var(--gray-400); }
+.stages-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.stage-chip {
+  display: inline-flex; align-items: center; gap: 8px;
+  border: 1px solid var(--gray-300); border-radius: 8px;
+  padding: 10px 14px; background: #fff; font-size: 14px; color: var(--gray-700);
+}
+.stage-chip input {
+  border: none; outline: none; font-size: 14px; width: 130px; background: transparent; padding: 0;
+}
+.stage-x { border: none; background: none; color: var(--gray-400); cursor: pointer; padding: 0; display: flex; }
+.stage-x:hover { color: var(--red-500); }
+.stage-x svg { width: 14px; height: 14px; }
+.stage-arrow { color: var(--gray-400); display: flex; }
+.stage-arrow svg { width: 16px; height: 16px; }
+.btn-add-stage {
+  display: inline-flex; align-items: center; gap: 6px;
+  border: 1px dashed var(--gray-300); background: #fff; color: var(--gray-700);
+  border-radius: 8px; padding: 10px 14px; font-size: 13px; font-weight: 600; cursor: pointer;
+}
+.btn-add-stage:hover { border-color: var(--green-600); color: var(--green-700); }
+.btn-add-stage svg { width: 14px; height: 14px; }
+.modal-actions { display: flex; justify-content: flex-end; gap: 12px; margin-top: 28px; }
+.btn-cancel {
+  background: #fff; border: 1px solid var(--gray-300); color: var(--gray-700);
+  border-radius: 8px; padding: 11px 26px; font-size: 14px; font-weight: 600; cursor: pointer;
+}
+.btn-cancel:hover { background: var(--gray-100); }
+.btn-save {
+  background: var(--green-700); border: none; color: #fff;
+  border-radius: 8px; padding: 11px 30px; font-size: 14px; font-weight: 600; cursor: pointer;
+}
+.btn-save:hover { background: var(--green-800); }
+
+/* ============ TOAST ============ */
+.toast {
+  position: fixed; bottom: 24px; right: 24px; z-index: 60;
+  background: var(--green-800); color: #fff;
+  padding: 14px 20px; border-radius: var(--radius);
+  font-size: 14px; font-weight: 500;
+  display: flex; align-items: center; gap: 10px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, .2);
+  opacity: 0; transform: translateY(12px); pointer-events: none;
+  transition: opacity .25s, transform .25s;
+}
+.toast.show { opacity: 1; transform: translateY(0); }
+.toast svg { width: 18px; height: 18px; flex-shrink: 0; }
+
+/* Sidebar thu gọn (desktop) */
+body.collapsed .sidebar { width: 84px; }
+body.collapsed .logo span, body.collapsed .nav-item .label, body.collapsed .logout-btn .label { display: none; }
+body.collapsed .nav-item, body.collapsed .logout-btn { justify-content: center; }
+body.collapsed .side-footer { display: none; }
+body.collapsed .content, body.collapsed header { padding-left: 24px; padding-right: 24px; }
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+/* Tablet nhỏ / màn hình vừa */
+@media (max-width: 1100px) {
+  .content { padding: 20px 24px; }
+  header { padding: 16px 24px; }
+  .header-titles h1 { font-size: 20px; }
+  .header-titles p { font-size: 13px; }
+}
+
+/* Tablet: form modal về 1 cột */
+@media (max-width: 900px) {
+  .form-grid { grid-template-columns: 1fr; }
+  .tabs { gap: 20px; }
+  .tab { font-size: 15px; }
+}
+
+/* Mobile: sidebar chuyển thành thanh trên cùng */
+@media (max-width: 768px) {
+  body { flex-direction: column; }
+  .sidebar {
+    width: 100%;
+    height: auto;
+    position: static;
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 12px 16px;
+    border-right: none;
+    border-bottom: 1px solid var(--gray-200);
+  }
+  .logo { padding: 0 8px 0 0; font-size: 17px; }
+  .logo svg { width: 28px; height: 28px; }
+  .nav { flex-direction: row; flex-wrap: wrap; gap: 4px; flex: 1; }
+  .nav-item { padding: 9px 12px; font-size: 13px; gap: 8px; }
+  .nav-item svg { width: 17px; height: 17px; }
+  .logout-btn { padding: 9px 12px; }
+  .logout-btn .label { display: none; }
+  .side-footer { display: none; }
+
+  header { padding: 14px 16px; flex-wrap: wrap; }
+  .header-titles h1 { font-size: 18px; }
+  .header-titles p { font-size: 12px; }
+  .user-chip .role { display: none; }
+  .avatar { width: 34px; height: 34px; font-size: 12px; }
+
+  .content { padding: 16px; }
+  .content-top { gap: 12px; }
+  .btn-primary { width: 100%; justify-content: center; }
+  .search-box { min-width: 100%; }
+  .select-wrap select { min-width: 0; flex: 1; width: 100%; }
+  .select-wrap { flex: 1; }
+  .toolbar { gap: 8px; }
+
+  /* Bảng cuộn ngang trên mobile thay vì vỡ layout */
+  .table-card { overflow-x: auto; }
+  table { min-width: 720px; }
+
+  .modal { padding: 20px; max-height: 95vh; }
+  .cycle-inputs { flex-wrap: wrap; }
+  .stage-chip input { width: 100px; }
+  .toast { left: 16px; right: 16px; bottom: 16px; justify-content: center; }
+}
+
+/* Mobile nhỏ: chỉ hiện icon trong menu */
+@media (max-width: 520px) {
+  .nav-item .label { display: none; }
+  .nav-item { padding: 9px 10px; }
+  .header-titles p { display: none; }
+  .tabs { width: 100%; }
+  .tab { flex: 1; text-align: center; }
+}
+  </style>
+</head>
+<body>
+
+  <!-- ================= SIDEBAR ================= -->
+  <aside class="sidebar">
+    <div class="logo">
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M12 2v20" stroke="#15803d" stroke-width="1.8" stroke-linecap="round"/>
+        <path d="M12 6C9 6 6.5 4.5 6 2c3 0 5.5 1.5 6 4z" fill="#16a34a"/>
+        <path d="M12 6c3 0 5.5-1.5 6-4-3 0-5.5 1.5-6 4z" fill="#15803d"/>
+        <path d="M12 11c-3.5 0-6.5-1.8-7.2-4.5C8.2 6.5 11 8.3 12 11z" fill="#22c55e"/>
+        <path d="M12 11c3.5 0 6.5-1.8 7.2-4.5C15.8 6.5 13 8.3 12 11z" fill="#16a34a"/>
+        <path d="M12 16.5c-3.8 0-7-2-7.8-5C7.8 12 10.8 13.8 12 16.5z" fill="#86efac"/>
+        <path d="M12 16.5c3.8 0 7-2 7.8-5-3.6.5-6.6 2.3-7.8 5z" fill="#22c55e"/>
+      </svg>
+      <span>SmartAgri</span>
+    </div>
+
+    <nav class="nav" aria-label="Điều hướng chính">
+      <button type="button" class="nav-item" data-page="dashboard">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v16a2 2 0 0 0 2 2h16"/><path d="M7 13l3-3 4 4 5-6"/></svg>
+        <span class="label">Dashboard</span>
+      </button>
+      <button type="button" class="nav-item active" data-page="crops">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 20A7 7 0 0 1 4 13c0-4 3-8 9-9 5-1 7-1 7-1s0 2-1 7c-1 6-5 9-8 10z"/><path d="M12 12c-2 2-4 5-4 8"/></svg>
+        <span class="label">Danh mục cây trồng</span>
+      </button>
+      <button type="button" class="nav-item" data-page="users">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        <span class="label">Tài khoản người dùng</span>
+      </button>
+      <button type="button" class="nav-item" data-page="settings">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        <span class="label">Cấu hình hệ thống</span>
+      </button>
+    </nav>
+
+    <button type="button" class="logout-btn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      <span class="label">Đăng xuất</span>
+    </button>
+
+    <footer class="side-footer">
+      <p>&copy; 2026 SmartAgri</p>
+      <ul>
+        <li><a href="#" onclick="return false;">Hỗ trợ</a></li>
+        <li><a href="#" onclick="return false;">Điều khoản</a></li>
+      </ul>
+    </footer>
+  </aside>
+
+  <!-- ================= MAIN ================= -->
+  <main>
+    <header>
+      <button type="button" class="hamburger" id="hamburger" title="Thu gọn menu">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+      <div class="header-titles">
+        <h1>Quản lý danh mục cây trồng &amp; Sâu bệnh</h1>
+        <p>Thiết lập và chuẩn hóa dữ liệu nền tảng cho bộ lọc của Nông dân, HTX và gợi ý của AI.</p>
+      </div>
+      <div class="header-user">
+        <button type="button" class="bell" title="Thông báo">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          <span class="badge">2</span>
+        </button>
+        <div class="user-chip">
+          <div class="avatar" aria-label="Ảnh đại diện quản trị viên">QT</div>
+          <span class="role">Quản trị hệ thống</span>
+          <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+      </div>
+    </header>
+
+    <section class="content" aria-label="Nội dung quản lý danh mục">
+      <div class="content-top">
+        <div class="tabs" role="tablist" aria-label="Danh mục dữ liệu">
+          <button type="button" class="tab active" data-tab="crops" role="tab" aria-selected="true">Danh mục Cây trồng</button>
+          <button type="button" class="tab" data-tab="pests" role="tab" aria-selected="false">Danh mục Sâu bệnh hại</button>
+        </div>
+        <button type="button" class="btn-primary" id="btnAdd">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          <span id="btnAddLabel">Thêm cây trồng mới</span>
+        </button>
+      </div>
+
+      <section class="toolbar" aria-label="Bộ lọc và tìm kiếm">
+        <div class="search-box">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.5" y2="16.5"/></svg>
+          <input type="text" id="searchInput" placeholder="Tìm kiếm theo tên cây trồng hoặc tên loại sâu bệnh">
+        </div>
+        <div class="select-wrap" id="groupFilterWrap">
+          <select id="groupFilter" aria-label="Lọc theo nhóm cây trồng">
+            <option value="">Nhóm cây trồng: Tất cả</option>
+            <option>Lương thực</option>
+            <option>Cây công nghiệp</option>
+            <option>Cây ăn trái</option>
+            <option>Rau màu</option>
+          </select>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="select-wrap">
+          <select id="statusFilter" aria-label="Lọc theo trạng thái">
+            <option value="">Trạng thái: Tất cả</option>
+            <option value="active">Đang hoạt động</option>
+            <option value="archived">Lưu trữ</option>
+            <option value="disabled">Vô hiệu hóa</option>
+          </select>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <button type="button" class="btn-ghost" id="btnFilterExtra">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg>
+          Bộ lọc khác
+        </button>
+        <button type="button" class="btn-ghost green" id="btnRefresh">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+          Làm mới
+        </button>
+      </section>
+
+      <section class="table-card" aria-label="Bảng dữ liệu danh mục">
+        <table id="dataTable"></table>
+      </section>
+    </section>
+  </main>
+
+  <!-- ================= MODAL ================= -->
+  <div class="modal-backdrop" id="modalBackdrop">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <h2 id="modalTitle">Thêm cây trồng mới</h2>
+      <button type="button" class="modal-close" id="modalClose" aria-label="Đóng cửa sổ">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+
+      <!-- Form cây trồng: validate bằng JavaScript (novalidate tắt validate mặc định của trình duyệt) -->
+      <form id="cropForm" novalidate>
+        <div class="form-grid">
+          <div class="form-field" id="f-name">
+            <label for="inpName">Tên cây</label>
+            <input type="text" id="inpName" placeholder="Ví dụ: Lúa" autocomplete="off">
+            <span class="err-msg">Vui lòng nhập tên cây trồng</span>
+          </div>
+          <div class="form-field" id="f-cycle">
+            <label for="inpCycleMin">Chu kỳ sinh trưởng (ngày) <span class="req">*</span></label>
+            <div class="cycle-inputs">
+              <input type="number" id="inpCycleMin" placeholder="Nhập số ngày (từ)" min="0">
+              <span class="cycle-sep" aria-hidden="true">–</span>
+              <input type="number" id="inpCycleMax" placeholder="Nhập số ngày (đến)" min="0" aria-label="Chu kỳ sinh trưởng đến ngày">
+            </div>
+            <span class="err-msg" id="cycleErr">Vui lòng nhập chu kỳ sinh trưởng</span>
+          </div>
+          <div class="form-field">
+            <label for="inpVariety">Tên giống</label>
+            <input type="text" id="inpVariety" placeholder="Ví dụ: IR50404" autocomplete="off">
+          </div>
+          <div class="form-field">
+            <label for="inpGroup">Nhóm cây trồng</label>
+            <select id="inpGroup">
+              <option>Lương thực</option>
+              <option>Cây công nghiệp</option>
+              <option>Cây ăn trái</option>
+              <option>Rau màu</option>
+            </select>
+          </div>
+          <div class="form-field full" id="f-stages">
+            <label>Các giai đoạn sinh trưởng <span class="req">*</span></label>
+            <div class="stages-row" id="stagesRow"></div>
+            <span class="err-msg">Vui lòng thêm ít nhất một giai đoạn sinh trưởng</span>
+          </div>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn-cancel" id="btnCancel">Hủy</button>
+          <button type="submit" class="btn-save" id="btnSave">Lưu</button>
+        </div>
+      </form>
+
+      <!-- Form sâu bệnh -->
+      <form id="pestForm" novalidate style="display:none">
+        <div class="form-grid">
+          <div class="form-field" id="fp-name">
+            <label for="inpPestName">Tên sâu bệnh <span class="req">*</span></label>
+            <input type="text" id="inpPestName" placeholder="Ví dụ: Rầy nâu" autocomplete="off">
+            <span class="err-msg">Vui lòng nhập tên sâu bệnh</span>
+          </div>
+          <div class="form-field">
+            <label for="inpPestGroup">Nhóm</label>
+            <select id="inpPestGroup">
+              <option>Côn trùng</option>
+              <option>Nấm</option>
+              <option>Vi khuẩn</option>
+              <option>Virus</option>
+              <option>Tuyến trùng</option>
+              <option>Cỏ dại</option>
+            </select>
+          </div>
+          <div class="form-field full">
+            <label for="inpPestCrops">Cây trồng ảnh hưởng</label>
+            <input type="text" id="inpPestCrops" placeholder="Ví dụ: Lúa, Cà phê" autocomplete="off">
+          </div>
+          <div class="form-field full" id="fp-symptom">
+            <label for="inpPestSymptom">Triệu chứng nhận biết <span class="req">*</span></label>
+            <input type="text" id="inpPestSymptom" placeholder="Ví dụ: Lá chuyển vàng, đốm nâu ở mép lá" autocomplete="off">
+            <span class="err-msg">Vui lòng nhập triệu chứng nhận biết</span>
+          </div>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn-cancel" id="btnCancelPest">Hủy</button>
+          <button type="submit" class="btn-save" id="btnSavePest">Lưu</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+    <span id="toastMsg"></span>
+  </div>
+
+  <script>
+/* ============================================================
+   SmartAgri - Quản lý danh mục cây trồng & Sâu bệnh
+   CropMate AI - CSE122 BTL
+   Vanilla JavaScript: render dữ liệu, tìm kiếm, lọc, chuyển tab,
+   modal thêm/sửa, form validation, thay đổi trạng thái, toast.
+   ============================================================ */
+
+// ==================== DỮ LIỆU ====================
+let crops = [
+  { id: 'CAY-001', name: 'Lúa',         variety: 'IR50404',         group: 'Lương thực',      cycleMin: 120, cycleMax: 140, stages: ['Giao mạ', 'Đẻ nhánh', 'Làm đòng', 'Trổ bông', 'Thu hoạch'], status: 'active' },
+  { id: 'CAY-002', name: 'Cà phê',      variety: 'Robusta',          group: 'Cây công nghiệp', cycleMin: 365, cycleMax: 420, stages: ['Ươm cây', 'Kiến thiết cơ bản', 'Kinh doanh', 'Thu hoạch'], status: 'active' },
+  { id: 'CAY-003', name: 'Cây ăn trái', variety: 'Xoài Cát Hòa Lộc', group: 'Cây ăn trái',     cycleMin: 180, cycleMax: 240, stages: ['Ra lộc', 'Ra hoa', 'Đậu quả', 'Phát triển quả', 'Thu hoạch'], status: 'active' },
+  { id: 'CAY-004', name: 'Ngô',         variety: 'NK66',             group: 'Lương thực',      cycleMin: 90,  cycleMax: 110, stages: ['Gieo trồng', 'Chậm cây', 'Trổ cờ', 'Thu hoạch'], status: 'archived' },
+];
+
+let pests = [
+  { id: 'SB-001', name: 'Rầy nâu',     group: 'Côn trùng', crops: 'Lúa',                 symptom: 'Lá chuyển vàng, cháy đầu lá, đốm nâu',              status: 'active' },
+  { id: 'SB-002', name: 'Bệnh đạo ôn', group: 'Nấm',       crops: 'Lúa',                 symptom: 'Vết bệnh hình ô van màu xám trên lá',                status: 'active' },
+  { id: 'SB-003', name: 'Sâu vẽ bùa',  group: 'Côn trùng', crops: 'Cây ăn trái, Cà phê', symptom: 'Lá bị cuốn, khô đầu lá, giảm diện tích quang hợp',   status: 'disabled' },
+  { id: 'SB-004', name: 'Bệnh gỉ sắt', group: 'Nấm',       crops: 'Cà phê',              symptom: 'Đốm vàng cam ở mặt dưới lá',                         status: 'archived' },
+];
+
+const statusLabel = { active: 'Đang hoạt động', archived: 'Lưu trữ', disabled: 'Vô hiệu hóa' };
+let currentTab = 'crops';
+let editingId = null;
+
+// ==================== RENDER BẢNG ====================
+const table = document.getElementById('dataTable');
+const searchInput = document.getElementById('searchInput');
+const groupFilter = document.getElementById('groupFilter');
+const statusFilter = document.getElementById('statusFilter');
+const groupFilterWrap = document.getElementById('groupFilterWrap');
+
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]));
+}
+
+function getFiltered() {
+  const q = searchInput.value.trim().toLowerCase();
+  const g = groupFilter.value;
+  const s = statusFilter.value;
+  if (currentTab === 'crops') {
+    return crops.filter(c =>
+      (!q || c.name.toLowerCase().includes(q) || c.variety.toLowerCase().includes(q)) &&
+      (!g || c.group === g) && (!s || c.status === s)
+    );
+  }
+  return pests.filter(p =>
+    (!q || p.name.toLowerCase().includes(q) || p.symptom.toLowerCase().includes(q) || p.crops.toLowerCase().includes(q)) &&
+    (!g || p.group === g) && (!s || p.status === s)
+  );
+}
+
+function renderTable() {
+  const rows = getFiltered();
+  if (currentTab === 'crops') {
+    table.innerHTML = `
+      <thead><tr>
+        <th>Mã cây</th><th>Tên cây trồng</th><th>Tên giống</th>
+        <th>Chu kỳ sinh trưởng (ngày)</th><th>Danh sách các giai đoạn mẫu</th>
+        <th>Trạng thái</th><th>Thao tác</th>
+      </tr></thead>
+      <tbody>${rows.length ? rows.map(c => `
+        <tr>
+          <td class="mono">${c.id}</td>
+          <td>${escapeHtml(c.name)}</td>
+          <td>${escapeHtml(c.variety || '—')}</td>
+          <td class="mono">${c.cycleMin} - ${c.cycleMax}</td>
+          <td>${c.stages.map(escapeHtml).join(' → ')}</td>
+          <td><span class="badge ${c.status}">${statusLabel[c.status]}</span></td>
+          <td><div class="row-actions">
+            <button type="button" class="btn-edit" onclick="openCropModal('${c.id}')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.83 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5z"/></svg>
+              Sửa
+            </button>
+            ${c.status !== 'archived'
+              ? `<button type="button" class="btn-link" onclick="setStatus('${c.id}','archived','crop')">Lưu trữ / Vô hiệu hóa</button>`
+              : `<button type="button" class="btn-link restore" onclick="setStatus('${c.id}','active','crop')">Khôi phục</button>`}
+          </div></td>
+        </tr>`).join('') : `<tr><td colspan="7" class="empty-state">Không tìm thấy dữ liệu phù hợp</td></tr>`}
+      </tbody>`;
+  } else {
+    table.innerHTML = `
+      <thead><tr>
+        <th>Mã sâu bệnh</th><th>Tên sâu bệnh</th><th>Nhóm</th>
+        <th>Cây trồng ảnh hưởng</th><th>Triệu chứng nhận biết</th>
+        <th>Trạng thái</th><th>Thao tác</th>
+      </tr></thead>
+      <tbody>${rows.length ? rows.map(p => `
+        <tr>
+          <td class="mono">${p.id}</td>
+          <td>${escapeHtml(p.name)}</td>
+          <td>${escapeHtml(p.group)}</td>
+          <td>${escapeHtml(p.crops || '—')}</td>
+          <td>${escapeHtml(p.symptom)}</td>
+          <td><span class="badge ${p.status}">${statusLabel[p.status]}</span></td>
+          <td><div class="row-actions">
+            <button type="button" class="btn-edit" onclick="openPestModal('${p.id}')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.83 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5z"/></svg>
+              Sửa
+            </button>
+            ${p.status !== 'archived'
+              ? `<button type="button" class="btn-link" onclick="setStatus('${p.id}','archived','pest')">Lưu trữ / Vô hiệu hóa</button>`
+              : `<button type="button" class="btn-link restore" onclick="setStatus('${p.id}','active','pest')">Khôi phục</button>`}
+          </div></td>
+        </tr>`).join('') : `<tr><td colspan="7" class="empty-state">Không tìm thấy dữ liệu phù hợp</td></tr>`}
+      </tbody>`;
+  }
+}
+
+// ==================== CHUYỂN TAB ====================
+const tabs = document.querySelectorAll('.tab');
+tabs.forEach(t => t.addEventListener('click', () => {
+  tabs.forEach(x => x.classList.remove('active'));
+  t.classList.add('active');
+  currentTab = t.dataset.tab;
+  document.getElementById('btnAddLabel').textContent = currentTab === 'crops' ? 'Thêm cây trồng mới' : 'Thêm sâu bệnh mới';
+  groupFilterWrap.style.display = currentTab === 'crops' ? '' : 'none';
+  searchInput.placeholder = currentTab === 'crops'
+    ? 'Tìm kiếm theo tên cây trồng hoặc tên loại sâu bệnh'
+    : 'Tìm kiếm theo tên sâu bệnh hoặc triệu chứng';
+  renderTable();
+}));
+
+// ==================== TÌM KIẾM & LỌC ====================
+searchInput.addEventListener('input', renderTable);
+groupFilter.addEventListener('change', renderTable);
+statusFilter.addEventListener('change', renderTable);
+
+document.getElementById('btnRefresh').addEventListener('click', () => {
+  searchInput.value = ''; groupFilter.value = ''; statusFilter.value = '';
+  renderTable();
+  showToast('Đã làm mới dữ liệu');
+});
+
+document.getElementById('btnFilterExtra').addEventListener('click', () => {
+  const v = statusFilter.value;
+  statusFilter.value = v === 'active' ? '' : 'active';
+  renderTable();
+});
+
+// ==================== MODAL CÂY TRỒNG ====================
+const backdrop = document.getElementById('modalBackdrop');
+const stagesRow = document.getElementById('stagesRow');
+const arrowSvg = `<span class="stage-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></span>`;
+const xSvg = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`;
+
+function renderStages(stages, editableLast) {
+  stagesRow.innerHTML = stages.map((s, i) => {
+    const chip = editableLast && i === stages.length - 1
+      ? `<span class="stage-chip"><input id="newStageInput" type="text" placeholder="Nhập tên giai đoạn"><button type="button" class="stage-x" onclick="commitStage()">${xSvg}</button></span>`
+      : `<span class="stage-chip">${escapeHtml(s)}<button type="button" class="stage-x" onclick="removeStage(${i})">${xSvg}</button></span>`;
+    return (i > 0 ? arrowSvg : '') + chip;
+  }).join('') + `
+    <button type="button" class="btn-add-stage" onclick="addStageInput()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      Thêm giai đoạn
+    </button>`;
+}
+
+let draftStages = [];
+
+window.addStageInput = function () {
+  if (document.getElementById('newStageInput')) { document.getElementById('newStageInput').focus(); return; }
+  draftStages.push('');
+  renderStages(draftStages, true);
+  const inp = document.getElementById('newStageInput');
+  inp.focus();
+  inp.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); commitStage(); } });
+};
+
+window.commitStage = function () {
+  const inp = document.getElementById('newStageInput');
+  if (inp && inp.value.trim()) draftStages[draftStages.length - 1] = inp.value.trim();
+  else draftStages = draftStages.filter(s => s !== '');
+  renderStages(draftStages, false);
+  clearError('f-stages');
+};
+
+window.removeStage = function (i) {
+  draftStages.splice(i, 1);
+  renderStages(draftStages, false);
+};
+
+function clearError(id) { document.getElementById(id).classList.remove('error'); }
+
+function openCropModal(id) {
+  editingId = id || null;
+  document.getElementById('cropForm').style.display = '';
+  document.getElementById('pestForm').style.display = 'none';
+  document.getElementById('modalTitle').textContent = id ? 'Chỉnh sửa cây trồng' : 'Thêm cây trồng mới';
+  const item = id ? crops.find(c => c.id === id) : null;
+  document.getElementById('inpName').value = item ? item.name : '';
+  document.getElementById('inpVariety').value = item ? item.variety : '';
+  document.getElementById('inpGroup').value = item ? item.group : 'Lương thực';
+  document.getElementById('inpCycleMin').value = item ? item.cycleMin : '';
+  document.getElementById('inpCycleMax').value = item ? item.cycleMax : '';
+  draftStages = item ? [...item.stages] : ['Giao mạ', 'Đẻ nhánh', 'Làm đòng', 'Trổ bông', 'Thu hoạch'];
+  renderStages(draftStages, false);
+  ['f-name', 'f-cycle', 'f-stages'].forEach(clearError);
+  backdrop.classList.add('open');
+}
+window.openCropModal = openCropModal;
+
+function openPestModal(id) {
+  editingId = id || null;
+  document.getElementById('cropForm').style.display = 'none';
+  document.getElementById('pestForm').style.display = '';
+  document.getElementById('modalTitle').textContent = id ? 'Chỉnh sửa sâu bệnh' : 'Thêm sâu bệnh mới';
+  const item = id ? pests.find(p => p.id === id) : null;
+  document.getElementById('inpPestName').value = item ? item.name : '';
+  document.getElementById('inpPestGroup').value = item ? item.group : 'Côn trùng';
+  document.getElementById('inpPestCrops').value = item ? item.crops : '';
+  document.getElementById('inpPestSymptom').value = item ? item.symptom : '';
+  ['fp-name', 'fp-symptom'].forEach(clearError);
+  backdrop.classList.add('open');
+}
+window.openPestModal = openPestModal;
+
+// ==================== ĐÓNG MỞ MODAL ====================
+document.getElementById('btnAdd').addEventListener('click', () => {
+  currentTab === 'crops' ? openCropModal(null) : openPestModal(null);
+});
+document.getElementById('modalClose').addEventListener('click', () => backdrop.classList.remove('open'));
+document.getElementById('btnCancel').addEventListener('click', () => backdrop.classList.remove('open'));
+document.getElementById('btnCancelPest').addEventListener('click', () => backdrop.classList.remove('open'));
+backdrop.addEventListener('click', e => { if (e.target === backdrop) backdrop.classList.remove('open'); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') backdrop.classList.remove('open'); });
+
+// ==================== VALIDATE & LƯU CÂY TRỒNG ====================
+document.getElementById('cropForm').addEventListener('submit', e => {
+  e.preventDefault(); // không cho trình duyệt tải lại trang, tự validate bằng JS
+
+  const name = document.getElementById('inpName').value.trim();
+  const min = document.getElementById('inpCycleMin').value;
+  const max = document.getElementById('inpCycleMax').value;
+  let ok = true;
+
+  if (!name) { document.getElementById('f-name').classList.add('error'); ok = false; }
+  else clearError('f-name');
+
+  const cycleErr = document.getElementById('cycleErr');
+  if (min === '' || max === '') {
+    cycleErr.textContent = 'Vui lòng nhập chu kỳ sinh trưởng';
+    document.getElementById('f-cycle').classList.add('error'); ok = false;
+  } else if (Number(min) < 0 || Number(max) < 0) {
+    cycleErr.textContent = 'Số ngày không được là số âm';
+    document.getElementById('f-cycle').classList.add('error'); ok = false;
+  } else if (Number(min) > Number(max)) {
+    cycleErr.textContent = 'Số ngày "từ" không được lớn hơn số ngày "đến"';
+    document.getElementById('f-cycle').classList.add('error'); ok = false;
+  } else clearError('f-cycle');
+
+  const stages = draftStages.filter(s => s && s.trim());
+  if (!stages.length) { document.getElementById('f-stages').classList.add('error'); ok = false; }
+  else clearError('f-stages');
+
+  if (!ok) return;
+
+  if (editingId) {
+    const c = crops.find(x => x.id === editingId);
+    Object.assign(c, {
+      name,
+      variety: document.getElementById('inpVariety').value.trim(),
+      group: document.getElementById('inpGroup').value,
+      cycleMin: Number(min),
+      cycleMax: Number(max),
+      stages
+    });
+    showToast('Đã cập nhật cây trồng ' + c.id);
+  } else {
+    const seq = String(crops.length + 1).padStart(3, '0');
+    crops.push({
+      id: 'CAY-' + seq, name,
+      variety: document.getElementById('inpVariety').value.trim(),
+      group: document.getElementById('inpGroup').value,
+      cycleMin: Number(min), cycleMax: Number(max),
+      stages, status: 'active'
+    });
+    showToast('Đã thêm cây trồng mới');
+  }
+  backdrop.classList.remove('open');
+  renderTable();
+});
+
+// ==================== VALIDATE & LƯU SÂU BỆNH ====================
+document.getElementById('pestForm').addEventListener('submit', e => {
+  e.preventDefault();
+
+  const name = document.getElementById('inpPestName').value.trim();
+  const symptom = document.getElementById('inpPestSymptom').value.trim();
+  let ok = true;
+  if (!name) { document.getElementById('fp-name').classList.add('error'); ok = false; } else clearError('fp-name');
+  if (!symptom) { document.getElementById('fp-symptom').classList.add('error'); ok = false; } else clearError('fp-symptom');
+  if (!ok) return;
+
+  const data = {
+    name,
+    group: document.getElementById('inpPestGroup').value,
+    crops: document.getElementById('inpPestCrops').value.trim(),
+    symptom
+  };
+  if (editingId) {
+    Object.assign(pests.find(p => p.id === editingId), data);
+    showToast('Đã cập nhật sâu bệnh ' + editingId);
+  } else {
+    const seq = String(pests.length + 1).padStart(3, '0');
+    pests.push({ id: 'SB-' + seq, ...data, status: 'active' });
+    showToast('Đã thêm sâu bệnh mới');
+  }
+  backdrop.classList.remove('open');
+  renderTable();
+});
+
+// ==================== THAY ĐỔI TRẠNG THÁI ====================
+window.setStatus = function (id, status, type) {
+  const list = type === 'crop' ? crops : pests;
+  const item = list.find(x => x.id === id);
+  if (item) {
+    item.status = status;
+    renderTable();
+    showToast(status === 'active' ? 'Đã khôi phục ' + id : 'Đã lưu trữ ' + id);
+  }
+};
+
+// ==================== TOAST ====================
+let toastTimer;
+function showToast(msg) {
+  const toast = document.getElementById('toast');
+  document.getElementById('toastMsg').textContent = msg;
+  toast.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toast.classList.remove('show'), 2600);
+}
+
+// ==================== KHÁC ====================
+document.getElementById('hamburger').addEventListener('click', () => document.body.classList.toggle('collapsed'));
+document.querySelectorAll('.nav-item').forEach(n => n.addEventListener('click', () => {
+  document.querySelectorAll('.nav-item').forEach(x => x.classList.remove('active'));
+  n.classList.add('active');
+}));
+document.querySelector('.logout-btn').addEventListener('click', () => showToast('Đăng xuất thành công (demo)'));
+
+// Khởi tạo: render bảng lần đầu
+renderTable();
+  </script>
+</body>
+</html>
