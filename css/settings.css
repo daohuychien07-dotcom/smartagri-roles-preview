@@ -1,0 +1,98 @@
+/* ============================================================
+   SmartAgri - Cấu hình hệ thống
+   CropMate AI - CSE122 BTL (dùng chung biến màu với style.css)
+   ============================================================ */
+
+.content.settings { padding-top: 24px; }
+.settings-wrap { display: grid; grid-template-columns: 240px 1fr; gap: 24px; align-items: start; }
+
+/* ============ TAB DỌC ============ */
+.settings-tabs {
+  display: flex; flex-direction: column; gap: 4px;
+  background: #fff; border: 1px solid var(--gray-200);
+  border-radius: 14px; padding: 10px; box-shadow: var(--shadow);
+  position: sticky; top: 20px;
+}
+.stab {
+  display: flex; align-items: center; gap: 12px;
+  border: none; background: none; cursor: pointer;
+  padding: 12px 14px; border-radius: 10px;
+  font-size: 14px; font-weight: 600; color: var(--gray-700); text-align: left;
+  transition: background .15s, color .15s;
+}
+.stab svg { width: 18px; height: 18px; flex-shrink: 0; }
+.stab:hover { background: var(--gray-100); }
+.stab.active { background: var(--green-700); color: #fff; }
+
+/* ============ PANEL ============ */
+.settings-panels { min-width: 0; }
+.spanel { display: none; }
+.spanel.active { display: block; animation: fadeIn .2s ease; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+.panel-card {
+  background: #fff; border: 1px solid var(--gray-200);
+  border-radius: 14px; box-shadow: var(--shadow); overflow: hidden;
+}
+.panel-card-head { padding: 22px 26px 6px; }
+.panel-card-head h2 { font-size: 18px; font-weight: 700; color: var(--gray-900); }
+.panel-card-head p { font-size: 13px; color: var(--gray-500); margin-top: 4px; }
+
+/* Form row: label trái, control phải */
+.frow {
+  display: flex; align-items: center; justify-content: space-between; gap: 24px;
+  padding: 18px 26px; border-top: 1px solid var(--gray-100);
+}
+.frow:first-of-type { border-top: none; }
+.frow-label { display: flex; flex-direction: column; gap: 3px; max-width: 60%; }
+.frow-label label { font-size: 14px; font-weight: 600; color: var(--gray-900); }
+.frow-label small { font-size: 12.5px; color: var(--gray-500); }
+.frow input[type="text"], .frow input[type="email"], .frow input[type="password"],
+.frow input[type="number"], .frow select {
+  min-width: 260px; max-width: 320px;
+  padding: 10px 12px; border: 1px solid var(--gray-300); border-radius: 8px;
+  font-size: 14px; outline: none; background: #fff; color: var(--gray-900);
+}
+.frow input:focus, .frow select:focus { border-color: var(--green-600); box-shadow: 0 0 0 3px var(--green-100); }
+.frow input[type="number"] { max-width: 140px; }
+.frow.error input, .frow.error select { border-color: var(--red-500); background: #fffafa; }
+
+/* ============ TOGGLE SWITCH ============ */
+.switch { position: relative; display: inline-block; width: 46px; height: 26px; flex-shrink: 0; }
+.switch input { opacity: 0; width: 0; height: 0; }
+.slider {
+  position: absolute; inset: 0; cursor: pointer;
+  background: var(--gray-300); border-radius: 999px; transition: background .2s;
+}
+.slider::before {
+  content: ""; position: absolute; height: 20px; width: 20px; left: 3px; top: 3px;
+  background: #fff; border-radius: 50%; transition: transform .2s; box-shadow: 0 1px 3px rgba(0,0,0,.25);
+}
+.switch input:checked + .slider { background: var(--green-600); }
+.switch input:checked + .slider::before { transform: translateX(20px); }
+.switch input:focus-visible + .slider { box-shadow: 0 0 0 3px var(--green-100); }
+
+/* ============ ACTION BAR ============ */
+.settings-actions {
+  display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+  margin-top: 20px;
+}
+.saved-note { font-size: 13px; color: var(--gray-500); }
+.saved-note b { color: var(--green-700); }
+.settings-actions-btns { display: flex; gap: 12px; margin-left: auto; }
+
+/* ============ RESPONSIVE ============ */
+@media (max-width: 900px) {
+  .settings-wrap { grid-template-columns: 1fr; }
+  .settings-tabs { position: static; flex-direction: row; overflow-x: auto; }
+  .stab { white-space: nowrap; }
+  .stab span { display: inline; }
+}
+@media (max-width: 640px) {
+  .frow { flex-direction: column; align-items: flex-start; gap: 10px; }
+  .frow-label { max-width: 100%; }
+  .frow input, .frow select { min-width: 0; width: 100%; max-width: 100%; }
+  .frow.frow-toggle { flex-direction: row; align-items: center; }
+  .settings-actions-btns { width: 100%; }
+  .settings-actions-btns button { flex: 1; }
+}

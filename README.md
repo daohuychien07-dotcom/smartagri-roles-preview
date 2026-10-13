@@ -8,7 +8,16 @@
 
 ## Tên trang đã thực hiện
 
-**Quản lý danh mục cây trồng & Sâu bệnh (trang Quản trị hệ thống)**
+**Quản lý danh mục cây trồng & Sâu bệnh (trang Quản trị hệ thống)** — trang chính theo yêu cầu giữa kỳ.
+
+Hệ thống admin SmartAgri hiện có **4 trang** dùng chung sidebar/header và bộ biến màu:
+
+| Trang | File | Vai trò |
+|-------|------|---------|
+| Dashboard | `dashboard.html` | Bảng điều khiển tổng quan: thẻ thống kê, biểu đồ người dùng active, nhật ký hoạt động |
+| Danh mục cây trồng | `index.html` | **Trang chính** - quản lý danh mục cây trồng & sâu bệnh hại |
+| Tài khoản người dùng | `users.html` | Quản lý tài khoản: lọc, khóa/mở khóa, duyệt, đổi vai trò, phân trang |
+| Cấu hình hệ thống | `settings.html` | Cấu hình vận hành: chung, AI, thông báo, bảo mật, dữ liệu & sao lưu |
 
 ## Mục đích của trang
 
@@ -40,11 +49,20 @@ Không sử dụng backend, framework hay thư viện ngoài (theo đúng phạm
 
 ```
 project/
-├── index.html          # Trang Quản lý danh mục cây trồng & Sâu bệnh
+├── index.html          # Trang chính: Quản lý danh mục cây trồng & Sâu bệnh
+├── dashboard.html      # Bảng điều khiển tổng quan
+├── users.html          # Quản lý tài khoản người dùng
+├── settings.html       # Cấu hình hệ thống
 ├── css/
-│   └── style.css       # Toàn bộ định dạng + responsive
+│   ├── style.css       # Nền: sidebar/header/table/modal/toast + responsive (dùng chung)
+│   ├── dashboard.css   # Style riêng cho dashboard (stat card, biểu đồ, nhật ký)
+│   ├── users.css       # Style riêng cho trang tài khoản (badge vai trò, skeleton...)
+│   └── settings.css    # Style riêng cho cấu hình (tab dọc, toggle switch...)
 ├── js/
-│   └── main.js         # Dữ liệu mẫu + toàn bộ tương tác
+│   ├── main.js         # Logic trang danh mục
+│   ├── dashboard.js    # Logic dashboard (biểu đồ, toggle ngày/tuần)
+│   ├── users.js        # Logic tài khoản (lọc, khóa/duyệt, phân trang)
+│   └── settings.js     # Logic cấu hình (tab, lưu localStorage, reset)
 ├── assets/
 │   └── mockup-desktop.png  # Ảnh thiết kế tham khảo (desktop)
 └── README.md
@@ -52,7 +70,7 @@ project/
 
 ## Cách chạy
 
-Mở trực tiếp file `index.html` bằng trình duyệt (Chrome, Edge...). Không cần cài đặt gì thêm.
+Mở trực tiếp một trong các file `index.html` / `dashboard.html` / `users.html` / `settings.html` bằng trình duyệt (Chrome, Edge...). Các trang nối với nhau qua menu sidebar. Không cần cài đặt gì thêm.
 
 ## Responsive
 

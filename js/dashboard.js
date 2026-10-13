@@ -115,11 +115,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const ham = document.getElementById('hamburger');
   if (ham) ham.addEventListener('click', () => document.body.classList.toggle('collapsed'));
 
-  // Nút chưa làm (demo)
-  document.querySelectorAll('.nav-item[data-page="settings"]').forEach(n => {
-    n.addEventListener('click', () => showToast('Trang này đang được phát triển (demo)'));
-  });
-
   // Đăng xuất + chuông thông báo (demo)
   const logout = document.querySelector('.logout-btn');
   if (logout) logout.addEventListener('click', () => showToast('Đăng xuất thành công (demo)'));

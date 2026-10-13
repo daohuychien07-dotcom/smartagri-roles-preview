@@ -339,9 +339,8 @@ document.addEventListener('DOMContentLoaded', () => {
   // ESC đóng modal
   document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeLockModal(); closeRoleModal(); } });
 
-  // Hamburger + nav demo + logout/bell
+  // Hamburger + logout/bell
   $('#hamburger').addEventListener('click', () => document.body.classList.toggle('collapsed'));
-  document.querySelector('.nav-item[data-page="settings"]').addEventListener('click', () => showToast('Trang này đang được phát triển (demo)'));
   document.querySelector('.logout-btn').addEventListener('click', () => showToast('Đăng xuất thành công (demo)'));
   document.querySelector('.bell').addEventListener('click', () => showToast('Bạn có 3 thông báo mới (demo)'));
 });
