@@ -1,0 +1,216 @@
+/* ============================================================
+   SmartAgri - Trang Đăng nhập với tư cách (login)
+   CropMate AI - CSE122 BTL
+   Dùng lại biến màu + modal + toast từ css/style.css
+   ============================================================ */
+
+.login-page {
+  display: block;
+  min-height: 100vh;
+  background: #f6faf6;
+}
+
+.login-shell { display: flex; min-height: 100vh; }
+
+/* ============ HERO BÊN TRÁI ============ */
+.login-hero {
+  position: relative;
+  width: 38%;
+  min-width: 330px;
+  overflow: hidden;
+  background: linear-gradient(160deg, #dff0dc, #eaf6ea);
+}
+.hero-img {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+}
+.hero-curve {
+  position: absolute; top: 0; right: -1px;
+  width: 110px; height: 100%;
+  z-index: 1;
+}
+.hero-brand {
+  position: absolute; top: 24px; left: 24px; z-index: 2;
+  display: flex; align-items: center; gap: 12px;
+  background: rgba(255, 255, 255, .95);
+  border: 1px solid var(--green-100);
+  border-radius: 14px;
+  padding: 10px 18px 10px 12px;
+  box-shadow: 0 6px 18px rgba(20, 83, 45, .12);
+}
+.brand-logo { width: 34px; height: 34px; flex-shrink: 0; }
+.brand-text { display: flex; flex-direction: column; }
+.brand-name { font-size: 20px; font-weight: 800; color: var(--green-800); letter-spacing: .2px; }
+.brand-tag { font-size: 11px; color: var(--gray-500); }
+
+/* ============ KHUNG BÊN PHẢI ============ */
+.login-main {
+  flex: 1; min-width: 0;
+  position: relative;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 40px 48px;
+}
+
+/* style.css đặt <header> = thanh trắng có border-bottom -> trả về dạng khối cho trang login */
+.login-head {
+  display: block;
+  background: none;
+  border-bottom: none;
+  padding: 0;
+  text-align: center;
+  margin-bottom: 34px;
+}
+.login-head h1 {
+  font-size: 44px; font-weight: 800;
+  color: var(--green-900); letter-spacing: -.5px;
+}
+.head-divider {
+  display: flex; align-items: center; justify-content: center;
+  gap: 12px; margin: 14px 0 10px;
+}
+.head-divider .line { width: 118px; height: 2px; border-radius: 2px; background: linear-gradient(90deg, rgba(134, 239, 172, 0), #86efac); }
+.head-divider .line:last-child { background: linear-gradient(90deg, #86efac, rgba(134, 239, 172, 0)); }
+.head-divider svg { width: 26px; height: 26px; }
+.head-sub { font-size: 17px; font-weight: 600; color: var(--green-800); }
+
+/* ============ LƯỚI THẺ VAI TRÒ ============ */
+.role-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(280px, 1fr));
+  gap: 22px 26px;
+  width: 100%; max-width: 880px;
+}
+.role-card {
+  position: relative;
+  display: flex; align-items: center; gap: 18px;
+  background: #fff;
+  border: 1px solid var(--gray-200);
+  border-radius: 18px;
+  padding: 20px 22px 24px;
+  text-decoration: none;
+  box-shadow: 0 2px 10px rgba(20, 83, 45, .05);
+  transition: transform .18s, box-shadow .18s, border-color .18s;
+}
+.role-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--green-500);
+  box-shadow: 0 14px 28px rgba(20, 83, 45, .14);
+}
+.role-card:focus-visible { outline: 3px solid var(--green-100); outline-offset: 3px; }
+.role-img { width: 112px; height: 112px; flex-shrink: 0; border-radius: 50%; }
+.role-name { flex: 1; font-size: 21px; font-weight: 800; line-height: 1.25; color: var(--green-900); }
+.role-go {
+  position: absolute; right: 18px; bottom: 16px;
+  width: 38px; height: 38px; border-radius: 50%;
+  background: var(--green-900); color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  transition: transform .18s, background .18s;
+}
+.role-go svg { width: 20px; height: 20px; }
+.role-card:hover .role-go { transform: translateX(4px); background: var(--green-700); }
+
+/* Vai trò chọn gần nhất (JS thêm class .is-last) */
+.role-card.is-last {
+  border-color: var(--green-500);
+  box-shadow: 0 0 0 3px var(--green-100), 0 2px 10px rgba(20, 83, 45, .05);
+}
+.role-card.is-last::after {
+  content: "Gần nhất";
+  position: absolute; top: -10px; left: 18px;
+  background: var(--green-700); color: #fff;
+  font-size: 11px; font-weight: 700; letter-spacing: .3px;
+  padding: 3px 10px; border-radius: 999px;
+}
+
+/* Trạng thái đang đăng nhập: ẩn mũi tên, hiện vòng quay */
+.role-card.is-loading { pointer-events: none; }
+.role-card.is-loading .role-go svg { display: none; }
+.role-card.is-loading .role-go {
+  background: var(--green-700);
+  border: 3px solid var(--green-100);
+  border-top-color: #fff;
+  animation: role-spin .7s linear infinite;
+}
+@keyframes role-spin { to { transform: rotate(360deg); } }
+
+/* ============ CHÂN TRANG ============ */
+.login-foot {
+  margin-top: 34px;
+  width: 100%; max-width: 880px;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 16px; flex-wrap: wrap;
+}
+.foot-note { font-size: 13px; color: var(--gray-400); }
+.btn-register {
+  display: inline-flex; align-items: center; gap: 10px;
+  background: #fff; border: 1.5px solid var(--green-700);
+  color: var(--green-800); border-radius: 999px;
+  padding: 12px 22px; font-size: 15px; font-weight: 700; cursor: pointer;
+  transition: background .15s, box-shadow .15s, transform .15s;
+}
+.btn-register svg { width: 18px; height: 18px; }
+.btn-register:hover { background: var(--green-50); box-shadow: 0 8px 18px rgba(20, 83, 45, .14); transform: translateY(-1px); }
+
+.leaf-deco {
+  position: absolute; right: 0; bottom: 0;
+  width: 210px; opacity: .8; pointer-events: none;
+}
+
+/* ============ MODAL ĐĂNG KÝ ============ */
+.reg-modal { max-width: 780px; }
+.reg-hint { font-size: 14px; color: var(--gray-500); margin: -14px 0 22px; }
+.reg-hint strong { color: var(--yellow-700); }
+.check-line {
+  display: flex; align-items: flex-start; gap: 10px;
+  font-size: 14px; color: var(--gray-700); cursor: pointer;
+}
+.check-line a { color: var(--green-700); font-weight: 600; }
+/* style.css đặt width:100% cho mọi input trong .form-field -> trả lại cỡ cho checkbox */
+.check-line input[type="checkbox"] {
+  width: 18px; height: 18px; padding: 0; border: none; box-shadow: none;
+  margin-top: 1px; accent-color: var(--green-700); flex-shrink: 0;
+}
+
+.sr-only {
+  position: absolute; width: 1px; height: 1px;
+  padding: 0; margin: -1px; overflow: hidden;
+  clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
+/* ============ RESPONSIVE ============ */
+@media (max-width: 1180px) {
+  .role-grid { grid-template-columns: 1fr; max-width: 520px; }
+  .login-head h1 { font-size: 36px; }
+  .login-hero { width: 34%; min-width: 280px; }
+}
+
+@media (max-width: 860px) {
+  .login-shell { flex-direction: column; }
+  .login-hero { width: 100%; min-width: 0; height: 240px; }
+  .hero-curve { display: none; }
+  .hero-brand { top: 16px; left: 16px; padding: 8px 14px 8px 10px; }
+  .brand-logo { width: 28px; height: 28px; }
+  .brand-name { font-size: 17px; }
+  .login-main { padding: 30px 20px 70px; justify-content: flex-start; }
+  .login-head { margin-bottom: 24px; }
+}
+
+@media (max-width: 520px) {
+  .login-head h1 { font-size: 28px; }
+  .head-divider .line { width: 52px; }
+  .head-sub { font-size: 15px; }
+  .role-card { padding: 14px 16px 18px; gap: 14px; }
+  .role-img { width: 76px; height: 76px; }
+  .role-name { font-size: 17px; }
+  .role-go { width: 32px; height: 32px; right: 14px; bottom: 12px; }
+  .login-foot { flex-direction: column; align-items: stretch; text-align: center; }
+  .btn-register { justify-content: center; }
+  .leaf-deco { width: 140px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .role-card, .role-go, .btn-register { transition: none; }
+  .role-card.is-loading .role-go { animation: none; }
+}

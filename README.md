@@ -10,10 +10,11 @@
 
 **Quản lý danh mục cây trồng & Sâu bệnh (trang Quản trị hệ thống)** — trang chính theo yêu cầu giữa kỳ.
 
-Hệ thống admin SmartAgri hiện có **4 trang** dùng chung sidebar/header và bộ biến màu:
+Hệ thống admin SmartAgri hiện có **5 trang** dùng chung sidebar/header và bộ biến màu:
 
 | Trang | File | Vai trò |
 |-------|------|---------|
+| Đăng nhập | `login.html` | Trang đầu tiên: chọn vai trò (Chuyên gia, Điều phối HTX, Nông dân, Quản trị viên) + form đăng ký có validate |
 | Dashboard | `dashboard.html` | Bảng điều khiển tổng quan: thẻ thống kê, biểu đồ người dùng active, nhật ký hoạt động |
 | Danh mục cây trồng | `index.html` | **Trang chính** - quản lý danh mục cây trồng & sâu bệnh hại |
 | Tài khoản người dùng | `users.html` | Quản lý tài khoản: lọc, khóa/mở khóa, duyệt, đổi vai trò, phân trang |
@@ -37,6 +38,12 @@ Trang dành cho **Quản trị viên hệ thống**. Dùng để thiết lập v
 - **Toggle** thu gọn sidebar (nút hamburger).
 - **Thông báo toast** khi thao tác thành công.
 
+### Chức năng ở các trang mở rộng
+
+- **`login.html`**: 4 thẻ vai trò là link thật (`<a>`) — JavaScript chặn lại để lưu vai trò vào `localStorage`, hiện trạng thái "đang đăng nhập" rồi chuyển vào hệ thống; modal **Đăng ký/ Tạo tài khoản** có validate (tên ≥ 3 ký tự, regex email, số điện thoại 10 chữ số, mật khẩu ≥ 6 và nhập lại khớp, bắt buộc đồng ý điều khoản).
+- **`session.js`**: mọi trang quản trị đọc vai trò đã chọn để hiển thị tên + avatar ở header; nút Đăng xuất xóa phiên và trở về `login.html`.
+- **`notifications.js`**: chuông thông báo mở dropdown, đánh dấu đã đọc, cập nhật badge (dùng chung cho 4 trang).
+
 ## Công nghệ sử dụng
 
 - **HTML5**: semantic HTML (`header`, `nav`, `main`, `section`, `aside`, `footer`, `form`, `label`, `table`...).
@@ -50,27 +57,37 @@ Không sử dụng backend, framework hay thư viện ngoài (theo đúng phạm
 ```
 project/
 ├── index.html          # Trang chính: Quản lý danh mục cây trồng & Sâu bệnh
+├── login.html          # Đăng nhập chọn vai trò + form đăng ký
 ├── dashboard.html      # Bảng điều khiển tổng quan
 ├── users.html          # Quản lý tài khoản người dùng
 ├── settings.html       # Cấu hình hệ thống
+├── giuaki.html         # Bản 1 file tự chứa của trang danh mục (để nộp giữa kỳ)
 ├── css/
 │   ├── style.css       # Nền: sidebar/header/table/modal/toast + responsive (dùng chung)
+│   ├── login.css       # Style riêng cho trang đăng nhập (hero, lưới thẻ vai trò)
 │   ├── dashboard.css   # Style riêng cho dashboard (stat card, biểu đồ, nhật ký)
 │   ├── users.css       # Style riêng cho trang tài khoản (badge vai trò, skeleton...)
-│   └── settings.css    # Style riêng cho cấu hình (tab dọc, toggle switch...)
+│   ├── settings.css    # Style riêng cho cấu hình (tab dọc, toggle switch...)
+│   └── notifications.css  # Chuông thông báo (dùng chung)
 ├── js/
 │   ├── main.js         # Logic trang danh mục
+│   ├── login.js        # Chọn vai trò, modal đăng ký, validate form
+│   ├── session.js      # Đọc vai trò đã đăng nhập + nút Đăng xuất (dùng chung)
 │   ├── dashboard.js    # Logic dashboard (biểu đồ, toggle ngày/tuần)
 │   ├── users.js        # Logic tài khoản (lọc, khóa/duyệt, phân trang)
-│   └── settings.js     # Logic cấu hình (tab, lưu localStorage, reset)
+│   ├── settings.js     # Logic cấu hình (tab, lưu localStorage, reset)
+│   └── notifications.js   # Dropdown thông báo (dùng chung)
 ├── assets/
-│   └── mockup-desktop.png  # Ảnh thiết kế tham khảo (desktop)
+│   ├── mockup-desktop.png  # Ảnh thiết kế tham khảo (desktop)
+│   ├── login-hero.svg      # Ảnh minh họa cánh đồng + drone (trang đăng nhập)
+│   └── role-*.svg          # 4 minh họa vai trò: expert, coop, farmer, admin
+├── THUYET_TRINH_GIUKI.md   # Kịch bản thuyết trình video 3 phút
 └── README.md
 ```
 
 ## Cách chạy
 
-Mở trực tiếp một trong các file `index.html` / `dashboard.html` / `users.html` / `settings.html` bằng trình duyệt (Chrome, Edge...). Các trang nối với nhau qua menu sidebar. Không cần cài đặt gì thêm.
+Mở trực tiếp `login.html` (trang đầu tiên) hoặc một trong các file `index.html` / `dashboard.html` / `users.html` / `settings.html` bằng trình duyệt (Chrome, Edge...). Các trang quản trị nối với nhau qua menu sidebar; nút **Đăng xuất** đưa trở lại `login.html`. Không cần cài đặt gì thêm.
 
 ## Responsive
 

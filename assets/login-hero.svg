@@ -1,0 +1,129 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 900" width="600" height="900" role="img" aria-label="Cánh đồng nông nghiệp công nghệ cao có nhà kính và drone phun thuốc">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#fdf3d9"/>
+      <stop offset="45%" stop-color="#f3f7e6"/>
+      <stop offset="100%" stop-color="#dff0dc"/>
+    </linearGradient>
+    <linearGradient id="field" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#7cb75f"/>
+      <stop offset="45%" stop-color="#4f9243"/>
+      <stop offset="100%" stop-color="#2c6b32"/>
+    </linearGradient>
+    <linearGradient id="mount" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#9dc08f"/>
+      <stop offset="100%" stop-color="#7ba573"/>
+    </linearGradient>
+    <radialGradient id="sun" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#fff6cf"/>
+      <stop offset="60%" stop-color="#fde68a" stop-opacity=".75"/>
+      <stop offset="100%" stop-color="#fde68a" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Bầu trời -->
+  <rect width="600" height="900" fill="url(#sky)"/>
+  <circle cx="168" cy="196" r="150" fill="url(#sun)"/>
+  <circle cx="168" cy="196" r="46" fill="#fcd964" opacity=".9"/>
+
+  <!-- Mây -->
+  <g fill="#ffffff" opacity=".72">
+    <ellipse cx="420" cy="150" rx="70" ry="20"/>
+    <ellipse cx="470" cy="140" rx="46" ry="17"/>
+    <ellipse cx="90" cy="300" rx="58" ry="15"/>
+    <ellipse cx="520" cy="290" rx="64" ry="16"/>
+  </g>
+
+  <!-- Núi xa -->
+  <path d="M0 470 L120 350 L215 445 L300 360 L420 470 L520 400 L600 470 L600 560 L0 560 Z" fill="url(#mount)" opacity=".85"/>
+  <path d="M0 500 L90 430 L180 500 L280 440 L380 505 L470 455 L600 520 L600 580 L0 580 Z" fill="#6d9a68" opacity=".7"/>
+  <rect y="520" width="600" height="60" fill="#e8f3e2" opacity=".55"/>
+
+  <!-- Nhà kính bên trái -->
+  <g>
+    <path d="M28 640 L28 560 Q100 490 172 560 L172 640 Z" fill="#dff3e3" opacity=".92" stroke="#ffffff" stroke-width="3"/>
+    <path d="M100 500 L100 640" stroke="#ffffff" stroke-width="2.5" opacity=".8"/>
+    <path d="M46 566 Q100 522 154 566" fill="none" stroke="#ffffff" stroke-width="2.5" opacity=".8"/>
+    <path d="M38 604 Q100 560 162 604" fill="none" stroke="#ffffff" stroke-width="2.5" opacity=".8"/>
+    <path d="M240 620 L240 566 Q286 522 332 566 L332 620 Z" fill="#e5f5e8" opacity=".85" stroke="#ffffff" stroke-width="2.5"/>
+    <path d="M286 528 L286 620" stroke="#ffffff" stroke-width="2" opacity=".75"/>
+  </g>
+
+  <!-- Ruộng -->
+  <path d="M0 560 Q300 528 600 560 L600 900 L0 900 Z" fill="url(#field)"/>
+  <g opacity=".55">
+    <path d="M0 600 Q300 572 600 600 L600 640 Q300 612 0 640 Z" fill="#8cc46c"/>
+    <path d="M0 700 Q300 668 600 700 L600 748 Q300 716 0 748 Z" fill="#66aa55"/>
+    <path d="M0 812 Q300 776 600 812 L600 866 Q300 830 0 866 Z" fill="#3f8a45"/>
+  </g>
+  <!-- Luống cây hội tụ -->
+  <g stroke="#245c28" stroke-width="3" opacity=".28">
+    <line x1="-100" y1="900" x2="240" y2="566"/>
+    <line x1="-28" y1="900" x2="251" y2="566"/>
+    <line x1="44" y1="900" x2="262" y2="566"/>
+    <line x1="116" y1="900" x2="272" y2="566"/>
+    <line x1="188" y1="900" x2="283" y2="566"/>
+    <line x1="260" y1="900" x2="294" y2="566"/>
+    <line x1="332" y1="900" x2="305" y2="566"/>
+    <line x1="404" y1="900" x2="316" y2="566"/>
+    <line x1="476" y1="900" x2="326" y2="566"/>
+    <line x1="548" y1="900" x2="337" y2="566"/>
+    <line x1="620" y1="900" x2="348" y2="566"/>
+    <line x1="692" y1="900" x2="359" y2="566"/>
+  </g>
+  <!-- Bụi cây nhỏ -->
+  <g fill="#a8d67f" opacity=".7">
+    <circle cx="70" cy="860" r="13"/><circle cx="150" cy="820" r="11"/><circle cx="250" cy="864" r="14"/>
+    <circle cx="360" cy="826" r="11"/><circle cx="450" cy="868" r="13"/><circle cx="540" cy="822" r="10"/>
+    <circle cx="120" cy="742" r="9"/><circle cx="300" cy="750" r="9"/><circle cx="480" cy="744" r="9"/>
+  </g>
+
+  <!-- Drone nông nghiệp -->
+  <g transform="translate(300 300)">
+    <g stroke="#4b5563" stroke-width="5" stroke-linecap="round">
+      <line x1="-52" y1="-14" x2="-20" y2="2"/>
+      <line x1="52" y1="-14" x2="20" y2="2"/>
+      <line x1="-46" y1="22" x2="-18" y2="10"/>
+      <line x1="46" y1="22" x2="18" y2="10"/>
+    </g>
+    <g fill="#e5e7eb" stroke="#9ca3af" stroke-width="2">
+      <ellipse cx="-56" cy="-18" rx="24" ry="6"/>
+      <ellipse cx="56" cy="-18" rx="24" ry="6"/>
+      <ellipse cx="-50" cy="24" rx="20" ry="5"/>
+      <ellipse cx="50" cy="24" rx="20" ry="5"/>
+    </g>
+    <rect x="-26" y="-6" width="52" height="24" rx="10" fill="#f9fafb" stroke="#d1d5db" stroke-width="2"/>
+    <rect x="-12" y="16" width="24" height="12" rx="4" fill="#16a34a"/>
+    <circle cx="0" cy="6" r="5" fill="#15803d"/>
+    <g fill="#bfdbfe" opacity=".85">
+      <circle cx="-16" cy="42" r="3"/><circle cx="0" cy="50" r="3"/><circle cx="16" cy="42" r="3"/>
+      <circle cx="-8" cy="62" r="2.5"/><circle cx="8" cy="62" r="2.5"/>
+    </g>
+  </g>
+
+  <!-- Icon IoT nổi -->
+  <g stroke-linecap="round" fill="none">
+    <path d="M96 620 Q180 560 300 600 T520 560" stroke="#ffffff" stroke-width="2" stroke-dasharray="7 7" opacity=".7"/>
+    <g>
+      <circle cx="86" cy="612" r="30" fill="#ffffff" opacity=".92"/>
+      <g stroke="#16a34a" stroke-width="4">
+        <path d="M72 610 a20 20 0 0 1 28 0"/>
+        <path d="M78 618 a11 11 0 0 1 16 0"/>
+      </g>
+      <circle cx="86" cy="625" r="3.5" fill="#16a34a"/>
+    </g>
+    <g>
+      <circle cx="252" cy="600" r="26" fill="#ffffff" opacity=".92"/>
+      <path d="M252 586 c8 10 12 14 12 20 a12 12 0 0 1 -24 0 c0 -6 4 -10 12 -20 z" fill="#22c55e"/>
+    </g>
+    <g>
+      <circle cx="430" cy="574" r="26" fill="#ffffff" opacity=".92"/>
+      <path d="M430 562 v24" stroke="#15803d" stroke-width="3"/>
+      <path d="M430 570 c-8 0 -13 -5 -14 -12 8 1 13 6 14 12 z" fill="#22c55e"/>
+      <path d="M430 578 c8 0 13 -5 14 -12 -8 1 -13 6 -14 12 z" fill="#16a34a"/>
+    </g>
+  </g>
+
+  <!-- Sương sáng -->
+  <rect y="540" width="600" height="70" fill="#ffffff" opacity=".18"/>
+</svg>

@@ -339,7 +339,6 @@ document.addEventListener('DOMContentLoaded', () => {
   // ESC đóng modal
   document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeLockModal(); closeRoleModal(); } });
 
-  // Hamburger + logout
+  // Hamburger (logout xử lý ở js/session.js)
   $('#hamburger').addEventListener('click', () => document.body.classList.toggle('collapsed'));
-  document.querySelector('.logout-btn').addEventListener('click', () => showToast('Đăng xuất thành công (demo)'));
 });

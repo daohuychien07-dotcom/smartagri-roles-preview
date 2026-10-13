@@ -115,7 +115,5 @@ document.addEventListener('DOMContentLoaded', () => {
   const ham = document.getElementById('hamburger');
   if (ham) ham.addEventListener('click', () => document.body.classList.toggle('collapsed'));
 
-  // Đăng xuất (demo)
-  const logout = document.querySelector('.logout-btn');
-  if (logout) logout.addEventListener('click', () => showToast('Đăng xuất thành công (demo)'));
+  // Đăng xuất: xử lý trong js/session.js
 });

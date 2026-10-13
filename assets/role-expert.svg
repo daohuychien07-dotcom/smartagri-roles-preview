@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200" role="img" aria-label="Minh họa chuyên gia nông nghiệp mặc áo blu trắng đang kiểm tra cây">
+  <defs>
+    <clipPath id="c1"><circle cx="100" cy="100" r="100"/></clipPath>
+  </defs>
+  <g clip-path="url(#c1)">
+    <rect width="200" height="200" fill="#e8f6ea"/>
+    <circle cx="100" cy="104" r="72" fill="#d5eeda"/>
+    <!-- hàng rào ruộng phía sau -->
+    <g stroke="#a7d3ae" stroke-width="3" stroke-linecap="round">
+      <path d="M22 150 q30 -12 60 0"/><path d="M118 150 q30 -12 60 0"/>
+      <path d="M22 166 q30 -12 60 0"/><path d="M118 166 q30 -12 60 0"/>
+    </g>
+    <!-- cổ áo + áo blu -->
+    <path d="M56 200 C56 148 74 130 100 130 C126 130 144 148 144 200 Z" fill="#ffffff" stroke="#d6e6da" stroke-width="2.5"/>
+    <path d="M84 132 L100 156 L116 132 L100 126 Z" fill="#16a34a"/>
+    <path d="M100 156 L100 200" stroke="#d6e6da" stroke-width="2.5"/>
+    <path d="M62 158 L62 200" stroke="#e3efe5" stroke-width="2.5"/>
+    <path d="M138 158 L138 200" stroke="#e3efe5" stroke-width="2.5"/>
+    <!-- ve áo -->
+    <path d="M84 132 C76 146 72 164 74 186" fill="none" stroke="#cfe3d4" stroke-width="2.5"/>
+    <path d="M116 132 C124 146 128 164 126 186" fill="none" stroke="#cfe3d4" stroke-width="2.5"/>
+    <!-- cổ + đầu -->
+    <rect x="92" y="112" width="16" height="18" rx="7" fill="#f2c9a4"/>
+    <circle cx="100" cy="92" r="26" fill="#f7d7b6"/>
+    <path d="M74 88 C74 66 88 60 100 60 C112 60 126 66 126 88 C126 78 116 74 100 74 C84 74 74 78 74 88 Z" fill="#3f3f46"/>
+    <path d="M74 90 q-4 12 4 16" fill="none" stroke="#3f3f46" stroke-width="5" stroke-linecap="round"/>
+    <path d="M126 90 q4 12 -4 16" fill="none" stroke="#3f3f46" stroke-width="5" stroke-linecap="round"/>
+    <!-- kính -->
+    <g fill="#ffffff" fill-opacity=".55" stroke="#374151" stroke-width="2.5">
+      <circle cx="90" cy="93" r="8"/><circle cx="112" cy="93" r="8"/>
+    </g>
+    <path d="M98 93 h6" stroke="#374151" stroke-width="2.5"/>
+    <path d="M82 91 l-8 -2" stroke="#374151" stroke-width="2.5"/>
+    <circle cx="90" cy="93" r="2.2" fill="#374151"/><circle cx="112" cy="93" r="2.2" fill="#374151"/>
+    <path d="M96 108 q4 3 8 0" fill="none" stroke="#c98a63" stroke-width="2.5" stroke-linecap="round"/>
+    <!-- tay phải cầm cây giống -->
+    <path d="M138 160 C150 152 154 142 150 132" fill="none" stroke="#ffffff" stroke-width="14" stroke-linecap="round"/>
+    <circle cx="149" cy="128" r="9" fill="#f7d7b6"/>
+    <path d="M149 128 L149 96" stroke="#15803d" stroke-width="3.5" stroke-linecap="round"/>
+    <path d="M149 110 C139 110 133 104 132 96 C142 96 148 102 149 110 Z" fill="#22c55e"/>
+    <path d="M149 104 C159 104 165 98 166 90 C156 90 150 96 149 104 Z" fill="#16a34a"/>
+    <path d="M149 96 C143 92 142 84 146 78 C151 82 152 90 149 96 Z" fill="#4ade80"/>
+    <!-- tay trái kẹp sổ -->
+    <path d="M62 162 C52 154 50 144 54 136" fill="none" stroke="#ffffff" stroke-width="14" stroke-linecap="round"/>
+    <g transform="rotate(-8 46 148)">
+      <rect x="30" y="126" width="32" height="44" rx="4" fill="#dcfce7" stroke="#16a34a" stroke-width="2.5"/>
+      <rect x="40" y="121" width="12" height="9" rx="3" fill="#166534"/>
+      <g stroke="#86b99a" stroke-width="2.5" stroke-linecap="round">
+        <path d="M36 140 h20"/><path d="M36 148 h20"/><path d="M36 156 h13"/>
+      </g>
+    </g>
+    <circle cx="55" cy="136" r="8" fill="#f7d7b6"/>
+  </g>
+  <circle cx="100" cy="100" r="99" fill="none" stroke="#cbe7d3" stroke-width="2"/>
+</svg>

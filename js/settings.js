@@ -105,7 +105,6 @@ document.addEventListener('DOMContentLoaded', () => {
   $$('#settingsForm input[type="number"]').forEach(el =>
     el.addEventListener('input', () => el.closest('.frow')?.classList.remove('error')));
 
-  // Hamburger + demo
+  // Hamburger (logout xử lý ở js/session.js)
   $('#hamburger').addEventListener('click', () => document.body.classList.toggle('collapsed'));
-  $('.logout-btn').addEventListener('click', () => showToast('Đăng xuất thành công (demo)'));
 });

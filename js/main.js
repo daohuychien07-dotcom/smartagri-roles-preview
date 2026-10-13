@@ -339,7 +339,7 @@ document.querySelectorAll('.nav-item').forEach(n => n.addEventListener('click', 
   document.querySelectorAll('.nav-item').forEach(x => x.classList.remove('active'));
   n.classList.add('active');
 }));
-document.querySelector('.logout-btn').addEventListener('click', () => showToast('Đăng xuất thành công (demo)'));
+// Nút Đăng xuất được xử lý trong js/session.js (chuyển về login.html)
 
 // Khởi tạo: render bảng lần đầu
 renderTable();
