@@ -84,6 +84,7 @@ project/
 │   ├── login-hero.svg      # Ảnh minh họa cánh đồng + drone (trang đăng nhập)
 │   └── role-*.svg          # 4 minh họa vai trò: expert, coop, farmer, admin
 ├── THUYET_TRINH_GIUKI.md   # Kịch bản thuyết trình video 3 phút
+├── MA_CODE_THUYET_TRINH.md # Bản đồ mã nguồn: mỗi câu thuyết trình → file + số dòng
 └── README.md
 ```
 
