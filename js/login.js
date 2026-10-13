@@ -76,6 +76,13 @@ function clearError(id) { document.getElementById(id).classList.remove('error');
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 const PHONE_RE = /^0\d{9}$/;
 
+// Vai trò ở form đăng ký -> vai trò hệ thống dùng ở trang tài khoản
+const ROLE_TO_USER = {
+  'Nông dân': 'Nông dân',
+  'Chuyên gia nông nghiệp': 'Chuyên gia',
+  'Điều phối Hợp tác xã': 'Điều phối HTX',
+};
+
 regForm.addEventListener('submit', e => {
   e.preventDefault(); // không tải lại trang; tự kiểm tra bằng JavaScript
 
@@ -104,9 +111,34 @@ regForm.addEventListener('submit', e => {
     return;
   }
 
+  // Đẩy hồ sơ sang kho đăng ký -> trang Quản lý tài khoản người dùng sẽ đọc ra
+  const today = new Date();
+  const pad = n => String(n).padStart(2, '0');
+  REG.add({
+    id: 100 + REG.all().length + 1,
+    name,
+    email,
+    phone: phone.replace(/^(\d{4})(\d{3})(\d{3})$/, '$1 $2 $3'),
+    role: ROLE_TO_USER[role] || role,
+    status: 'pending',
+    joined: pad(today.getDate()) + '/' + pad(today.getMonth() + 1) + '/' + today.getFullYear(),
+    area: document.getElementById('regArea').value.trim(),
+    source: 'dang-ky',
+  });
+
   closeRegister();
-  showToast('Đã gửi đăng ký cho ' + name + ' — chờ quản trị duyệt');
+  showToast('Đã gửi đăng ký — hồ sơ nằm trong danh sách chờ duyệt');
+  showSentNote(name);
 });
+
+// Ghi chú "đã gửi" kèm link tới trang Quản lý tài khoản (bộ lọc Đang chờ duyệt)
+function showSentNote(name) {
+  const note = document.getElementById('sentNote');
+  if (!note) return;
+  note.innerHTML = '✓ Hồ sơ của <strong>' + name + '</strong> đã được đẩy tới trang '
+    + '<a href="users.html?status=pending">Quản lý tài khoản người dùng</a> ở trạng thái <strong>Đang chờ duyệt</strong>.';
+  note.hidden = false;
+}
 
 // Bỏ lỗi ngay khi người dùng sửa trường
 ['regName:rf-name', 'regEmail:rf-email', 'regPhone:rf-phone', 'regRole:rf-role', 'regPass:rf-pass', 'regRepass:rf-repass']

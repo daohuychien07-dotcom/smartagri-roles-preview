@@ -41,6 +41,7 @@ Trang dành cho **Quản trị viên hệ thống**. Dùng để thiết lập v
 ### Chức năng ở các trang mở rộng
 
 - **`login.html`**: 4 thẻ vai trò là link thật (`<a>`) — JavaScript chặn lại để lưu vai trò vào `localStorage`, hiện trạng thái "đang đăng nhập" rồi chuyển vào hệ thống; modal **Đăng ký/ Tạo tài khoản** có validate (tên ≥ 3 ký tự, regex email, số điện thoại 10 chữ số, mật khẩu ≥ 6 và nhập lại khớp, bắt buộc đồng ý điều khoản).
+- **Luồng đăng ký → trang Tài khoản người dùng** (`js/store.js`): hồ sơ hợp lệ được ghi vào `localStorage['smartagri_registrations_v1']`; `users.html` đọc và chèn lên đầu danh sách với trạng thái *Đang chờ duyệt* + nhãn "Mới đăng ký" (kèm khu vực canh tác). Khi Admin Duyệt / Khóa / Đổi vai trò, thay đổi ghi ngược vào kho nên tải lại trang vẫn còn. `dashboard.html` đọc cùng kho để tăng số "Tài khoản chờ duyệt" và thêm dòng vào nhật ký hoạt động.
 - **`session.js`**: mọi trang quản trị đọc vai trò đã chọn để hiển thị tên + avatar ở header; nút Đăng xuất xóa phiên và trở về `login.html`.
 - **`notifications.js`**: chuông thông báo mở dropdown, đánh dấu đã đọc, cập nhật badge (dùng chung cho 4 trang).
 
@@ -72,6 +73,7 @@ project/
 ├── js/
 │   ├── main.js         # Logic trang danh mục
 │   ├── login.js        # Chọn vai trò, modal đăng ký, validate form
+│   ├── store.js        # Kho hồ sơ đăng ký (localStorage) dùng chung login/users/dashboard
 │   ├── session.js      # Đọc vai trò đã đăng nhập + nút Đăng xuất (dùng chung)
 │   ├── dashboard.js    # Logic dashboard (biểu đồ, toggle ngày/tuần)
 │   ├── users.js        # Logic tài khoản (lọc, khóa/duyệt, phân trang)

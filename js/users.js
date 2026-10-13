@@ -20,6 +20,21 @@ let USERS = [
   { id: 12, name: 'Đặng Thị Lan',      email: 'lan.dang@htx.vn',        phone: '0913 600 700', role: 'Điều phối HTX',   joined: '15/03/2024', status: 'pending' },
 ];
 
+/* ---------- Hồ sơ mới đăng ký (do login.html đẩy sang, lưu ở localStorage) ---------- */
+function mergeRegistrations() {
+  if (typeof REG === 'undefined') return;
+  const regs = REG.all().map(r => Object.assign({}, r, { fromRegistration: true }));
+  USERS = regs.concat(USERS);
+}
+mergeRegistrations();
+
+// Trả ngược thay đổi (duyệt / khóa / mở khóa / đổi vai trò) vào kho đăng ký
+function persistIfRegistered(u) {
+  if (u && u.fromRegistration && typeof REG !== 'undefined') {
+    REG.patch(u.id, { status: u.status, role: u.role });
+  }
+}
+
 /* ---------- Trạng thái UI ---------- */
 const state = { search: '', role: '', status: '', page: 1, pageSize: 10, loading: false, selected: new Set() };
 
@@ -98,7 +113,7 @@ function render() {
     return `<tr>
       <td class="col-check"><input type="checkbox" class="row-check" data-id="${u.id}" ${checked} aria-label="Chọn ${esc(u.name)}"></td>
       <td class="col-avatar"><span class="u-avatar" style="background:${colorFor(u.id)}">${esc(initials(u.name))}</span></td>
-      <td class="u-name">${esc(u.name)}</td>
+      <td class="u-name">${esc(u.name)}${u.fromRegistration ? '<span class="tag-new">Mới đăng ký</span>' : ''}${u.area ? `<span class="area">${esc(u.area)}</span>` : ''}</td>
       <td class="u-contact">${esc(u.email)}<span class="phone">${esc(u.phone)}</span></td>
       <td><span class="role-tag ${r.cls}">${svg(r.icon)}${esc(u.role)}</span></td>
       <td class="mono">${esc(u.joined)}</td>
@@ -247,6 +262,10 @@ function findUser(id) { return USERS.find(u => u.id === id); }
 
 /* ---------- Khởi tạo ---------- */
 document.addEventListener('DOMContentLoaded', () => {
+  // Deep link từ trang đăng ký: users.html?status=pending -> bật sẵn bộ lọc chờ duyệt
+  const preset = new URLSearchParams(location.search).get('status');
+  if (preset && STATUS_META[preset]) { state.status = preset; $('#statusFilter').value = preset; }
+
   // loading giả khi mở trang
   state.loading = true; render();
   setTimeout(() => { state.loading = false; render(); }, 800);
@@ -278,8 +297,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const id = +btn.dataset.id;
     const act = btn.dataset.act;
     if (act === 'lock') openLockModal(id);
-    else if (act === 'unlock') { findUser(id).status = 'active'; render(); showToast('Đã mở khóa tài khoản'); }
-    else if (act === 'approve') { findUser(id).status = 'active'; render(); showToast('Đã phê duyệt tài khoản'); }
+    else if (act === 'unlock') { const u = findUser(id); u.status = 'active'; persistIfRegistered(u); render(); showToast('Đã mở khóa tài khoản'); }
+    else if (act === 'approve') { const u = findUser(id); u.status = 'active'; persistIfRegistered(u); render(); showToast('Đã phê duyệt tài khoản'); }
     else if (act === 'role') openRoleModal(id);
   });
   $('#userTbody').addEventListener('change', e => {
@@ -293,11 +312,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Bulk actions
   $('#bulkLock').addEventListener('click', () => {
-    state.selected.forEach(id => { const u = findUser(id); if (u.status !== 'locked') u.status = 'locked'; });
+    state.selected.forEach(id => { const u = findUser(id); if (u.status !== 'locked') { u.status = 'locked'; persistIfRegistered(u); } });
     showToast(`Đã khóa ${state.selected.size} tài khoản`); state.selected.clear(); render();
   });
   $('#bulkUnlock').addEventListener('click', () => {
-    state.selected.forEach(id => { findUser(id).status = 'active'; });
+    state.selected.forEach(id => { const u = findUser(id); u.status = 'active'; persistIfRegistered(u); });
     showToast(`Đã mở khóa ${state.selected.size} tài khoản`); state.selected.clear(); render();
   });
 
@@ -320,7 +339,7 @@ document.addEventListener('DOMContentLoaded', () => {
     e.preventDefault();
     const reason = $('#lockReason').value.trim();
     if (!reason) { $('#f-lockReason').classList.add('error'); return; }
-    const u = findUser(lockTargetId); if (u) u.status = 'locked';
+    const u = findUser(lockTargetId); if (u) { u.status = 'locked'; persistIfRegistered(u); }
     state.selected.delete(lockTargetId);
     closeLockModal(); render(); showToast(`Đã khóa tài khoản của ${u.name}`);
   });
@@ -332,7 +351,7 @@ document.addEventListener('DOMContentLoaded', () => {
   $('#roleBackdrop').addEventListener('click', e => { if (e.target.id === 'roleBackdrop') closeRoleModal(); });
   $('#roleForm').addEventListener('submit', e => {
     e.preventDefault();
-    const u = findUser(roleTargetId); if (u) u.role = $('#roleSelect').value;
+    const u = findUser(roleTargetId); if (u) { u.role = $('#roleSelect').value; persistIfRegistered(u); }
     closeRoleModal(); render(); showToast(`Đã đổi vai trò của ${u.name} thành ${u.role}`);
   });
 

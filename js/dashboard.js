@@ -67,10 +67,24 @@ function renderChart(range) {
 }
 
 /* ---------- Vẽ bảng nhật ký ---------- */
+// Hồ sơ vừa đăng ký từ trang login được đưa lên đầu nhật ký hoạt động
+function registrationLogs() {
+  if (typeof REG === 'undefined') return [];
+  const tone = {
+    pending: { tone: 'warn',   status: 'Chờ duyệt',  cls: 'pending',  verb: 'vừa đăng ký tài khoản — chờ duyệt' },
+    active:  { tone: 'ok',     status: 'Đã duyệt',   cls: 'ok',       verb: 'vừa được duyệt tài khoản' },
+    locked:  { tone: 'danger', status: 'Bị khóa',    cls: 'danger',   verb: 'vừa bị khóa tài khoản' },
+  };
+  return REG.all().slice(0, 3).map(u => {
+    const m = tone[u.status] || tone.pending;
+    return { icon: 'userplus', tone: m.tone, text: `${u.role} ${u.name} ${m.verb}`, time: 'Vừa xong', status: m.status, cls: m.cls };
+  });
+}
+
 function renderLogs() {
   const tbody = document.querySelector('#logTable tbody');
   if (!tbody) return;
-  tbody.innerHTML = LOGS.map(l => `
+  tbody.innerHTML = registrationLogs().concat(LOGS).map(l => `
     <tr>
       <td>
         <div class="log-act">
@@ -97,6 +111,13 @@ function showToast(msg) {
 
 /* ---------- Khởi tạo ---------- */
 document.addEventListener('DOMContentLoaded', () => {
+  // Đồng bộ thẻ "Tài khoản chờ duyệt" với số hồ sơ đăng ký thật từ trang login
+  if (typeof REG !== 'undefined') {
+    const n = REG.countByStatus('pending');
+    const el = document.getElementById('statPending');
+    if (el && n) el.textContent = String(18 + n);
+  }
+
   renderChart('day');
   renderLogs();
 
