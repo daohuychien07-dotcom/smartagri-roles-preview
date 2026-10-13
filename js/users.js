@@ -339,8 +339,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // ESC đóng modal
   document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeLockModal(); closeRoleModal(); } });
 
-  // Hamburger + logout/bell
+  // Hamburger + logout
   $('#hamburger').addEventListener('click', () => document.body.classList.toggle('collapsed'));
   document.querySelector('.logout-btn').addEventListener('click', () => showToast('Đăng xuất thành công (demo)'));
-  document.querySelector('.bell').addEventListener('click', () => showToast('Bạn có 3 thông báo mới (demo)'));
 });

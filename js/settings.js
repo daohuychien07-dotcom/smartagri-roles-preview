@@ -108,5 +108,4 @@ document.addEventListener('DOMContentLoaded', () => {
   // Hamburger + demo
   $('#hamburger').addEventListener('click', () => document.body.classList.toggle('collapsed'));
   $('.logout-btn').addEventListener('click', () => showToast('Đăng xuất thành công (demo)'));
-  $('.bell').addEventListener('click', () => showToast('Bạn có 3 thông báo mới (demo)'));
 });
