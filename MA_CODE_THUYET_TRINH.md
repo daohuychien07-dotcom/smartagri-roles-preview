@@ -4,6 +4,10 @@ File này ghi lại **đúng vị trí (tên file + số dòng)** của mọi th
 `THUYET_TRINH_GIUKI.md` (mục 4 và mục 6), để khi quay OBS chỉ cần `Ctrl+P` mở file,
 `Ctrl+G` gõ số dòng là nhảy tới nơi.
 
+> 📝 Kịch bản đã tinh gọn còn **385 từ (~3 phút 10)**, nên một vài ý trong bảng dưới đây
+> không còn được *nói* ở phần 4 nữa (vd `flex-wrap`, `aria-label`, so sánh 'từ'/'đến').
+> Em vẫn giữ nguyên vị trí code — đó là những chỗ GV hay trỏ khi hỏi ngược.
+
 > Đường dẫn gốc: `CSE122-BTL-NGUYENDUCNHAT` → nhánh `main`.
 > Ba file để mở sẵn trong VS Code: `index.html` · `css/style.css` · `js/main.js`.
 
