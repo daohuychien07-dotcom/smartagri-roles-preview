@@ -100,8 +100,8 @@ Mở trực tiếp `login.html` (trang đầu tiên) hoặc một trong các fil
 
 ## Link liên quan
 
-- **Link Canva**: *(cập nhật sau - dán link file Canva của bạn vào đây)*
-- **Link video**: *(cập nhật sau - dán link video trình bày ~03 phút vào đây)*
+- **Link Canva**: (https://canva.link/j66tusfj3cbdckv)
+- **Link video**: (https://youtu.be/SiAEbIB4Tos?si=pGBaoD4mPdswX8P5)
 - **Link GitHub**: https://github.com/ducnhatnguyen18-svg/CSE122-BTL-NGUYENDUCNHAT
 
 ## Ghi chú
