@@ -299,7 +299,7 @@ $('#btnXlsx').addEventListener('click', () => {
     ['Nông hộ', 'Diện tích (ha)', 'Năng suất (tan/ha)', 'So với chỉ tiêu (%)', 'Số lần ghi nhật ký'],
     ...sortedRows(s).map(r => [r.name, r.area, r.yield, (r.yield / TARGET * 100).toFixed(1), r.logs]),
   ];
-  const csv = '' + lines.map(row => row.map(c => {
+  const csv = '\uFEFF' + lines.map(row => row.map(c => {
     const v = c === undefined ? '' : String(c);
     return /[";\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v.replace(/\./g, ',');
   }).join(';')).join('\n');
