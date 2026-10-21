@@ -48,12 +48,14 @@
 .rp-export-menu button small { grid-column: 2; font-size: 12px; font-weight: 400; color: var(--gray-500); }
 
 /* ============ DẢI CHỈ SỐ ============ */
-.rp-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 24px; }
+/* minmax(0, 1fr): cho phép cột co dưới min-content để số tiền lớn không đẩy trang tràn ngang */
+.rp-stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; margin-bottom: 24px; }
 .rp-stat {
-  display: flex; align-items: center; gap: 16px;
+  display: flex; align-items: center; gap: 16px; min-width: 0;
   background: #fff; border: 1px solid var(--gray-200); border-radius: 14px;
   box-shadow: var(--shadow); padding: 20px 22px;
 }
+.rp-stat > div { min-width: 0; }
 .rp-stat-ic {
   width: 54px; height: 54px; border-radius: 50%; flex-shrink: 0;
   display: flex; align-items: center; justify-content: center;
@@ -135,6 +137,8 @@
 
 /* ============ BẢNG SO SÁNH NÔNG HỘ ============ */
 .rp-sort-hint { font-size: 12.5px; color: var(--gray-400); }
+/* .table-wrap bọc bảng: bảng rộng thì cuộn ngang trong khung, không đẩy trang tràn */
+.table-wrap { overflow-x: auto; }
 .rp-table { min-width: 640px; }
 .rp-table th.sortable { cursor: pointer; user-select: none; white-space: nowrap; }
 .rp-table th.sortable:hover { color: var(--green-700); }
@@ -228,6 +232,11 @@
 @media (max-width: 1200px) {
   .rp-layout { grid-template-columns: minmax(0, 1fr); }
   .rp-archive { position: static; }
+  /* 3 thẻ + số tiền lớn không còn vừa → xếp 2 cột và giảm cỡ chữ để không tràn ngang */
+  .rp-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .rp-stat { padding: 16px 18px; gap: 12px; }
+  .rp-stat-value { font-size: 22px; }
+  .rp-stat-ic { width: 46px; height: 46px; }
 }
 @media (max-width: 900px) {
   .rp-stats { grid-template-columns: 1fr; }

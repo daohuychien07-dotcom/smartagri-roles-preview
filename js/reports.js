@@ -16,7 +16,7 @@ const SEASONS = [
   {
     id: 'dongxuan2526',
     name: 'Vụ Đông Xuân 2025-2026',
-    crop: 'Lúa ST25',
+    crop: 'Lúa IR50404',
     state: 'done',            // đã thu hoạch -> có báo cáo
     target: 7.00,             // tấn/ha
     households: 45,
@@ -89,7 +89,6 @@ const state = { season: SEASONS[0], sort: { key: 'yield', dir: 'desc' } };
 /* ================= TIỆN ÍCH ================= */
 const $ = s => document.querySelector(s);
 const nf = (n, d = 0) => new Intl.NumberFormat('vi-VN', { minimumFractionDigits: d, maximumFractionDigits: d }).format(n);
-const money = n => nf(n, 0) + ' ₫';
 const escapeHtml = s => String(s).replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]));
 const isArchived = id => !!(archive[id] && archive[id].archived);
 const todayVn = () => { const t = new Date(), p = n => String(n).padStart(2, '0'); return p(t.getDate()) + '/' + p(t.getMonth() + 1) + '/' + t.getFullYear(); };
@@ -111,8 +110,13 @@ function buildSeasonSelect() {
 }
 
 /* ================= DẢI CHỈ SỐ ================= */
+/* Mũi tên theo chiều tăng/giảm, nhưng màu theo ý nghĩa:
+   sản lượng & doanh thu tăng là tốt (xanh), chi phí tăng là xấu (đỏ) → goodUp = false */
 function renderStats(s) {
-  const delta = (v, suffix) => `<span class="${v >= 0 ? 'up' : 'down'}">${svg(v >= 0 ? 'up' : 'down')}${v >= 0 ? '+' : '−'}${nf(Math.abs(v), 1)}%</span> ${suffix}`;
+  const delta = (v, suffix, goodUp = true) => {
+    const isGood = v >= 0 ? goodUp : !goodUp;
+    return `<span class="${isGood ? 'up' : 'down'}">${svg(v >= 0 ? 'up' : 'down')}${v >= 0 ? '+' : '−'}${nf(Math.abs(v), 1)}%</span> ${suffix}`;
+  };
   $('#rpStats').innerHTML = `
     <article class="rp-stat">
       <span class="rp-stat-ic green">${svg('sprout')}</span>
@@ -127,7 +131,7 @@ function renderStats(s) {
       <div>
         <p class="rp-stat-label">Tổng chi phí vật tư (Đồng)</p>
         <p class="rp-stat-value blue">${nf(s.cost, 0)}</p>
-        <p class="rp-stat-sub">${delta(s.costRate, 'so với kế hoạch chi phí')}</p>
+        <p class="rp-stat-sub">${delta(s.costRate, 'so với kế hoạch chi phí', false)}</p>
       </div>
     </article>
     <article class="rp-stat">
@@ -367,8 +371,11 @@ function showToast(msg) {
 /* ================= KHỞI ĐỘNG ================= */
 function boot() {
   const p = new URLSearchParams(window.location.search);
-  const byQuery = SEASONS.find(s => s.id === p.get('season') || s.name.indexOf(p.get('season') || '\u0000') === 0);
-  if (p.get('season') && byQuery) state.season = byQuery;
+  const q = p.get('season');
+  if (q) {
+    const byQuery = SEASONS.find(s => s.id === q || s.name.toLowerCase().startsWith(q.toLowerCase()));
+    if (byQuery) state.season = byQuery;
+  }
   buildSeasonSelect();
   render();
 }
