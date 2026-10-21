@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SmartAgri - Lịch trình mùa vụ tập trung</title>
+  <meta name="description" content="Trang lịch trình và tiến độ mùa vụ của hợp tác xã, có AI sinh checklist mùa vụ - CropMate AI (SmartAgri)">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/schedule.css">
+  <link rel="stylesheet" href="css/notifications.css">
+  <script src="js/catalog.js" defer></script>
+  <script src="js/schedule.js" defer></script>
+  <script src="js/notifications.js" defer></script>
+  <script src="js/session.js" defer></script>
+</head>
+<body>
+
+  <!-- ================= SIDEBAR ================= -->
+  <aside class="sidebar">
+    <div class="logo">
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M12 2v20" stroke="#15803d" stroke-width="1.8" stroke-linecap="round"/>
+        <path d="M12 6C9 6 6.5 4.5 6 2c3 0 5.5 1.5 6 4z" fill="#16a34a"/>
+        <path d="M12 6c3 0 5.5-1.5 6-4-3 0-5.5 1.5-6 4z" fill="#15803d"/>
+        <path d="M12 11c-3.5 0-6.5-1.8-7.2-4.5C8.2 6.5 11 8.3 12 11z" fill="#22c55e"/>
+        <path d="M12 11c3.5 0 6.5-1.8 7.2-4.5C15.8 6.5 13 8.3 12 11z" fill="#16a34a"/>
+        <path d="M12 16.5c-3.8 0-7-2-7.8-5C7.8 12 10.8 13.8 12 16.5z" fill="#86efac"/>
+        <path d="M12 16.5c3.8 0 7-2 7.8-5-3.6.5-6.6 2.3-7.8 5z" fill="#22c55e"/>
+      </svg>
+      <span>SmartAgri</span>
+    </div>
+
+    <nav class="nav" aria-label="Điều hướng chính">
+      <a href="dashboard.html" class="nav-item" data-page="dashboard">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg>
+        <span class="label">Dashboard</span>
+      </a>
+      <a href="households.html" class="nav-item" data-page="households">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9.5 12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"/><path d="M9 21v-7h6v7"/></svg>
+        <span class="label">Tổng quan nông hộ</span>
+      </a>
+      <button type="button" class="nav-item active" data-page="schedule">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        <span class="label">Lịch trình mùa vụ</span>
+      </button>
+      <a href="reports.html" class="nav-item" data-page="reports">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M23 6l-9.5 9.5-5-5L1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+        <span class="label">Báo cáo tổng kết</span>
+      </a>
+      <a href="index.html" class="nav-item" data-page="crops">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 20A7 7 0 0 1 4 13c0-4 3-8 9-9 5-1 7-1 7-1s0 2-1 7c-1 6-5 9-8 10z"/><path d="M12 12c-2 2-4 5-4 8"/></svg>
+        <span class="label">Danh mục cây trồng</span>
+      </a>
+      <a href="users.html" class="nav-item" data-page="users">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        <span class="label">Tài khoản người dùng</span>
+      </a>
+      <a href="settings.html" class="nav-item" data-page="settings">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        <span class="label">Cấu hình hệ thống</span>
+      </a>
+    </nav>
+
+    <button type="button" class="logout-btn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      <span class="label">Đăng xuất</span>
+    </button>
+
+    <footer class="side-footer">
+      <p>&copy; 2026 SmartAgri</p>
+      <ul>
+        <li><a href="#" onclick="return false;">Hỗ trợ</a></li>
+        <li><a href="#" onclick="return false;">Điều khoản</a></li>
+      </ul>
+    </footer>
+  </aside>
+
+  <!-- ================= MAIN ================= -->
+  <main>
+    <header>
+      <button type="button" class="hamburger" id="hamburger" title="Thu gọn menu">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+      <div class="header-titles">
+        <h1>Lịch trình mùa vụ tập trung</h1>
+        <p>Lập kế hoạch và theo dõi các hoạt động mùa vụ của hợp tác xã.</p>
+      </div>
+      <div class="header-user">
+        <button type="button" class="bell" title="Thông báo">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          <span class="badge">1</span>
+        </button>
+        <div class="user-chip">
+          <div class="avatar" aria-label="Ảnh đại diện">ĐT</div>
+          <span class="role">Điều phối HTX</span>
+          <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+      </div>
+    </header>
+
+    <section class="content sc" aria-label="Nội dung lịch trình mùa vụ">
+
+      <!-- ===== Thanh sinh lịch ===== -->
+      <section class="sc-trigger" aria-label="Sinh lịch mùa vụ">
+        <div class="sc-trigger-col">
+          <h2 class="sc-mini-title">
+            <span class="ai-tag">AI-1</span> Sinh lịch mùa vụ thông minh
+          </h2>
+          <p class="sc-hint">Tạo lịch mùa vụ chuẩn bằng AI dựa trên loại cây, thời vụ và diện tích quy hoạch.</p>
+          <button type="button" class="btn-primary" id="btnAiGenerate">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            AI Sinh Lịch Mùa Vụ Chuẩn
+          </button>
+        </div>
+        <div class="sc-trigger-col">
+          <h2 class="sc-mini-title">Hoặc thêm sự kiện thủ công</h2>
+          <p class="sc-hint">Tạo nhanh các hoạt động cần triển khai trong tuần này.</p>
+          <div class="sc-quick">
+            <button type="button" class="quick-btn sow" data-quick="Gieo sạ tập trung">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22V12"/><path d="M12 12c0-4 3-7 8-7 0 4-3 7-8 7z"/><path d="M12 12C12 8 9 5 4 5c0 4 3 7 8 7z"/></svg>
+              Gieo sạ tập trung
+            </button>
+            <button type="button" class="quick-btn spray" data-quick="Phun thuốc diện rộng">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 3v4"/><path d="M15 5h8"/><path d="M12 9h6l1 12H4L5 9z"/><path d="M9 13h6"/></svg>
+              Phun thuốc diện rộng
+            </button>
+            <button type="button" class="quick-btn fert" data-quick="Bón phân đợt 1">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h12l2 6H4z"/><path d="M6 9v11a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V9"/><path d="M10 13h4"/></svg>
+              Bón phân đợt 1
+            </button>
+          </div>
+        </div>
+        <div class="sc-trigger-col sc-htx">
+          <span class="sc-htx-label">Đơn vị quản lý</span>
+          <div class="select-wrap">
+            <select id="coopSelect" aria-label="Chọn hợp tác xã">
+              <option>HTX Nông nghiệp An Phú</option>
+              <option>HTX Xanh Đồng Bằng</option>
+              <option>HTX Miền Trung</option>
+            </select>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== Tab + điều hướng tháng ===== -->
+      <div class="sc-tabs">
+        <div class="pilltabs" role="tablist" aria-label="Chế độ xem lịch">
+          <button type="button" class="pilltab active" data-view="month" role="tab" aria-selected="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            Theo Tháng
+          </button>
+          <button type="button" class="pilltab" data-view="week" role="tab" aria-selected="false">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+            Theo Tuần
+          </button>
+          <button type="button" class="pilltab" data-view="stage" role="tab" aria-selected="false">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22V12"/><path d="M12 12c0-4 3-7 8-7 0 4-3 7-8 7z"/></svg>
+            Giai đoạn Mùa vụ
+          </button>
+        </div>
+
+        <div class="sc-nav">
+          <button type="button" class="icon-btn" id="btnPrev" title="Trước" aria-label="Kỳ trước">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>
+          </button>
+          <button type="button" class="btn-ghost" id="btnToday">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/></svg>
+            Hôm nay
+          </button>
+          <button type="button" class="icon-btn" id="btnNext" title="Sau" aria-label="Kỳ tiếp theo">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+        </div>
+
+        <div class="sc-context" id="scContext"></div>
+
+        <div class="sc-filters">
+          <div class="select-wrap sm">
+            <select id="typeFilter" aria-label="Lọc theo loại sự kiện">
+              <option value="">Tất cả loại sự kiện</option>
+              <option value="sow">Gieo sạ tập trung</option>
+              <option value="spray">Phun thuốc diện rộng</option>
+              <option value="fert">Bón phân</option>
+              <option value="check">Kiểm tra đồng ruộng</option>
+            </select>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div class="select-wrap sm">
+            <select id="areaFilter" aria-label="Lọc theo khu vực">
+              <option value="">Tất cả khu vực</option>
+            </select>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== Layout: lịch + panel AI ===== -->
+      <div class="sc-layout">
+        <section class="sc-calwrap" aria-label="Lịch mùa vụ">
+          <div class="sc-skeleton" id="scSkeleton" hidden>
+            <p class="sk-loading">
+              <span class="spin" aria-hidden="true"></span>
+              Đang tải lịch trình của 50 nông hộ…
+            </p>
+            <div class="sk-row"><span class="sk-line w40"></span><span class="sk-line w30"></span></div>
+            <div class="sk-grid" id="skGrid"></div>
+            <p class="sk-sync">Đang đồng bộ dữ liệu mùa vụ và tiến độ canh tác…</p>
+          </div>
+          <div class="sc-cal" id="scCal"></div>
+        </section>
+
+        <aside class="sc-ai" aria-label="AI sinh checklist mùa vụ">
+          <h2 class="sc-ai-title"><span class="ai-tag">AI-2</span> AI Sinh Checklist Mùa Vụ</h2>
+          <form id="aiForm" novalidate>
+            <div class="form-field" id="fa-crop">
+              <label for="aiCrop">Loại cây trồng <span class="req">*</span></label>
+              <select id="aiCrop"></select>
+              <span class="err-msg" id="aiCropErr">Không nằm trong danh mục chuẩn</span>
+            </div>
+            <div class="form-field" id="fa-date">
+              <label for="aiDate">Ngày xuống giống dự kiến <span class="req">*</span></label>
+              <input type="date" id="aiDate" value="2026-06-02">
+              <span class="err-msg">Vui lòng chọn ngày xuống giống</span>
+            </div>
+            <div class="form-field" id="fa-area">
+              <label for="aiArea">Diện tích quy hoạch <span class="req">*</span></label>
+              <div class="area-input">
+                <input type="number" id="aiArea" min="1" step="0.1" value="120">
+                <span class="unit">ha</span>
+              </div>
+              <span class="err-msg">Diện tích phải lớn hơn 0</span>
+            </div>
+
+            <div class="sc-progress" id="aiProgress" hidden>
+              <div class="sc-progress-head">
+                <span class="spin" aria-hidden="true"></span>
+                <p id="aiProgressText">AI đang tính toán lịch trình theo giai đoạn sinh trưởng…</p>
+                <b id="aiProgressPct">0%</b>
+              </div>
+              <span class="track"><span class="fill" id="aiProgressFill"></span></span>
+            </div>
+
+            <div class="sc-result" id="aiResult" hidden>
+              <h3 class="sc-result-title">Kết quả gợi ý lịch trình</h3>
+              <ul class="sc-milestones" id="aiMilestones"></ul>
+              <p class="sc-why">
+                <b>Vì sao AI đề xuất mốc thời gian này?</b>
+                <span id="aiWhy"></span>
+              </p>
+            </div>
+
+            <div class="sc-error" id="aiError" hidden>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+              <div>
+                <h3>AI không thể tạo lịch</h3>
+                <p id="aiErrorMsg">Chưa có dữ liệu chuẩn cho loại cây này. Vui lòng chọn loại cây khác hoặc tự xây dựng lịch công việc.</p>
+              </div>
+            </div>
+
+            <div class="sc-ai-actions">
+              <button type="submit" class="btn-primary wide" id="btnAiRun">Sinh lịch bằng AI</button>
+              <button type="button" class="btn-primary" id="btnAiApply" hidden>Áp dụng cho toàn HTX</button>
+              <div class="sc-ai-sub">
+                <button type="button" class="btn-cancel" id="btnAiManual">Tự tạo lịch thủ công</button>
+                <button type="button" class="btn-cancel" id="btnAiReset">Đặt lại</button>
+              </div>
+            </div>
+          </form>
+        </aside>
+      </div>
+    </section>
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+    <span id="toastMsg"></span>
+  </div>
+
+</body>
+</html>

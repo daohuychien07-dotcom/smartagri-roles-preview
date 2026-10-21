@@ -55,10 +55,12 @@
 /* ============ PANELS (chart + log) ============ */
 .dash-cols {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  /* minmax(0,1fr) để bảng nhật ký không đẩy cột tràn ngang */
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: 20px;
   align-items: stretch;
 }
+.log-panel { overflow-x: auto; }
 .panel {
   background: #fff;
   border: 1px solid var(--gray-200);
