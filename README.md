@@ -165,6 +165,7 @@ Mở tay một trang `chuyen-gia/*.html` khi chưa từng đăng nhập sẽ đ�
 - **Link Canva**: (https://canva.link/j66tusfj3cbdckv)
 - **Link video**: (https://youtu.be/SiAEbIB4Tos?si=pGBaoD4mPdswX8P5)
 - **Link GitHub**: https://github.com/ducnhatnguyen18-svg/CSE122-BTL-NGUYENDUCNHAT
+- **Link chạy thử online (GitHub Pages)**: https://ducnhatnguyen18-svg.github.io/CSE122-BTL-NGUYENDUCNHAT/login.html — mở là vào trang đăng nhập, chọn vai trò là dùng được cả 12 trang, không cần tải code về.
 
 ## Ghi chú
 
