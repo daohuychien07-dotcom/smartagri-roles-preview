@@ -63,7 +63,13 @@ body {
   color: var(--green-800);
 }
 .logo svg { width: 36px; height: 36px; }
-.nav { display: flex; flex-direction: column; gap: 6px; flex: 1; }
+/* Menu chung 12 trang: co tieu de nhom + cuon khi man hinh thap */
+.nav { display: flex; flex-direction: column; gap: 4px; flex: 1; min-height: 0; overflow-y: auto; scrollbar-width: thin; }
+.nav-group {
+  font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+  color: var(--gray-400); padding: 14px 16px 4px; user-select: none;
+}
+.nav-group:first-child { padding-top: 0; }
 .nav-item {
   display: flex;
   align-items: center;
@@ -136,7 +142,10 @@ header {
   min-width: 16px; height: 16px; border-radius: 8px;
   display: flex; align-items: center; justify-content: center; padding: 0 3px;
 }
-.user-chip { display: flex; align-items: center; gap: 10px; }
+/* .user-chip la duong dan toi trang Tai khoan (a.user-chip) nen gi mau + bo goach chan */
+.user-chip { display: flex; align-items: center; gap: 10px; color: inherit; text-decoration: none; border-radius: 999px; padding: 4px 8px 4px 4px; transition: background .18s; }
+.user-chip:hover { background: var(--gray-100); }
+.user-chip:hover .role { color: var(--green-800); }
 .avatar {
   width: 42px; height: 42px; border-radius: 50%;
   background: linear-gradient(135deg, var(--green-600), var(--green-800));
@@ -336,6 +345,7 @@ tbody tr:hover { background: var(--gray-50); }
 /* Sidebar thu gọn (desktop) */
 body.collapsed .sidebar { width: 84px; }
 body.collapsed .logo span, body.collapsed .nav-item .label, body.collapsed .logout-btn .label { display: none; }
+body.collapsed .nav-group { display: none; }
 body.collapsed .nav-item, body.collapsed .logout-btn { justify-content: center; }
 body.collapsed .side-footer { display: none; }
 body.collapsed .content, body.collapsed header { padding-left: 24px; padding-right: 24px; }
@@ -376,7 +386,8 @@ body.collapsed .content, body.collapsed header { padding-left: 24px; padding-rig
   }
   .logo { padding: 0 8px 0 0; font-size: 17px; }
   .logo svg { width: 28px; height: 28px; }
-  .nav { flex-direction: row; flex-wrap: wrap; gap: 4px; flex: 1; }
+  .nav { flex-direction: row; flex-wrap: wrap; gap: 4px; flex: 1; max-height: 128px; }
+  .nav-group { display: none; }
   .nav-item { padding: 9px 12px; font-size: 13px; gap: 8px; }
   .nav-item svg { width: 17px; height: 17px; }
   .logout-btn { padding: 9px 12px; }

@@ -66,13 +66,13 @@
 
 "CSS tách sang `style.css`. Đầu file khai báo **biến màu trong `:root`** nên đổi chủ đề chỉ sửa một chỗ. Layout dùng **Flexbox**, form modal dùng **Grid** hai cột `1fr 1fr`. Cuối file là **media query** 1100 đến 520 pixel."
 
-> Nhảy tới: `style.css` dòng `6` (`9` `--green-700`) → `39` body flex → `273` grid → `348`/`356`/`363`/`411` media.
+> Nhảy tới: `style.css` dòng `6` (`9` `--green-700`) → `39` body flex → `282` grid → `358`/`366`/`373`/`422` media.
 
 **JavaScript (~20s — 44 từ)**
 
 "JavaScript thuần, không thư viện. Dữ liệu là hai mảng `crops` và `pests`; `renderTable()` lấy kết quả từ `getFiltered()` gán vào `innerHTML`, nên **bảng render từ mảng**. Khi submit, em bắt buộc có tên và có đủ giai đoạn sinh trưởng."
 
-> Nhảy tới: `main.js` dòng `9` + `16` mảng → `38` getFiltered → `54` renderTable (`57` innerHTML) → `231` submit → `239`/`255` lỗi → `style.css:283` `.error`.
+> Nhảy tới: `main.js` dòng `9` + `16` mảng → `38` getFiltered → `54` renderTable (`57` innerHTML) → `231` submit → `239`/`255` lỗi → `style.css:292` `.error`.
 
 ---
 
@@ -94,10 +94,10 @@ Em xin hết, cảm ơn thầy cô."
 
 1. **"Xóa `e.preventDefault()` thì sao?"** *(main.js:232, 288)* → Trang tải lại theo cách mặc định, mảng JS trở về dữ liệu mẫu và code validate không kịp chạy.
 2. **"JS chạy khi nào?"** *(index.html:10-12, main.js:345)* → Script nằm trong `<head>` với `defer` nên chạy sau khi DOM đã đọc xong; dòng cuối file gọi `renderTable()` vẽ lần đầu, các tương tác đăng ký qua `addEventListener`.
-3. **"Vì sao bảng không viết sẵn trong HTML?"** *(index.html:134 + main.js:54-109)* → Dữ liệu nằm ở mảng JS và render động, nên tìm/lọc/thêm/sửa chỉ cần gọi lại `renderTable()`.
-4. **"`.form-grid` để làm gì?"** *(style.css:273-275)* → Grid hai cột cho form modal; `.full` dùng `grid-column: 1 / -1` để trường dài chiếm trọn hàng.
-5. **"Responsive ở đâu?"** *(style.css:344-417)* → `364` body thành cột, `365-379` sidebar thành thanh ngang, `401-402` `overflow-x: auto` + `table { min-width: 720px }` để cuộn ngang thay vì vỡ layout.
-6. **"Badge đổi màu thế nào?"** *(main.js:70 + style.css:236-238)* → Khi render em ghép `class="badge ${c.status}"`, CSS có ba rule `.active` / `.archived` / `.disabled`.
+3. **"Vì sao bảng không viết sẵn trong HTML?"** *(index.html:170 + main.js:54-109)* → Dữ liệu nằm ở mảng JS và render động, nên tìm/lọc/thêm/sửa chỉ cần gọi lại `renderTable()`.
+4. **"`.form-grid` để làm gì?"** *(style.css:282-284)* → Grid hai cột cho form modal; `.full` dùng `grid-column: 1 / -1` để trường dài chiếm trọn hàng.
+5. **"Responsive ở đâu?"** *(style.css:353-428)* → `374` body thành cột, `375-386` sidebar thành thanh ngang, `412-413` `overflow-x: auto` + `table { min-width: 720px }` để cuộn ngang thay vì vỡ layout.
+6. **"Badge đổi màu thế nào?"** *(main.js:70 + style.css:245-247)* → Khi render em ghép `class="badge ${c.status}"`, CSS có ba rule `.active` / `.archived` / `.disabled`.
 7. **"1000 dòng có chậm không?"** *(main.js:57)* → Có, vì `innerHTML` vẽ lại cả bảng; hướng khắc phục là phân trang hoặc virtual scroll, và cần backend thật.
 8. **"`editingId` để làm gì?"** *(main.js:25, 188, 260-281)* → `null` là thêm mới (`push`, sinh mã tự tăng), có mã là sửa (`Object.assign` vào bản ghi cũ).
 9. **"Điểm chưa hoàn thiện?"** *(main.js:9, 16, 44)* → Chưa có backend nên tải lại trang là về dữ liệu mẫu; chưa phân trang; tìm kiếm mới phủ tên cây và tên giống, chưa tìm sang giai đoạn sinh trưởng.

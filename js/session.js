@@ -21,6 +21,9 @@
   if (logout) {
     logout.addEventListener('click', () => {
       localStorage.removeItem(ROLE_KEY);
+      // Xoá luôn phiên của không gian Chuyên gia (chuyen-gia/) để không vào được trang cũ.
+      sessionStorage.removeItem('smartagri_auth');
+      sessionStorage.removeItem('smartagri_user');
       window.location.href = 'login.html';
     });
   }

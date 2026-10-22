@@ -10,7 +10,9 @@
 
 **Quản lý danh mục cây trồng & Sâu bệnh (trang Quản trị hệ thống)** — trang chính theo yêu cầu giữa kỳ.
 
-Hệ thống admin SmartAgri hiện có **8 trang** dùng chung sidebar/header và bộ biến màu:
+Hệ thống SmartAgri hiện có **12 trang** nối thành một website hoàn chỉnh: 7 trang quản trị ở thư mục gốc + 5 trang trong **không gian Chuyên gia** (`chuyen-gia/`), tất cả dùng chung một menu sidebar 12 mục và cùng một phiên đăng nhập.
+
+**Khối quản trị (thư mục gốc)** — sidebar/header và bộ biến màu dùng chung:
 
 | Trang | File | Vai trò |
 |-------|------|---------|
@@ -22,6 +24,16 @@ Hệ thống admin SmartAgri hiện có **8 trang** dùng chung sidebar/header v
 | Danh mục cây trồng | `index.html` | **Trang chính** - quản lý danh mục cây trồng & sâu bệnh hại |
 | Tài khoản người dùng | `users.html` | Quản lý tài khoản: lọc, khóa/mở khóa, duyệt, đổi vai trò, phân trang |
 | Cấu hình hệ thống | `settings.html` | Cấu hình vận hành: chung, AI, thông báo, bảo mật, dữ liệu & sao lưu |
+
+**Không gian Chuyên gia (`chuyen-gia/`)** — vùng làm việc riêng của vai trò Chuyên gia nông nghiệp:
+
+| Trang | File | Vai trò |
+|-------|------|---------|
+| Yêu cầu hỗ trợ & Tư vấn | `chuyen-gia/consult.html` | Hàng đợi yêu cầu của nông hộ, soạn lời khuyên, gán mức ưu tiên |
+| Nhật ký canh tác | `chuyen-gia/journal.html` | Nhật ký đồng ruộng theo hộ, thêm/bọc sự kiện canh tác, ảnh hiện trường |
+| AI Cảnh báo & Dự báo | `chuyen-gia/alerts.html` | Cảnh báo sâu bệnh và dự báo theo khu vực do AgrBrain sinh từ dữ liệu |
+| Thư viện tài nguyên | `chuyen-gia/library.html` | Kho quy trình, tài liệu, video; duyệt/xóa hồ sơ chờ |
+| Quản lý chuyên gia | `chuyen-gia/experts.html` | Danh sách chuyên gia, phân công yêu cầu, trạng thái làm việc |
 
 ## Mục đích của trang
 
@@ -55,7 +67,19 @@ Trang dành cho **Quản trị viên hệ thống**. Dùng để thiết lập v
 - **`reports.html`**: chọn mùa vụ (đã kết thúc / đang diễn ra), 3 chỉ số sản lượng - chi phí - doanh thu theo định dạng số Việt Nam, **biểu đồ cột năng suất thuần CSS** kèm đường chỉ tiêu nét đứt, dải tóm tắt tự tính % đạt chỉ tiêu, bảng so sánh nông hộ **sắp xếp theo cột** (kèm `aria-sort` và dòng tổng kết), tên hộ là link sang `households.html?q=...`, xuất **PDF** (hộp thoại in, có `@media print`) và **Excel/CSV** (`Blob` + BOM để không lỗi tiếng Việt), panel **Đóng & Lưu trữ mùa vụ** với modal xác nhận phải tick ô cam kết, trạng thái khóa ghi `localStorage` nên tải lại vẫn còn.
 - **`js/catalog.js`**: danh mục cây trồng / sâu bệnh / khu vực dùng chung cho 3 trang mới, đồng bộ với dữ liệu ở `js/main.js` để AI và bộ lọc không tự đặt tên giống cây.
 
+### Nối hai khối trang thành một website
+
+- **Menu chung 12 mục** chia 4 nhóm: *Vận hành HTX* (Dashboard) → *Khối HTX* (Nông hộ, Lịch trình, Báo cáo) → *Chuyên gia & AI* (Yêu cầu tư vấn, Nhật ký canh tác, AI Cảnh báo, Thư viện, Quản lý chuyên gia) → *Quản trị hệ thống* (Danh mục, Tài khoản, Cấu hình). Menu được khai báo ở **3 nơi** và đã đối chiếu khớp từng chữ: viết tay trong HTML của 7 trang gốc + `giuaki.html`, mảng `SA_NAV` trong `chuyen-gia/js/shell.js` (dùng cho `alerts/experts/library`), và hai danh sách tĩnh trong `chuyen-gia/consult.html` + `chuyen-gia/journal.html`. Trang đang xem sáng bằng `aria-current="page"` / class `active`, thứ tự và nhãn giống hệt nhau trên cả 12 trang.
+- **Một phiên đăng nhập**: `login.html` lưu vai trò vào `localStorage['smartagri_role_v1']`. Khối gốc đọc trực tiếp; khối Chuyên gia dùng `sessionStorage`, nên 5 trang `chuyen-gia/*.html` có đoạn "cầu nối phiên" trong `<head>`: nếu chưa có `smartagri_auth` mà `localStorage` có vai trò thì sinh phiên Chuyên gia tại chỗ, ngược lại mới đưa về `login.html`. Đăng xuất ở bất kỳ trang nào xóa cả hai nơi nên không xem lại được trang cũ.
+- **Vai trò Chuyên gia nông nghiệp** ở trang đăng nhập vào thẳng `chuyen-gia/consult.html`; chuông thông báo trên các trang gốc có link "Xem tất cả thông báo" sang `chuyen-gia/alerts.html`, còn mục "Hỗ trợ" trong footer sidebar dẫn sang `chuyen-gia/library.html`.
+- **Tách tuyệt đối để không đụng độ**: `chuyen-gia/` giữ nguyên CSS/JS riêng (`css/style.css`, `css/parts.css`, `js/pages.js`, `js/agrbrain.js`...) nên không ghi đè `css/style.css` hay `js/main.js` của khối gốc. Hai khối dùng cách đặt class khác nhau (BEM `.nav__item` và `.nav-item`) nên không xung đột kiểu.
+- **Trợ lý AI AgrBrain** (`chuyen-gia/js/agrbrain.js`) quét dữ liệu của cả 5 trang Chuyên gia để sinh danh sách việc ưu tiên và thông báo trong chuông; mỗi thông báo/link đều trỏ đúng `#` của mục cần xử lý, và biết nhảy sang trang khối gốc — ví dụ hồ sơ đăng ký chờ duyệt dẫn tới `../users.html?status=pending` (đúng trang có sẵn bộ lọc "Đang chờ duyệt").
+
+> 5 trang trong `chuyen-gia/` do thành viên nhóm viết (repo `cse122-cropmate-ai`, nhánh `smartagri`), được chép nguyên vào thư mục con rồi sửa đường dẫn và nối phiên; 7 trang ở thư mục gốc là phần code cá nhân nộp giữa kỳ.
+
 ## Công nghệ sử dụng
+
+
 
 - **HTML5**: semantic HTML (`header`, `nav`, `main`, `section`, `aside`, `footer`, `form`, `label`, `table`...).
 - **CSS3**: Flexbox, CSS Grid (form 2 cột), biến màu CSS, hiệu ứng `hover`, `transition`, **Media Query responsive** (desktop / tablet / mobile).
@@ -75,7 +99,7 @@ project/
 ├── reports.html        # Báo cáo tổng kết mùa vụ + đóng & lưu trữ
 ├── users.html          # Quản lý tài khoản người dùng
 ├── settings.html       # Cấu hình hệ thống
-├── giuaki.html         # Bản 1 file tự chứa của trang danh mục (để nộp giữa kỳ)
+├── giuaki.html         # Bản 1 file tự chứa của trang danh mục (HTML+CSS+JS inline, menu đủ 12 mục, để nộp giữa kỳ)
 ├── css/
 │   ├── style.css       # Nền: sidebar/header/table/modal/toast + responsive (dùng chung)
 │   ├── login.css       # Style riêng cho trang đăng nhập (hero, lưới thẻ vai trò)
@@ -103,6 +127,20 @@ project/
 │   ├── mockup-desktop.png  # Ảnh thiết kế tham khảo (desktop)
 │   ├── login-hero.svg      # Ảnh minh họa cánh đồng + drone (trang đăng nhập)
 │   └── role-*.svg          # 4 minh họa vai trò: expert, coop, farmer, admin
+├── chuyen-gia/             # Không gian Chuyên gia (CSS/JS/assets riêng)
+│   ├── consult.html        # Yêu cầu hỗ trợ & Tư vấn
+│   ├── journal.html        # Nhật ký canh tác
+│   ├── alerts.html         # AI Cảnh báo & Dự báo
+│   ├── library.html        # Thư viện tài nguyên
+│   ├── experts.html        # Quản lý chuyên gia
+│   ├── css/                # style.css (nền + shell), parts.css (block riêng), journal.css
+│   ├── js/
+│   │   ├── shell.js        # Mảng SA_NAV 12 mục + khung sidebar/topbar/modal
+│   │   ├── agrbrain.js     # Trợ lý AI: quét dữ liệu 5 trang, sinh việc + thông báo
+│   │   ├── pages.js        # Logic alerts / experts / library
+│   │   ├── journal.js      # Logic nhật ký canh tác
+│   │   └── main.js         # tiện ích dùng chung của khối Chuyên gia
+│   └── assets/             # logo, ảnh minh họa, thumbnail tài liệu
 ├── THUYET_TRINH_GIUKI.md   # Kịch bản thuyết trình video 3 phút
 ├── MA_CODE_THUYET_TRINH.md # Bản đồ mã nguồn: mỗi câu thuyết trình → file + số dòng
 ├── TRALOI_KIEM_TRA_GIUA_KI.md # Bài làm đề trên lớp (3 câu: HTML / CSS / JS)
@@ -111,13 +149,16 @@ project/
 
 ## Cách chạy
 
-Mở trực tiếp `login.html` (trang đầu tiên) hoặc một trong các file `index.html` / `dashboard.html` / `households.html` / `schedule.html` / `reports.html` / `users.html` / `settings.html` bằng trình duyệt (Chrome, Edge...). Các trang nối với nhau qua menu sidebar (7 mục, thứ tự: Dashboard → Tổng quan nông hộ → Lịch trình mùa vụ → Báo cáo tổng kết → Danh mục cây trồng → Tài khoản người dùng → Cấu hình hệ thống); vai trò **Điều phối Hợp tác xã** ở trang đăng nhập vào thẳng `households.html`, nút **Đăng xuất** đưa trở lại `login.html`. Không cần cài đặt gì thêm.
+Mở trực tiếp `login.html` (trang đầu tiên) rồi chọn một vai trò, hoặc mở bất kỳ file nào trong 12 trang: `index.html` / `dashboard.html` / `households.html` / `schedule.html` / `reports.html` / `users.html` / `settings.html` / `chuyen-gia/consult.html` / `chuyen-gia/journal.html` / `chuyen-gia/alerts.html` / `chuyen-gia/library.html` / `chuyen-gia/experts.html` bằng trình duyệt (Chrome, Edge...). Toàn bộ menu sidebar nối kín giữa hai khối nên đi được từ trang gốc sang trang Chuyên gia và ngược lại; vai trò **Điều phối Hợp tác xã** vào thẳng `households.html`, vai trò **Chuyên gia nông nghiệp** vào thẳng `chuyen-gia/consult.html`, nút **Đăng xuất** đưa trở lại `login.html`. Không cần cài đặt hay chạy lệnh gì thêm.
+
+Mở tay một trang `chuyen-gia/*.html` khi chưa từng đăng nhập sẽ được đưa về `login.html` (trang nào cũng có đoạn kiểm tra phiên trong `<head>`); chỉ cần chọn vai trò ở trang đăng nhập là vào được.
 
 ## Responsive
 
 - **Desktop**: sidebar cố định bên trái, form modal 2 cột (theo thiết kế).
 - **Tablet (<= 900px)**: form modal về 1 cột.
 - **Mobile (<= 768px)**: sidebar chuyển thành thanh menu ngang phía trên, bảng dữ liệu cuộn ngang thay vì vỡ layout, nút "Thêm" tràn full-width.
+- **Cả hai khối** đều được đo ở bề rộng 336px: 12/12 trang không tràn ngang (`scrollWidth - clientWidth = 0`). Lịch mùa vụ (`schedule.html`) giữ tối thiểu 700px nhưng cuộn ngang trong khung nhờ `.sc-layout { grid-template-columns: minmax(0, 1fr) }`; nút hành động trên thẻ tài nguyên (`chuyen-gia/css/parts.css`) cho xuống dòng; nhãn trục ngang biểu đồ báo cáo rút font và cho phép cắt chữ.
 
 ## Link liên quan
 

@@ -250,6 +250,9 @@
   .rp { --rp-plot-h: 200px; }
   .rp-bar-val { font-size: 10.5px; }
   .rp-summary .rate { margin-left: 0; }
+  /* 7 nhãn trục ngang ép rộng thêm → cho rút gọn để không tràn ngang */
+  .rp-xlabels { gap: 2px; padding: 8px 0 0; }
+  .rp-xlabels span { font-size: 11px; min-width: 0; overflow: hidden; }
 }
 
 /* ============ BẢN IN PDF ============ */

@@ -70,7 +70,7 @@
         <button type="button" class="notif-mark-all">Đánh dấu tất cả đã đọc</button>
       </div>
       <div class="notif-list"></div>
-      <div class="notif-foot"><a href="#" onclick="return false;">Xem tất cả thông báo</a></div>`;
+      <div class="notif-foot"><a href="chuyen-gia/alerts.html">Xem tất cả thông báo</a></div>`;
     host.appendChild(panel);
     chip = panel.querySelector('.count-chip');
 
