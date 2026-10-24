@@ -1,0 +1,36 @@
+Liên kết thiết kế (Figma / Canva) — CropMate AI (SmartAgri)
+
+Nguồn thiết kế của toàn bộ dự án là CANVA (không phải Figma).
+
+1) BẢN CỦA SV3 — 8 trang quản trị + cổng đăng nhập (thư mục gốc)
+   Link (công khai, "Ai có đường link đều xem được"):
+   https://canva.link/j66tusfj3cbdckv
+   Quy mô: 35 trang thiết kế, gồm sitemap, user flow, mockup desktop và
+   phiên bản mobile của các màn hình:
+     login.html, dashboard.html, households.html, schedule.html,
+     reports.html, index.html, users.html, settings.html
+   Ảnh xuất trực tiếp từ bản thiết kế đã commit trong repo:
+     design/mockups/01-admin-crop-catalog-desktop.png
+     (mockup màn hình Quản lý danh mục cây trồng & sinh vật gây hại;
+      ảnh gốc assets/mockup-desktop.png vào repo từ commit 98fa748, 2026-10-12)
+
+2) BẢN CỦA SV1 — 10 trang khối Nông dân (nong-dan/)
+   Trạng thái: CHƯA có link thiết kế nào trong repo. README của khối đang để
+   nguyên chỗ trống "<DÁN LINK FIGMA VÀO ĐÂY>" (nong-dan/README.md dòng 10 và
+   dòng 298).
+   VIỆC CẦN LÀM: SV1 dán link Figma/Canva thật vào đây và bổ sung ảnh mockup
+   cho 10 màn hình `nong-dan/` theo danh sách ở `mockups/README.md` trước khi nộp.
+
+3) BẢN CỦA SV2 — 5 trang khối Chuyên gia (chuyen-gia/)
+   Trạng thái: CHƯA có link thiết kế được commit. Các màn hình này được
+   dựng theo mô tả bố cục trong mã + ảnh minh họa có trong repo:
+     chuyen-gia/assets/login-hero.jpg
+     chuyen-gia/assets/ruong-lua-hien-truong.png
+     chuyen-gia/assets/thumb-*.svg (6 ảnh thu nhỏ tài nguyên)
+   VIỆC CẦN LÀM: SV2 bổ sung link Figma/Canva.
+
+GHI CHÚ METHODOLOGY (khai trung thực, dùng cho mục "Khai báo sử dụng AI")
+- Không có trang nào được sinh bằng cách "dán ảnh AI rồi code theo ảnh".
+- Với 8 trang gốc: đọc mockup Canva → tự viết khung xương HTML ngữ nghĩa →
+  CSS dùng token màu chung trong css/style.css (`:root`) → JavaScript.
+- Phần khung dây (wireframe) và ảnh mockup của 8 trang gốc nằm ở link mục 1.

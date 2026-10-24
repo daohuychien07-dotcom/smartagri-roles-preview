@@ -1,253 +1,241 @@
-# CSE122 - Bài tập lớn: CropMate AI (SmartAgri)
+# CropMate AI (SmartAgri) – Nhật ký mùa vụ và trợ lý canh tác theo trình độ
 
-> Bài kiểm tra giữa kỳ - Học phần Phát triển ứng dụng Web cơ bản (CSE122)
+> **Học phần:** CSE122 – Phát triển ứng dụng Web cơ bản · **Đề tài:** BTL-04
+> **Sản phẩm:** nguyên mẫu Web Frontend 4 vai trò, 23 màn hình, CRUD có trạng thái nghiệp vụ, 3 trải nghiệm AI mô phỏng, không backend.
+> **Chạy thử ngay:** https://ducnhatnguyen18-svg.github.io/CSE122-BTL-NGUYENDUCNHAT/login.html
+> **Repo nộp bài:** https://github.com/ducnhatnguyen18-svg/CSE122-BTL-NGUYENDUCNHAT · **Repo nhóm:** https://github.com/ducnhatnguyen18-svg/cse122-cropmate-ai
+> **Hồ sơ bắt buộc:** [screen-inventory](docs/screen-inventory.md) · [proposal](docs/project-proposal.md) · [vai trò & tính năng](docs/roles-and-features.md) · [phân công](docs/team-assignment.md) · [OBS](docs/obs-evidence.md) · [khai báo AI](docs/ai-usage-report.md) · [thiết kế](design/figma-link.txt)
 
-## Tên đề tài
+---
 
-**CropMate AI (SmartAgri)** - Nền tảng hỗ trợ nông nghiệp thông minh: quản lý danh mục cây trồng, sâu bệnh hại và gợi ý canh tác cho Nông dân, HTX.
+## Ngữ cảnh
 
-## Tên trang đã thực hiện
+Nông hộ nhỏ trong hợp tác xã ghi chép rời rạc bằng sổ tay, Zalo và ảnh trong điện thoại. Khi sâu bệnh xuất hiện, chuyên gia nhận được một mô tả thiếu bối cảnh: không biết giống gì, giai đoạn nào, đã phun gì, thời tiết mấy ngày qua. Điều phối HTX quản lý lịch bằng Excel và điện thoại; danh mục cây trồng – sinh vật gây hại và tài khoản thì không ai giữ cho nhất quán.
 
-**Quản lý danh mục cây trồng & Sâu bệnh (trang Quản trị hệ thống)** — trang chính theo yêu cầu giữa kỳ.
+CropMate AI gom **bốn vai trò** (Nông dân · Chuyên gia · Điều phối HTX · Quản trị viên) vào **một website duy nhất**: nông dân ghi nhật ký và nhận chẩn đoán sơ bộ, chuyên gia duyệt kết quả đó trước khi trả lời, HTX lập lịch và tổng kết mùa vụ, quản trị viên giữ danh mục chuẩn và kiểm soát tài khoản. Sau khi đăng nhập, người dùng **chỉ thấy đúng không gian của vai trò mình** (`js/roles.js`).
 
-Hệ thống SmartAgri hiện có **24 file HTML / 19 trang nối mạch** thành một website hoàn chỉnh, gồm **ba khối** dùng chung một cổng đăng nhập và một phiên: 7 trang quản trị ở thư mục gốc + 5 trang **không gian Chuyên gia** (`chuyen-gia/`) + 7 trang **không gian Nông dân** (`nong-dan/`), cùng 3 trang xác thực riêng của khối nông dân.
+## Phát biểu vấn đề
 
-Sau khi đăng nhập, module **`js/roles.js`** quyết định người dùng đó thấy gì: menu chỉ còn đúng các trang thuộc vai trò, link nội dung ngoài phạm vi bị ẩn, và mở tay một trang bị cấm sẽ tự chuyển về trang nhà của vai trò đó (bảng ở mục "Phân quyền giao diện theo vai trò").
+| Mã | Vấn đề | Hướng giải quyết trong sản phẩm |
+|---|---|---|
+| **P1** | Nhật ký mùa vụ phân tán, không tra cứu lại được | `nong-dan/diary.html` + `nong-dan/index.html`: nhật ký có ảnh, tìm kiếm, lọc, lưu `localStorage` |
+| **P2** | Khó theo dõi công việc theo giai đoạn | `nong-dan/season.html` (giai đoạn) + `schedule.html` (lịch HTX, AI-2 sinh checklist) |
+| **P3** | Ảnh hiện trường không được tổ chức và phân loại | `nong-dan/ai.html` + `chuyen-gia/journal.html`: phân loại + độ tin cậy + vòng duyệt |
+| **P4** | Chuyên gia thiếu bối cảnh khi tư vấn | `chuyen-gia/consult.html` + AgrBrain (AI-3) tóm tắt 6 nguồn dữ liệu thành việc ưu tiên |
+| **P5** *(nhóm bổ sung)* | HTX không có bức tranh tổng thể | `households.html`, `schedule.html`, `reports.html` |
+| **P6** *(nhóm bổ sung)* | Danh mục và tài khoản không ai quản trị | `index.html`, `users.html`, `settings.html`, `dashboard.html` |
 
-**Khối quản trị (thư mục gốc)** — sidebar/header và bộ biến màu dùng chung:
+## Mục tiêu
 
-| Trang | File | Vai trò |
-|-------|------|---------|
-| Đăng nhập | `login.html` | Trang đầu tiên: chọn vai trò (Chuyên gia, Điều phối HTX, Nông dân, Quản trị viên) + form đăng ký có validate |
-| Dashboard | `dashboard.html` | Bảng điều khiển tổng quan: thẻ thống kê, biểu đồ người dùng active, nhật ký hoạt động |
-| Tổng quan nông hộ | `households.html` | **Trang chính của Điều phối HTX**: lưới thẻ/bảng 6 nông hộ, chỉ số toàn HTX, lọc theo khu vực - giống - trạng thái sức khỏe, gửi thông báo riêng |
-| Lịch trình mùa vụ | `schedule.html` | Lịch tập trung 3 chế độ (Tháng / Tuần / Giai đoạn), thêm sự kiện nhanh, bộ lọc loại + khu vực, **AI-2 sinh checklist mùa vụ** có tiến trình và áp dụng cho toàn HTX |
-| Báo cáo tổng kết | `reports.html` | Tổng kết theo mùa vụ: 3 chỉ số, biểu đồ năng suất so với chỉ tiêu, bảng so sánh nông hộ sắp xếp được, xuất PDF/CSV, **đóng & lưu trữ mùa vụ** |
-| Danh mục cây trồng | `index.html` | **Trang chính** - quản lý danh mục cây trồng & sâu bệnh hại |
-| Tài khoản người dùng | `users.html` | Quản lý tài khoản: lọc, khóa/mở khóa, duyệt, đổi vai trò, phân trang |
-| Cấu hình hệ thống | `settings.html` | Cấu hình vận hành: chung, AI, thông báo, bảo mật, dữ liệu & sao lưu |
+- **O1** Biến bài toán thành sản phẩm Frontend có hành trình người dùng rõ cho 4 vai trò.
+- **O2** Đủ giao diện cho từng vai trò, mỗi vai trò ≥ 3 màn hình (thực tế: Nông dân 10, Chuyên gia 5, Điều phối 3, Quản trị 4).
+- **O3** CRUD có ý nghĩa nghiệp vụ: `chờ → đã tư vấn / từ chối → lưu trữ`, không xóa cứng dữ liệu.
+- **O4** JavaScript thuần cho tìm kiếm, lọc đa tiêu chí, sắp xếp, phân trang, validate, modal + `Esc`, tab, toast, render dữ liệu.
+- **O5** Dữ liệu giả lập qua mảng JS + **19 khóa `localStorage`** (`smartagri_*`), giữ nguyên sau `F5`.
+- **O6** ≥ 3 trải nghiệm AI đủ 6 bước và có kịch bản thất bại/không chắc chắn.
+- **O7** Làm việc nhóm qua Git/GitHub theo nhánh; bảng công việc ghi trong `docs/`.
+- **O8** *(nhóm bổ sung)* Một hệ thống thống nhất thay vì 3 "website con": cổng đăng nhập chung, menu 12 mục đồng bộ, phân quyền giao diện theo vai trò.
 
-**Không gian Chuyên gia (`chuyen-gia/`)** — vùng làm việc riêng của vai trò Chuyên gia nông nghiệp:
+## Các vai trò
 
-| Trang | File | Vai trò |
-|-------|------|---------|
-| Yêu cầu hỗ trợ & Tư vấn | `chuyen-gia/consult.html` | Hàng đợi yêu cầu của nông hộ, soạn lời khuyên, gán mức ưu tiên |
-| Nhật ký canh tác | `chuyen-gia/journal.html` | Nhật ký đồng ruộng theo hộ, thêm/bọc sự kiện canh tác, ảnh hiện trường |
-| AI Cảnh báo & Dự báo | `chuyen-gia/alerts.html` | Cảnh báo sâu bệnh và dự báo theo khu vực do AgrBrain sinh từ dữ liệu |
-| Thư viện tài nguyên | `chuyen-gia/library.html` | Kho quy trình, tài liệu, video; duyệt/xóa hồ sơ chờ |
-| Quản lý chuyên gia | `chuyen-gia/experts.html` | Danh sách chuyên gia, phân công yêu cầu, trạng thái làm việc |
+| Vai trò | Không gian | Trang nhà sau đăng nhập | Mục menu |
+|---|---|---|---:|
+| **Nông dân** | `nong-dan/` (10 trang) | `nong-dan/index.html` | 7 |
+| **Chuyên gia nông nghiệp** | `chuyen-gia/` (5 trang) | `chuyen-gia/consult.html` | 4 |
+| **Điều phối HTX** | trang gốc + 4 trang Chuyên gia | `households.html` | 8 |
+| **Quản trị viên** | toàn bộ khối HTX + Chuyên gia | `dashboard.html` | 12 |
 
-**Không gian Nông dân (`nong-dan/`)** — vùng làm việc riêng của vai trò Nông dân (CSS/JS/assets tách riêng, menu 7 mục):
+Phạm vi trên **không phải mô tả trên giấy**: `js/roles.js` lọc phần tử menu theo vai trò, ẩn link ngoài phạm vi, đổi logo/chip về trang nhà vai trò, và `guardPage()` chặn việc gõ URL tay (dùng `location.replace` để nút Back không quay lại trang bị cấm). Kiểm thử 4 vai trò ở mục **Demo**.
 
-| Trang | File | Vai trò |
-|-------|------|---------|
-| Tổng quan | `nong-dan/index.html` | Bảng điều khiển mùa vụ: trạng thái lô ruộng, thời tiết, trợ lý AI, hoạt động gần đây, ghi nhật ký nhanh |
-| Mùa vụ | `nong-dan/season.html` | Chọn/thêm mùa vụ, các giai đoạn sinh trưởng, kế hoạch canh tác và danh sách lô ruộng |
-| Nhật ký | `nong-dan/diary.html` | Form thêm/sửa và danh sách nhật ký đồng ruộng, lưu ở `localStorage` |
-| Thời tiết | `nong-dan/weather.html` | Khu vực theo dõi, chỉ số đồng ruộng, dự báo 24 giờ/7 ngày, cảnh báo và khuyến nghị canh tác |
-| Trợ lý AI | `nong-dan/ai.html` | Chẩn đoán bệnh qua ảnh, hỏi đáp kỹ thuật, lịch sử chẩn đoán |
-| Hỗ trợ kỹ thuật | `nong-dan/support.html` | Gửi yêu cầu hỗ trợ và xem phản hồi từ chuyên gia |
-| Cài đặt | `nong-dan/settings.html` | Hồ sơ nông hộ, lô ruộng, thông báo, giao diện, bảo mật, xuất/xoá dữ liệu cá nhân |
-| Đăng nhập / Đăng ký / Quên mật khẩu | `nong-dan/login.html`, `register.html`, `forgot-password.html` | 3 trang xác thực riêng của khối; `login.html` có link "Về cổng đăng nhập chung của toàn hệ thống" |
+## Luồng người dùng
 
-## Mục đích của trang
-
-Trang dành cho **Quản trị viên hệ thống**. Dùng để thiết lập và chuẩn hóa dữ liệu nền tảng (danh mục cây trồng, giống cây, chu kỳ sinh trưởng, giai đoạn sinh trưởng, danh mục sâu bệnh hại) làm căn cứ cho bộ lọc của Nông dân/HTX và cho gợi ý của AI trong hệ thống CropMate AI.
-
-## Các chức năng chính
-
-- **Chuyển tab** giữa *Danh mục Cây trồng* và *Danh mục Sâu bệnh hại*.
-- **Tìm kiếm** theo tên cây trồng, tên giống, tên sâu bệnh hoặc triệu chứng (tìm trực tiếp khi gõ).
-- **Lọc dữ liệu** theo nhóm cây trồng và theo trạng thái (Đang hoạt động / Lưu trữ / Vô hiệu hóa), nút **Làm mới** để xóa bộ lọc.
-- **Render dữ liệu từ mảng JavaScript** ra bảng (dữ liệu cây trồng và sâu bệnh lưu trong hai mảng `crops`, `pests`).
-- **Mở/đóng Modal** thêm mới hoặc chỉnh sửa cây trồng / sâu bệnh.
-- **Form Validation** bằng JavaScript: bắt buộc nhập tên, chu kỳ sinh trưởng (không âm, "từ" không lớn hơn "đến"), bắt buộc có ít nhất một giai đoạn sinh trưởng.
-- **Thêm / sửa dữ liệu**: thêm cây trồng, sâu bệnh mới; chỉnh sửa qua nút "Sửa".
-- **Thay đổi trạng thái**: Lưu trữ / Vô hiệu hóa / Khôi phục, hiển thị bằng badge màu.
-- **Thêm / xóa các giai đoạn sinh trưởng** dạng chip nối mũi tên trong form.
-- **Toggle** thu gọn sidebar (nút hamburger).
-- **Thông báo toast** khi thao tác thành công.
-
-### Chức năng ở các trang mở rộng
-
-- **`login.html`**: 4 thẻ vai trò là link thật (`<a>`) — JavaScript chặn lại để lưu vai trò vào `localStorage`, hiện trạng thái "đang đăng nhập" rồi chuyển vào hệ thống; modal **Đăng ký/ Tạo tài khoản** có validate (tên ≥ 3 ký tự, regex email, số điện thoại 10 chữ số, mật khẩu ≥ 6 và nhập lại khớp, bắt buộc đồng ý điều khoản).
-- **Luồng đăng ký → trang Tài khoản người dùng** (`js/store.js`): hồ sơ hợp lệ được ghi vào `localStorage['smartagri_registrations_v1']`; `users.html` đọc và chèn lên đầu danh sách với trạng thái *Đang chờ duyệt* + nhãn "Mới đăng ký" (kèm khu vực canh tác). Khi Admin Duyệt / Khóa / Đổi vai trò, thay đổi ghi ngược vào kho nên tải lại trang vẫn còn. `dashboard.html` đọc cùng kho để tăng số "Tài khoản chờ duyệt" và thêm dòng vào nhật ký hoạt động.
-- **`session.js`**: mọi trang quản trị đọc vai trò đã chọn để hiển thị tên + avatar ở header; nút Đăng xuất xóa phiên và trở về `login.html`.
-- **`notifications.js`**: chuông thông báo mở dropdown, đánh dấu đã đọc, cập nhật badge (dùng chung mọi trang quản trị).
-
-### Chức năng ở 3 trang theo thiết kế HTX (mockup Canva)
-
-- **`households.html`**: 4 thẻ chỉ số (45 hộ / 120 ha / tỷ lệ an toàn / 3 sự cố - số sự cố tính từ dữ liệu thật), chuyển **Bảng ↔ Thẻ**, tìm kiếm không phân biệt hoa thường, chip lọc *giống cây* và *trạng thái sức khỏe* kết hợp AND với dropdown khu vực,thanh tiến độ giai đoạn sinh trưởng, modal "Gửi thông báo riêng" có validate, deep link `?health=alert` / `?q=tên hộ`.
-- **`schedule.html`**: lịch tháng 42 ô + chế độ tuần + sơ đồ giai đoạn mùa vụ, điều hướng trước/sau/hôm nay, thêm sự kiện thủ công, bấm sự kiện để đánh dấu đã xong, bộ lọc *loại sự kiện* + *khu vực* hiện thành chip bỏ được, **AI-2**: kiểm tra giống cây có thuộc danh mục chuẩn (`js/catalog.js`) → mô phỏng bất đồng bộ có % tiến trình → đề xuất mốc lịch theo đúng số ngày chu kỳ và sâu bệnh của cây → "Áp dụng cho toàn HTX" đẩy mốc lịch thành sự kiện thật; có skeleton lúc tải và empty state.
-- **`reports.html`**: chọn mùa vụ (đã kết thúc / đang diễn ra), 3 chỉ số sản lượng - chi phí - doanh thu theo định dạng số Việt Nam, **biểu đồ cột năng suất thuần CSS** kèm đường chỉ tiêu nét đứt, dải tóm tắt tự tính % đạt chỉ tiêu, bảng so sánh nông hộ **sắp xếp theo cột** (kèm `aria-sort` và dòng tổng kết), tên hộ là link sang `households.html?q=...`, xuất **PDF** (hộp thoại in, có `@media print`) và **Excel/CSV** (`Blob` + BOM để không lỗi tiếng Việt), panel **Đóng & Lưu trữ mùa vụ** với modal xác nhận phải tick ô cam kết, trạng thái khóa ghi `localStorage` nên tải lại vẫn còn.
-- **`js/catalog.js`**: danh mục cây trồng / sâu bệnh / khu vực dùng chung cho 3 trang mới, đồng bộ với dữ liệu ở `js/main.js` để AI và bộ lọc không tự đặt tên giống cây.
-
-### Nối ba khối trang thành một website
-
-- **Menu chung 12 mục** chia 4 nhóm: *Vận hành HTX* (Dashboard) → *Khối HTX* (Nông hộ, Lịch trình, Báo cáo) → *Chuyên gia & AI* (Yêu cầu tư vấn, Nhật ký canh tác, AI Cảnh báo, Thư viện, Quản lý chuyên gia) → *Quản trị hệ thống* (Danh mục, Tài khoản, Cấu hình). Menu được khai báo ở **3 nơi** và đã đối chiếu khớp từng chữ: viết tay trong HTML của 7 trang gốc + `giuaki.html`, mảng `SA_NAV` trong `chuyen-gia/js/shell.js` (dùng cho `alerts/experts/library`), và hai danh sách tĩnh trong `chuyen-gia/consult.html` + `chuyen-gia/journal.html`. Trang đang xem sáng bằng `aria-current="page"` / class `active`, thứ tự và nhãn giống hệt nhau trên cả 12 trang.
-- **Một phiên đăng nhập** cho cả ba khối: `login.html` lưu vai trò vào `localStorage['smartagri_role_v1']` dưới dạng `{role, short, initials, scope, at}` — `scope` (`admin` / `coop` / `expert` / `farmer`) là khoá để `js/roles.js` quyết định phạm vi thấy được. Khối gốc đọc trực tiếp; khối Chuyên gia dùng `sessionStorage`, nên 5 trang `chuyen-gia/*.html` có đoạn "cầu nối phiên" trong `<head>`: nếu chưa có `smartagri_auth` mà `localStorage` có vai trò thì sinh phiên Chuyên gia tại chỗ, ngược lại mới đưa về `login.html`. Khối Nông dân cũng đọc cùng khoá `localStorage`, và `nong-dan/js/login.js` (đăng nhập demo trong khối) sau khi xác thực sẽ ghi phiên chung rồi chuyển sang `chuyen-gia/consult.html` nếu là tài khoản `chuyen_gia`, về `nong-dan/index.html` nếu là nông dân. Đăng xuất ở bất kỳ trang nào xóa hết cả ba nơi lưu nên không xem lại được trang cũ.
-- **Vai trò Chuyên gia nông nghiệp** ở trang đăng nhập vào thẳng `chuyen-gia/consult.html`; chuông thông báo trên các trang gốc có link "Xem tất cả thông báo" sang `chuyen-gia/alerts.html`, còn mục "Hỗ trợ" trong footer sidebar dẫn sang `chuyen-gia/library.html`.
-- **Vai trò Nông dân** ở trang đăng nhập vào thẳng `nong-dan/index.html`. Đã kiểm tra bằng grep: toàn bộ link trong 10 trang khối này chỉ trỏ nội bộ trong `nong-dan/` (cộng thêm link "Về cổng đăng nhập chung" ở `nong-dan/login.html`), nên không phải sửa đường dẫn nào khác.
-- **Tách tuyệt đối để không đụng độ**: mỗi khối giữ nguyên CSS/JS riêng — `chuyen-gia/` (`css/style.css`, `css/parts.css`, `js/pages.js`, `js/agrbrain.js`...) và `nong-dan/` (`css/`, `js/`, `assets/` của riêng khối) — nên không ghi đè `css/style.css` hay `js/main.js` của khối gốc. Ba khối đặt class menu theo kiểu khác nhau (`.nav-item`, BEM `.nav__item`, `.side-link`) nên không xung đột kiểu; `js/roles.js` là file dùng chung duy nhất và chỉ thêm/bớt class ẩn.
-- **Trợ lý AI AgrBrain** (`chuyen-gia/js/agrbrain.js`) quét dữ liệu của cả 5 trang Chuyên gia để sinh danh sách việc ưu tiên và thông báo trong chuông; mỗi thông báo/link đều trỏ đúng `#` của mục cần xử lý, và biết nhảy sang trang khối gốc — ví dụ hồ sơ đăng ký chờ duyệt dẫn tới `../users.html?status=pending` (đúng trang có sẵn bộ lọc "Đang chờ duyệt").
-
-### Phân quyền giao diện theo vai trò (`js/roles.js`)
-
-Module thuần JS, không thư viện, được nhúng vào `<head>` của **19 trang** (7 trang gốc, 5 trang Chuyên gia, 7 trang Nông dân) và chạy theo đường dẫn trang nên một file dùng được cho cả ba khối:
-
-| Vai trò (`scope`) | Trang nhà sau khi đăng nhập | Số mục menu nhìn thấy | Bị chặn |
-|-------------------|-----------------------------|------------------------|---------|
-| Quản trị viên (`admin`) | `dashboard.html` | 12 (toàn bộ menu) | `nong-dan/*` (không gian riêng của nông dân) |
-| Điều phối HTX (`coop`) | `households.html` | 8 theo 3 nhóm menu | `index.html`, `users.html`, `settings.html`, `chuyen-gia/experts.html`, `nong-dan/*` |
-| Chuyên gia (`expert`) | `chuyen-gia/consult.html` | 4 (Yêu cầu tư vấn, Nhật ký, AI Cảnh báo, Thư viện) | 7 trang khối gốc, `chuyen-gia/experts.html`, `nong-dan/*` |
-| Nông dân (`farmer`) | `nong-dan/index.html` | 7 (menu riêng của khối) | mọi trang ngoài `nong-dan/` |
-
-Cơ chế:
-
-- **Bảng đăng ký trang theo đường dẫn** (`PATH_KEY`): 19 trang -> một `key`; `dir` lấy từ `location.pathname` nên trang gốc nhận `dashboard.html`, trang chuyên gia nhận `chuyen-gia/consult.html`, và `urlFor()` tự thêm `../` khi cần nhảy chéo khối.
-- **Lọc menu**: `filterNav()` với `ITEM_SEL = '.nav-item, .nav__item, .side-link'` — mục không thuộc vai trò bị `display: none !important` + `aria-hidden` và đánh dấu `data-role-hidden` để kiểm tra tự động; nhóm menu (`.nav-group`) bị ẩn nếu còn lại trống.
-- **Lọc link trong nội dung**: `filterLinks()` ẩn các link trỏ tới trang ngoài phạm vi (kể cả trong dropdown thông báo, footer sidebar, thẻ vai trò), rồi `pruneEmptyParent()` gỡ `<li>` đã rỗng để không còn dòng trắng. Link `.brand`/`.logo`, `.user-chip` và `.role-card` nằm trong `SKIP` nên không bị ẩn oan.
-- **Sửa link dẫn ra ngoài phạm vi**: `fixEntryLinks()` soi `a.brand` (logo sidebar) và `a.user-chip` (tên người dùng ở header) — nếu href trỏ tới trang ngoài phạm vi vai trò thì đổi về trang nhà của vai trò đó, kèm `title` "Về trang của ...". Nhờ vậy Nông dân bấm logo không bị đưa sang trang quản trị rồi mới bị chặn.
-- **Chặn truy cập tay**: `guardPage()` chạy sớm trong `<head>` — chưa có phiên → `login.html`; có phiên nhưng trang ngoài phạm vi → `location.replace(urlFor(ROLE_HOME[scope]))`. Dùng `replace` để nút Back không quay lại trang bị cấm.
-- **Menu sinh bằng JavaScript**: sidebar của khối Chuyên gia do `chuyen-gia/js/shell.js` vẽ sau khi tải xong, nên module gắn `MutationObserver` để lọc tiếp các node thêm mới.
-- **Chống timing bất định**: `apply()` chạy đồng bộ và có `parsed` (`readyState !== 'loading'`) chắn phần ẩn nhóm menu, vì `requestAnimationFrame` bị trình duyệt tắt khi tab chạy nền — dùng bộ lọc đồng bộ thì menu ẩn ngay cả khi tab nền.
-- **Phiên cũ vẫn dùng được**: nếu `localStorage` thiếu `scope` (phiên lưu trước khi có phân quyền), `keyOfRole()` suy vai trò bằng cách bỏ dấu tiếng Việt rồi khớp từ khoá (`quan tri`→admin, `chuyen gia`→expert, `hop tac xa`/`ieu phoi`→coop, còn lại farmer).
-- **Gỡ vướng đăng xuất**: `wireSharedLogout()` gắn lại nút "Đăng xuất" trong khối nông dân (vốn chỉ xoá dữ liệu cục bộ) để xoá cả phiên chung và về `login.html`.
-- **Hỗ trợ kiểm thử**: `window.SA_ROLES` công khai `{role, label, block, menu, signedIn}` cùng các hàm `allow(key)`, `keyOfHref(href)`, `urlFor(key)`, `home()`, `apply()` để gọi từ Console khi cần đối chiếu; `document.documentElement.dataset.role` gắn nhãn vai trò lên `<html>` (kiểm nhanh bằng DevTools), còn mỗi phần tử bị ẩn mang `data-role-hidden` nên đếm được bằng `querySelectorAll('[data-role-hidden]').length`.
-
-> 5 trang trong `chuyen-gia/` và 10 trang trong `nong-dan/` do thành viên nhóm viết (repo `cse122-cropmate-ai`; khối nông dân lấy từ nhánh `season-dashboard`), được chép nguyên vào thư mục con rồi nối phiên và phân quyền; 7 trang ở thư mục gốc cùng `login.html`, `js/roles.js` và phần liên kết là code cá nhân.
-
-## Công nghệ sử dụng
-
-
-
-- **HTML5**: semantic HTML (`header`, `nav`, `main`, `section`, `aside`, `footer`, `form`, `label`, `table`...).
-- **CSS3**: Flexbox, CSS Grid (form 2 cột), biến màu CSS, hiệu ứng `hover`, `transition`, **Media Query responsive** (desktop / tablet / mobile).
-- **JavaScript (thuần - Vanilla JS)**: DOM, `addEventListener`, render dữ liệu từ mảng, validate form, `localStorage`/`sessionStorage` cho phiên + dữ liệu, `MutationObserver` lọc menu do JS vẽ, `data-*` attributes, `location.replace`, `Blob` + `URL.createObjectURL` khi xuất CSV, không dùng thư viện hay framework.
-
-Không sử dụng backend, framework hay thư viện ngoài (theo đúng phạm vi kiểm tra giữa kỳ).
-
-## Cấu trúc thư mục
-
+```text
+Nông dân                          Chuyên gia                      Điều phối HTX / Quản trị viên
+────────                          ──────────                      ─────────────────────────────
+login.html (chọn vai trò)
+ └▶ nong-dan/index.html (AI-1)      chuyen-gia/consult.html        dashboard.html (chỉ số hệ thống)
+ └▶ nong-dan/season.html (giai đoạn)  └▶ AgrBrain AI-3 tóm tắt       └▶ households.html (giám sát hộ)
+ └▶ nong-dan/diary.html (nhật ký)      └▶ đổi trạng thái W→S/R        └▶ schedule.html (AI-2 checklist)
+      AI-1 chẩn đoán ─────────────▶    chuyen-gia/journal.html          └▶ reports.html (tổng kết, CSV,
+ └▶ nong-dan/weather.html (luật +      (duyệt kết quả AI,                 archive)
+      lý do)                                sửa độ tin cậy)                └▶ index.html · users.html ·
+ └▶ nong-dan/support.html ───gửi──▶   └▶ trả lời ──▶ support.html          settings.html (quản trị)
+      (chờ → đã tư vấn → đóng)             (nông dân thấy phản hồi)
 ```
+
+Chuỗi phân tích đầy đủ (persona → mục tiêu → nhiệm vụ → luồng → màn hình): [`docs/user-analysis.md`](docs/user-analysis.md), [`docs/user-goals-tasks-flows.md`](docs/user-goals-tasks-flows.md).
+
+## Bảng kiểm kê màn hình
+
+**23 màn hình / 24 tệp HTML** (tệp thứ 24 là `giuaki.html`, bản 1 tệp tự chứa của `index.html` dùng cho điểm giữa kỳ — không tính là màn hình). Bảng 13 cột đầy đủ theo Phụ lục B của đề cương: **[`docs/screen-inventory.md`](docs/screen-inventory.md)** — gồm mục tiêu người dùng, nhiệm vụ, tệp, CRUD, trạng thái, AI, người phụ trách, mã TASK, nhánh, trạng thái video OBS, và ánh xạ sang 12 tên tệp nền tảng của đề BTL-04.
+
+| Vai trò | Màn hình (tệp) |
+|---|---|
+| Nông dân | `nong-dan/index.html` · `season.html` · `diary.html` · `weather.html` · `ai.html` · `support.html` · `settings.html` · `login.html` · `register.html` · `forgot-password.html` |
+| Chuyên gia | `chuyen-gia/consult.html` · `journal.html` · `alerts.html` · `library.html` · `experts.html` |
+| Điều phối HTX | `households.html` · `schedule.html` · `reports.html` |
+| Quản trị viên | `dashboard.html` · `index.html` · `users.html` · `settings.html` |
+| Dùng chung | `login.html` (cổng chọn 4 vai trò + form đăng ký) |
+
+**Bao phủ trạng thái** (Bình thường / Đang tải / Rỗng / Thành công / Lỗi / Vô hiệu hóa / Đang chờ / Bị từ chối / Đã lưu trữ) được ghi nhận theo từng màn hình ở cột *Trạng thái* của bảng kiểm kê; skeleton có thật ở `users.html`, `schedule.html`, `chuyen-gia/*`, `nong-dan/login.html`.
+
+## Tính năng AI
+
+Cả ba đều **mô phỏng ở Frontend** (luật + JSON giả lập + `setTimeout`), không gọi API, không khóa bí mật. Mỗi tính năng có đủ 6 bước *Nhập → Kiểm tra hợp lệ → Đang xử lý → Kết quả → Giải thích → Chấp nhận/Sửa/Từ chối → Lưu vào ứng dụng* và **có kịch bản thất bại**.
+
+| AI | Tên đề bài | Màn hình | Điểm chính | Khi AI sai/thiếu dữ liệu |
+|---|---|---|---|---|
+| **AI-1** | Field Issue Classifier | `nong-dan/index.html`, `nong-dan/diary.html`, `nong-dan/ai.html`, duyệt ở `chuyen-gia/journal.html` | phân loại từ mô tả/ảnh, độ tin cậy 72–97 % ổn định theo ảnh (`hashOf()`), giải thích dấu hiệu + phác đồ, lịch sử 20 lần, chat hỏi đáp | `nong-dan/js/ai.js:557` "chưa có câu trả lời chắc chắn" → gợi ý gửi chuyên gia; ca độ tin cậy thấp `journal.js:906` "chưa vượt ngưỡng xử lý" |
+| **AI-2** | Season Checklist Generator | `schedule.html` | nhập giống + giai đoạn → tiến trình % → mốc lịch theo đúng chu kỳ trong `js/catalog.js` → "Áp dụng cho toàn HTX" | `js/schedule.js:305`/`:338` `showAiError('AI chưa có dữ liệu chuẩn cho "…"')` khi giống ngoài danh mục |
+| **AI-3** | Farm Log Summarizer (AgrBrain) | `chuyen-gia/consult.html`, `chuyen-gia/journal.html`, chuông thông báo 5 trang | đọc `localStorage` của 6 loại dữ liệu, xếp việc ưu tiên + lý do, deep link tới `#alert-1`, `#req-3`, `../users.html?status=pending` | thiếu dữ liệu → `SEED_*`, badge `.ab-count` tự ẩn khi danh sách rỗng, không bịa nội dung |
+
+**Không phải AI (nói rõ để không khai sai):** `nong-dan/weather.html` là **luật if/then trên dữ liệu thời tiết** kèm lý do (`nong-dan/js/weather.js:454`); `#rpSummary` của `reports.html` là **tổng hợp bằng công thức** (`js/reports.js:175`); tab "Mô hình AI" trong `settings.html` chỉ là **form cấu hình**; chỉ số "Tỷ lệ gọi AI thành công" trong `dashboard.html` là **số liệu giả lập**.
+
+## Công nghệ
+
+- **HTML5 ngữ nghĩa:** `header`/`nav`/`main`/`section`/`aside`/`footer`, một `h1` mỗi trang, `label` cho mọi ô nhập, `alt` cho ảnh, `aria-current`, `aria-sort`, `role="tabpanel"`, modal đóng bằng `Esc`.
+- **CSS3 tự viết, không framework:** Flexbox, Grid (`minmax(0,1fr)`), biến màu trong `:root` của `css/style.css`, `@media` 900/768 px, `@media print` cho báo cáo. Ba khối giữ CSS riêng (`css/`, `chuyen-gia/css/`, `nong-dan/css/`) với cơ chế class khác nhau (`.nav-item` / `.nav__item` / `.side-link`) nên không đè kiểu.
+- **JavaScript thuần:** DOM + `addEventListener`, render từ mảng, validate biểu mẫu, `localStorage`/`sessionStorage`, `MutationObserver`, `Blob` + BOM khi xuất CSV, `location.replace` khi chặn trang. **Không thư viện, không framework, không backend.**
+- **Yêu cầu mạng duy nhất của toàn site:** phông `Be Vietnam Pro` qua `fonts.googleapis.com` ở 5 trang `chuyen-gia/`.
+
+### Cấu trúc thư mục
+
+```text
 project/
-├── index.html          # Trang chính: Quản lý danh mục cây trồng & Sâu bệnh
-├── login.html          # Đăng nhập chọn vai trò + form đăng ký
-├── dashboard.html      # Bảng điều khiển tổng quan
-├── households.html     # Tổng quan nông hộ (lưới thẻ / bảng, gửi thông báo riêng)
-├── schedule.html       # Lịch trình mùa vụ tập trung + AI sinh checklist
-├── reports.html        # Báo cáo tổng kết mùa vụ + đóng & lưu trữ
-├── users.html          # Quản lý tài khoản người dùng
-├── settings.html       # Cấu hình hệ thống
-├── giuaki.html         # Bản 1 file tự chứa của trang danh mục (HTML+CSS+JS inline, menu đủ 12 mục, để nộp giữa kỳ)
-├── css/
-│   ├── style.css       # Nền: sidebar/header/table/modal/toast + responsive (dùng chung)
-│   ├── login.css       # Style riêng cho trang đăng nhập (hero, lưới thẻ vai trò)
-│   ├── dashboard.css   # Style riêng cho dashboard (stat card, biểu đồ, nhật ký)
-│   ├── households.css  # Style riêng cho tổng quan nông hộ (thẻ, chip lọc, tiến độ)
-│   ├── schedule.css    # Style riêng cho lịch trình (lịch, sự kiện, skeleton, panel AI)
-│   ├── reports.css     # Style riêng cho báo cáo (biểu đồ CSS, bảng, modal, @media print)
-│   ├── users.css       # Style riêng cho trang tài khoản (badge vai trò, skeleton...)
-│   ├── settings.css    # Style riêng cho cấu hình (tab dọc, toggle switch...)
-│   └── notifications.css  # Chuông thông báo (dùng chung)
-├── js/
-│   ├── main.js         # Logic trang danh mục
-│   ├── login.js        # Chọn vai trò, modal đăng ký, validate form
-│   ├── roles.js        # PHÂN QUYỀN GIAO DIỆN THEO VAI TRÒ: lọc menu + ẩn link + chặn trang (dùng chung 3 khối)
-│   ├── store.js        # Kho hồ sơ đăng ký (localStorage) dùng chung login/users/dashboard
-│   ├── catalog.js      # Danh mục cây trồng / sâu bệnh / khu vực dùng chung 3 trang HTX
-│   ├── session.js      # Đọc vai trò đã đăng nhập + nút Đăng xuất (dùng chung)
-│   ├── dashboard.js    # Logic dashboard (biểu đồ, toggle ngày/tuần)
-│   ├── households.js   # Logic nông hộ (lọc, chuyển view, modal thông báo, deep link)
-│   ├── schedule.js     # Logic lịch (3 chế độ xem, sự kiện, AI checklist có tiến trình)
-│   ├── reports.js      # Logic báo cáo (biểu đồ, sắp bảng, xuất PDF/CSV, lưu trữ vụ)
-│   ├── users.js        # Logic tài khoản (lọc, khóa/duyệt, phân trang)
-│   ├── settings.js     # Logic cấu hình (tab, lưu localStorage, reset)
-│   └── notifications.js   # Dropdown thông báo (dùng chung)
-├── assets/
-│   ├── mockup-desktop.png  # Ảnh thiết kế tham khảo (desktop)
-│   ├── login-hero.svg      # Ảnh minh họa cánh đồng + drone (trang đăng nhập)
-│   └── role-*.svg          # 4 minh họa vai trò: expert, coop, farmer, admin
-├── chuyen-gia/             # Không gian Chuyên gia (CSS/JS/assets riêng)
-│   ├── consult.html        # Yêu cầu hỗ trợ & Tư vấn
-│   ├── journal.html        # Nhật ký canh tác
-│   ├── alerts.html         # AI Cảnh báo & Dự báo
-│   ├── library.html        # Thư viện tài nguyên
-│   ├── experts.html        # Quản lý chuyên gia
-│   ├── css/                # style.css (nền + shell), parts.css (block riêng), journal.css
-│   ├── js/
-│   │   ├── shell.js        # Mảng SA_NAV 12 mục + khung sidebar/topbar/modal
-│   │   ├── agrbrain.js     # Trợ lý AI: quét dữ liệu 5 trang, sinh việc + thông báo
-│   │   ├── pages.js        # Logic alerts / experts / library
-│   │   ├── journal.js      # Logic nhật ký canh tác
-│   │   └── main.js         # tiện ích dùng chung của khối Chuyên gia
-│   └── assets/             # logo, ảnh minh họa, thumbnail tài liệu
-├── nong-dan/               # Không gian Nông dân (CSS/JS/assets riêng, 10 trang)
-│   ├── index.html          # Bảng điều khiển mùa vụ (trang nhà của vai trò Nông dân)
-│   ├── season.html         # Mùa vụ: giai đoạn sinh trưởng, kế hoạch canh tác, lô ruộng
-│   ├── diary.html          # Nhật ký đồng ruộng
-│   ├── weather.html        # Thời tiết nông nghiệp + khuyến nghị canh tác
-│   ├── ai.html             # Trợ lý AI: chẩn đoán qua ảnh, hỏi đáp kỹ thuật
-│   ├── support.html        # Yêu cầu hỗ trợ kỹ thuật & phản hồi chuyên gia
-│   ├── settings.html       # Cài đặt: hồ sơ nông hộ, lô ruộng, thông báo, bảo mật, dữ liệu
-│   ├── login.html          # Đăng nhập demo nông dân (nongdan/123456) + link về cổng chung
-│   ├── register.html       # Đăng ký tài khoản nông dân
-│   ├── forgot-password.html# Quên mật khẩu
-│   ├── css/                # style/layout/ui + 9 css theo trang (ai, diary, season...)
-│   ├── js/
-│   │   ├── main.js         # Khung sidebar/topbar và tiện ích dùng chung của khối
-│   │   ├── display.js      # Đọc dữ liệu localStorage để hiển thị
-│   │   ├── login.js        # Đăng nhập demo + ghi phiên chung smartagri_role_v1
-│   │   └── season.js / diary.js / weather.js / ai.js / support.js / settings.js ...
-│   ├── assets/             # logo.svg, favicon.svg, avatar-farmer.png, hero-rice.png...
-│   ├── README.md           # Ghi chú của thành viên viết khối này
-│   └── youtobe             # File ghi link video + trang demo của thành viên
-├── THUYET_TRINH_GIUKI.md   # Kịch bản thuyết trình video 3 phút
-├── MA_CODE_THUYET_TRINH.md # Bản đồ mã nguồn: mỗi câu thuyết trình → file + số dòng
-├── TRALOI_KIEM_TRA_GIUA_KI.md # Bài làm đề trên lớp (3 câu: HTML / CSS / JS)
-└── README.md
+├── README.md
+├── docs/
+│   ├── project-proposal.md        # Ngữ cảnh, P1-P6, O1-O8, phạm vi + giới hạn
+│   ├── user-analysis.md           # Giai đoạn 0: persona + vai trò + ma trận quyền hạn
+│   ├── user-goals-tasks-flows.md  # Giai đoạn 0: mục tiêu → nhiệm vụ → luồng
+│   ├── screen-inventory.md        # BẢNG KIỂM KÊ MÀN HÌNH 13 cột (23 màn hình) + AI + thực thể
+│   ├── roles-and-features.md      # Chức năng đã code, theo từng màn hình
+│   ├── team-assignment.md         # Phân công + TASK + trách nhiệm chéo
+│   ├── obs-evidence.md            # Danh sách video OBS theo màn hình
+│   └── ai-usage-report.md         # Khai báo sử dụng AI + 10 lỗi đã gặp và cách kiểm chứng
+├── design/
+│   ├── figma-link.txt             # Link Canva 35 trang + tình trạng mockup từng khối
+│   └── mockups/                   # Ảnh mockup xuất từ bản thiết kế (README liệt kê 21 ảnh còn thiếu)
+├── login.html            # Cổng đăng nhập 4 vai trò + form đăng ký
+├── dashboard.html households.html schedule.html reports.html
+├── index.html users.html settings.html giuaki.html
+├── css/                  # style.css (dùng chung) + 8 css theo trang + notifications.css
+├── js/                   # roles.js (PHÂN QUYỀN) · store.js · catalog.js · session.js ·
+│                         # notifications.js · main/dashboard/households/schedule/reports/users/settings.js
+├── assets/               # mockup-desktop.png, login-hero.svg, role-*.svg
+├── chuyen-gia/           # 5 trang Chuyên gia + css/{style,parts,journal}.css + js/{shell,pages,journal,agrbrain,main}.js + assets/
+├── nong-dan/             # 10 trang Nông dân + 12 css + 11 js + assets/ + README.md riêng của SV1
+└── THUYET_TRINH_GIUKI.md · MA_CODE_THUYET_TRINH.md · TRALOI_KIEM_TRA_GIUA_KI.md   # hồ sơ bài giữa kỳ (giữ để đối chiếu điểm)
 ```
 
-## Cách chạy
+Tổng: **24 HTML · 24 CSS · 29 JS** (không kể `docs/`, `design/`, ảnh và video).
 
-Mở trực tiếp `login.html` (cổng đăng nhập chung, trang đầu tiên) rồi chọn một trong 4 vai trò; mỗi vai trò vào đúng không gian của mình và **chỉ thấy menu của mình**: **Quản trị viên** → `dashboard.html` (12 mục), **Điều phối Hợp tác xã** → `households.html` (8 mục), **Chuyên gia nông nghiệp** → `chuyen-gia/consult.html` (4 mục), **Nông dân** → `nong-dan/index.html` (7 mục). Nút **Đăng xuất** ở bất kỳ trang nào xóa phiên và đưa về `login.html`.
+## Thành viên nhóm
 
-19 trang được `js/roles.js` phân quyền: 7 trang gốc (`index.html`, `dashboard.html`, `households.html`, `schedule.html`, `reports.html`, `users.html`, `settings.html`); 5 trang Chuyên gia (`chuyen-gia/consult.html`, `journal.html`, `alerts.html`, `library.html`, `experts.html`); 7 trang Nông dân (`nong-dan/index.html`, `season.html`, `diary.html`, `weather.html`, `ai.html`, `support.html`, `settings.html`). Ngoài ra còn cổng đăng nhập `login.html`, `giuaki.html` (bản 1 file tự chứa để nộp giữa kỳ) và 3 trang xác thực của khối nông dân (`nong-dan/login.html` với tài khoản demo `nongdan` / `123456`, `register.html`, `forgot-password.html`) — tổng 24 file HTML.
+| Mã | Họ tên | MSSV | Tài khoản GitHub | Phụ trách |
+|---|---|---|---|---|
+| SV1 | `<Điền trước khi nộp>` | `<…>` | `daohuychien07-dotcom` | Khối Nông dân — `nong-dan/` (10 màn hình) |
+| SV2 | `<Điền trước khi nộp>` | `<…>` | `tachisama95-ux` (git name `Thanh Dat`) | Khối Chuyên gia — `chuyen-gia/` (5 màn hình) |
+| SV3 | `<Điền trước khi nộp>` | `<…>` | `ducnhatnguyen18-svg` | Khối HTX + Quản trị (8 màn hình), tích hợp, phát hành, hồ sơ |
 
-Mở tay một trang khi chưa đăng nhập → về `login.html`. Mở tay một trang **ngoài phạm vi vai trò** → tự chuyển về trang nhà của vai trò đó (dùng `location.replace` nên nút Back không quay lại được); ví dụ Chuyên gia mở `dashboard.html` sẽ sang `chuyen-gia/consult.html`, Nông dân mở `chuyen-gia/consult.html` sẽ sang `nong-dan/index.html`.
+> Họ tên/MSSV để trống có chủ đích: lịch sử commit dùng tài khoản GitHub và một số commit sớm có `user.name` chưa chuẩn (`Ten Cua Ban`), nên nhóm tự khai và xác nhận trước khi nộp thay vì để tài liệu đoán.
 
-Chạy bằng cách mở file `.html` trực tiếp vẫn hoạt động, nhưng để ổn định nhất (đường dẫn chéo khối, `localStorage` theo origin) nên chạy qua máy chủ tĩnh tại chỗ: `python -m http.server 8000` rồi mở `http://localhost:8000/login.html`. Python chỉ dùng để xem thử, không phải một phần của bài nộp.
+## Phân công công việc
 
-## Kết quả kiểm thử phân quyền
+Chi tiết + lát cắt dọc + trách nhiệm chéo: **[`docs/team-assignment.md`](docs/team-assignment.md)**. Bảng TASK (mã việc ↔ màn hình ↔ tệp ↔ người làm ↔ nhánh ↔ OBS): cột *Công việc/Nhánh/OBS* của **[`docs/screen-inventory.md`](docs/screen-inventory.md)** và **[`docs/obs-evidence.md`](docs/obs-evidence.md)**.
 
-Kiểm bằng cách nạp từng trang trong iframe cùng origin qua `http://127.0.0.1:8123` rồi đếm mục menu nhìn thấy theo computed style (`display/visibility/opacity` của cả chuỗi phần tử cha):
+Tóm tắt: **TASK-01…10** SV1 · **TASK-11…15** SV2 · **TASK-16…24** SV3. Mỗi thành viên tự làm end-to-end (mockup → HTML → CSS → JS → dữ liệu → responsive → nhánh → commit → OBS). Trách nhiệm chéo: SV3 hệ thống thiết kế + tích hợp/phát hành/QA, SV2 JavaScript/dữ liệu/tương tác AI, SV1 responsive và nội dung ngành cho khối nông dân.
 
-| Vai trò | Số trang đã chạy | Kết quả |
-|---------|------------------|---------|
-| Quản trị viên | 7 trang gốc | 12/12 mục trên mọi trang, 0 phần tử bị ẩn, không trang nào chuyển hướng |
-| Điều phối HTX | 2 trang gốc + 4 trang Chuyên gia | 8 mục + 3 nhãn nhóm, 7 liên kết ngoài phạm vi bị ẩn; mở `chuyen-gia/experts.html` → `households.html` |
-| Chuyên gia | 4 trang Chuyên gia | 4 mục, 26 phần tử bị ẩn; mở `dashboard.html` → `chuyen-gia/consult.html` |
-| Nông dân | 7 trang Nông dân | 7 mục trên mọi trang, 0 tràn ngang; mở `chuyen-gia/consult.html` → `nong-dan/index.html` |
-| Chưa đăng nhập | trang bất kỳ | về `login.html` |
+## Quy trình Git
 
-Thêm các ca đã kiểm: Quản trị viên mở `nong-dan/*` → `dashboard.html`; Điều phối HTX mở `nong-dan/weather.html` → `households.html`; phiên cũ không có `scope` vẫn suy ra đúng vai trò; đăng nhập demo `nongdan/123456` ghi phiên chung rồi vào bảng điều khiển mùa vụ; bấm **Đăng xuất** trong khối nông dân xóa `smartagri_role_v1` và về cổng chung. Console sạch (không lỗi JS, không thiếu file CSS/JS/ảnh) trên cả 24 file HTML, và `scrollWidth - clientWidth = 0` ở bề rộng 1280 trên mọi trang đã nạp.
+**Repo nộp bài `CSE122-BTL-NGUYENDUCNHAT` (remote `origin`)** — 24 commit trên `main`, 2026-10-08 → 10-24, message mô tả việc bằng tiếng Việt không dấu (tránh lỗi mã hóa trên Windows) và **không dùng tiền tố chuẩn**:
 
-## Responsive
+```text
+Them khong gian Nong dan (nong-dan/) va noi vao cong dang nhap chung     107a6bc
+Phan quyen giao dien theo vai tro: moi vai tro chi thay dung menu        eefcdd7
+Gop 2 nha code thanh 1 web 12 trang va kiem duyet lan cuoi               253355b
+Sua xuat CSV: them BOM (U+FEFF) de Excel khong dang tieng Viet           277b20c
+```
 
-- **Desktop**: sidebar cố định bên trái, form modal 2 cột (theo thiết kế).
-- **Tablet (<= 900px)**: form modal về 1 cột.
-- **Mobile (<= 768px)**: sidebar chuyển thành thanh menu ngang phía trên, bảng dữ liệu cuộn ngang thay vì vỡ layout, nút "Thêm" tràn full-width.
-- **Hai khối mình viết/gộp (gốc + Chuyên gia)** đều được đo ở bề rộng 336px: 12/12 trang không tràn ngang (`scrollWidth - clientWidth = 0`). Lịch mùa vụ (`schedule.html`) giữ tối thiểu 700px nhưng cuộn ngang trong khung nhờ `.sc-layout { grid-template-columns: minmax(0, 1fr) }`; nút hành động trên thẻ tài nguyên (`chuyen-gia/css/parts.css`) cho xuống dòng; nhãn trục ngang biểu đồ báo cáo rút font và cho phép cắt chữ.
-- **Khối Nông dân** giữ nguyên responsive của thành viên (sidebar `nong-dan/css/layout.css` tự đổi layout theo `@media`); mình chỉ nạp thêm `js/roles.js` nên không ảnh hưởng đến kiểu. Đã đo lại ở 1280px: 7/7 trang không tràn ngang, menu vẫn đủ 7 mục.
+**Repo nhóm `cse122-cropmate-ai` (remote `team`)** — nơi làm việc thật theo nhánh:
 
-## Link liên quan
+| Nhánh | Số commit | Tác giả | Nội dung |
+|---|---:|---|---|
+| `main` | 7 | `Thanh Dat`, `Ten Cua Ban` | khối Chuyên gia (AgrBrain) |
+| `season-dashboard` | 16 | `daohuychien07-dotcom` | khối Nông dân |
+| `dev` | 6 (4 commit theo `feat:`/`docs:`) | `ducnhatnguyen18-svg`, `daohuychien07-dotcom` | khung dự án + `docs/` Giai đoạn 0 (`pages/*.html`, mock API) |
+| `smartagri` | = `origin/main` | `ducnhatnguyen18-svg` | bản gộp 3 khối, đẩy **fast-forward**, không đụng `main` của nhóm |
 
-- **Link Canva**: (https://canva.link/j66tusfj3cbdckv)
-- **Link video**: (https://youtu.be/SiAEbIB4Tos?si=pGBaoD4mPdswX8P5)
-- **Link GitHub**: https://github.com/ducnhatnguyen18-svg/CSE122-BTL-NGUYENDUCNHAT
-- **Repo nhóm (được thêm là remote `team`)**: https://github.com/ducnhatnguyen18-svg/cse122-cropmate-ai — khối `chuyen-gia/` và `nong-dan/` lấy từ repo này (nhánh `smartagri` và `season-dashboard`); bản gộp của mình đẩy lên nhánh `smartagri`, không đụng tới `main` của repo nhóm.
-- **Link chạy thử online (GitHub Pages)**: https://ducnhatnguyen18-svg.github.io/CSE122-BTL-NGUYENDUCNHAT/login.html — mở là vào cổng đăng nhập chung, chọn vai trò là dùng được 19 trang theo đúng phạm vi vai trò, không cần tải code về.
+```text
+Nhánh riêng theo khối → commit → push → đối chiếu/merge → bản gộp trên origin/main → GitHub Pages
+```
 
-## Ghi chú
+**Trung thực về giới hạn Git (điểm yếu, chủ động nói khi bị hỏi):**
+1. **Conventional Commits mới chỉ ở `team/dev` (4/6 commit).** `origin/main` 24/24 commit và hai nhánh của thành viên **không có tiền tố** `feat:`/`fix:`/`docs:` — từ commit dựng bộ hồ sơ `docs/` này trở đi nhóm chuyển sang `docs:` / `feat:` / `fix:` theo chuẩn.
+2. Repo nộp bài chỉ có `main`; `feature/*` và `dev` nằm ở repo nhóm (`season-dashboard`, `smartagri-agrbrain`, `dev`).
+3. Repo nộp bài **không có PR** nào; repo nhóm có 1 PR (`#8`, đã đóng, không merge, không có nhận xét review). Đánh giá chéo vì thế chủ yếu qua buổi làm chung và `git diff` khi gộp khối.
+4. Commit gộp `nong-dan/` và `chuyen-gia/` vào repo nộp bài do SV3 tạo (chép nguyên tệp), nên "ai viết file nào" phải đối chiếu bằng nhánh gốc + `docs/team-assignment.md`, không đọc từ `origin/main`.
+5. Ngày commit trải 2026-10-01 → 10-24; ba commit ngày 10-24 là phần phân quyền + hồ sơ, không phải toàn bộ bài làm dồn ngày cuối.
 
-Dữ liệu trong trang là dữ liệu mẫu lưu ở mảng JavaScript (`crops`, `pests` trong `js/main.js`), chưa kết nối backend/database. Khi tải lại trang, dữ liệu thêm/sửa sẽ về mặc định.
+## Figma / Canva
+
+- **Bản thiết kế của 8 trang gốc (SV3): Canva 35 trang** — sitemap, user flow, mockup desktop + mobile, thành phần, trạng thái loading/rỗng/lỗi, mockup tương tác AI: https://canva.link/j66tusfj3cbdckv (mở công khai "Anyone with the link can view").
+- Ảnh mockup xuất trực tiếp đã commit: `design/mockups/01-admin-crop-catalog-desktop.png` (nguồn: `assets/mockup-desktop.png`).
+- Quy trình: đọc mockup Canva → **tự viết khung xương HTML ngữ nghĩa** → CSS theo token `:root` → JavaScript. Không có trang nào "dán ảnh AI sinh rồi code theo ảnh".
+- **Thiếu:** 10 trang `nong-dan/` và 5 trang `chuyen-gia/` **chưa có link thiết kế trong repo** (`nong-dan/README.md` còn nguyên chỗ trống `<DÁN LINK FIGMA VÀO ĐÂY>`). Việc cần làm trước khi nộp: xem `design/figma-link.txt` mục 2–3 và `design/mockups/README.md` (danh sách 21 ảnh mockup còn thiếu).
+
+## Demo
+
+**Online (GitHub Pages, build từ `origin/main`):** https://ducnhatnguyen18-svg.github.io/CSE122-BTL-NGUYENDUCNHAT/login.html — không cần tải code, deep link `?status=pending`, `?health=alert`, `#alert-1` hoạt động, console sạch, không 404.
+
+**Chạy cục bộ:**
+
+```bash
+python -m http.server 8000
+# mở http://localhost:8000/login.html
+```
+
+Mở trực tiếp tệp `.html` vẫn chạy được, nhưng nên dùng máy chủ tĩnh vì `file://` làm mất query string của deep link và `localStorage` bị tách theo origin. Python chỉ để xem thử, không phải một phần bài nộp.
+
+**Luồng demo liền mạch 6 phút (đề xuất):** `login.html` chọn Quản trị viên → `dashboard.html` (chờ duyệt tính từ kho đăng ký thật) → `users.html?status=pending` → `households.html?health=alert` → `schedule.html` chạy AI-2 tới **trạng thái lỗi** rồi áp dụng checklist → `reports.html` xuất CSV → `index.html` thêm + ngừng dùng một cây trồng → Đăng xuất → chọn **Nông dân** → `nong-dan/ai.html` chạy AI-1 → `support.html` gửi yêu cầu → Đăng xuất → chọn **Chuyên gia** → `chuyen-gia/consult.html` mở AgrBrain (AI-3) → `journal.html` duyệt và sửa kết quả AI.
+
+**Kết quả kiểm thử đã thực hiện**
+
+| Hạng mục | Cách kiểm | Kết quả |
+|---|---|---|
+| Phân quyền 4 vai trò | nạp từng trang trong iframe cùng origin qua `http://127.0.0.1:8123`, đếm mục menu theo computed-style (đi hết chuỗi phần tử cha) | admin 12/12, coop 8 (+3 nhãn nhóm, 7 link bị ẩn), expert 4 (26 phần tử ẩn), farmer 7/7 — đúng như bảng vai trò |
+| Chặn trang ngoài phạm vi | gõ URL tay sau khi đăng nhập vai trò khác | coop → `index.html`/`users.html`/`settings.html`/`experts.html`/`nong-dan/*` bị đưa về `households.html`; expert mở `dashboard.html` → `consult.html`; farmer mở `chuyen-gia/consult.html` → `nong-dan/index.html` |
+| Phiên & đăng xuất | đọc `localStorage`/`sessionStorage` sau khi bấm Đăng xuất | cả ba nơi lưu bị xóa, không xem lại trang cũ bằng nút Back |
+| Liên kết | sinh 128 link `.html` từ DOM của 12 trang khối gốc + Chuyên gia | 0 link hỏng, 0 lỗi 404; deep link `#alert-1`, `#req-1`, `#req-3`, `#doc-10`, `#journalForm` đều tìm thấy và sáng `is-target` |
+| Console & tài nguyên | mở console từng trang | sạch trên **24/24 HTML**, không thiếu CSS/JS/ảnh |
+| Tràn ngang | `scrollWidth − clientWidth` trong iframe | `= 0` ở 1280 px trên mọi trang đã nạp; khối gốc + Chuyên gia đo thêm ở 336 px: 12/12 không tràn |
+| Tính bền dữ liệu | F5 sau Thêm/Sửa/Archive | còn nguyên (`localStorage`) |
+
+**Chưa kiểm chứng (nói rõ):** 10 trang `nong-dan/` chưa đo vỡ layout ở 320/375 px; bảng Trello/Jira công khai chưa có (bảng TASK hiện nằm trong `docs/`); 21/23 video OBS chưa quay.
+
+## Minh chứng OBS
+
+Quy tắc: **1 màn hình trong bảng kiểm kê = 1 video OBS có mặt sinh viên, có sửa code trực tiếp và có bước commit.**
+
+| | Số lượng |
+|---|---:|
+| Màn hình trong bảng kiểm kê | **23** |
+| Video đã có | **2** |
+| Video còn thiếu | **21** |
+
+- `youtu.be/r-eW5GXDfPM` — SV1, khối Nông dân (`nong-dan/index.html` + các trang chức năng).
+- `youtu.be/SiAEbIB4Tos` — SV3, `index.html` (bản giữa kỳ ~3 phút, chưa đủ 8 ý của quy chế cuối kỳ).
+
+Bảng đối chiếu TASK ↔ màn hình ↔ tên file video (`SV?-<NN>-<ten>.mp4`) ↔ trạng thái ↔ link, kèm 8 nội dung bắt buộc trong mỗi video và checklist rà trước khi nộp: **[`docs/obs-evidence.md`](docs/obs-evidence.md)**.
+
+## Khai báo sử dụng AI
+
+Toàn bộ khai báo theo mẫu Phụ lục F — công cụ, 6 prompt chính, phần AI sinh vs phần sinh viên sửa, **10 lỗi AI thật đã gặp** (sed làm hỏng cú pháp `agrbrain.js` mà không báo lỗi; chữ Hán lẫn vào văn bản tiếng Việt; mojibake `perl -CSD`; `requestAnimationFrame` không chạy ở tab nền; `grid repeat(7,1fr)` vỡ ở 336 px; CSV thiếu BOM; khai quá "AI" cho những chỗ chỉ là công thức JS…), cách kiểm chứng và bài học: **[`docs/ai-usage-report.md`](docs/ai-usage-report.md)**.
+
+Hai rủi ro quy chế còn tồn, đã chỉ ra đúng dòng để sửa trước khi bảo vệ:
+
+| Quy chế | Vị trí | Hiện trạng | Cách sửa đề xuất |
+|---|---|---|---|
+| **VP-01** (để lộ API key, -1.50) | `settings.html:189` | AI điền sẵn `value="sk-demo-1234567890"` — không phải key thật nhưng trông như key, lại được `js/settings.js` ghi vào `localStorage` | đổi thành `value=""` + `placeholder="Chưa cấu hình"`, hoặc ghi rõ "giá trị chỉ là ví dụ, không được gửi đi đâu" |
+| **VP-02** (XSS do ghép HTML, -1.00) | `js/login.js:140` | `note.innerHTML = '…<strong>' + name + '</strong>…'` với `name` lấy từ ô nhập, không thoát ký tự | dùng `textContent` cho phần tên, hoặc `escapeHtml()` như `js/households.js:43` và `js/users.js:57` đã làm |
+
+Mọi tính năng AI của dự án là **mock ở Frontend**; **không có** lời gọi LLM/API bên trong, **không có** khóa bí mật nào trong mã (`grep` toàn repo chỉ thấy đúng chuỗi demo ở `settings.html:189`).
