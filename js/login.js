@@ -134,11 +134,28 @@ regForm.addEventListener('submit', e => {
 });
 
 // Ghi chú "đã gửi" kèm link tới trang Quản lý tài khoản (bộ lọc Đang chờ duyệt)
+// Dựng DOM từng nút thay vì ghép chuỗi HTML: tên do người dùng nhập KHÔNG bao giờ
+// được trình duyệt parse thành markup (chống XSS — xem mục An toàn trong README).
 function showSentNote(name) {
   const note = document.getElementById('sentNote');
   if (!note) return;
-  note.innerHTML = '✓ Hồ sơ của <strong>' + name + '</strong> đã được đẩy tới trang '
-    + '<a href="users.html?status=pending">Quản lý tài khoản người dùng</a> ở trạng thái <strong>Đang chờ duyệt</strong>.';
+  note.textContent = '';
+
+  const who = document.createElement('strong');
+  who.textContent = name;
+
+  const link = document.createElement('a');
+  link.href = 'users.html?status=pending';
+  link.textContent = 'Quản lý tài khoản người dùng';
+
+  const state = document.createElement('strong');
+  state.textContent = 'Đang chờ duyệt';
+
+  note.append(
+    '✓ Hồ sơ của ', who,
+    ' đã được đẩy tới trang ', link,
+    ' ở trạng thái ', state, '.'
+  );
   note.hidden = false;
 }
 

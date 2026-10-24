@@ -50,7 +50,7 @@ Bốn vai trò, hai mươi ba màn hình. Tài liệu này mô tả **chức nă
 | Bảng điều khiển hệ thống | `dashboard.html` | Chỉ số (đã đăng nhập, đang hoạt động, **tỷ lệ gọi AI thành công**, chờ duyệt tính từ kho đăng ký thật), biểu đồ cột đổi khoảng thời gian, bảng nhật ký hoạt động + toast, thu gọn sidebar |
 | Danh mục cây trồng & sinh vật gây hại | `index.html` | C/R/U + **Ngừng dùng (archive)**, tìm kiếm, lọc nhóm, badge trạng thái `setStatus()`, form thêm cây trồng validate tên + chu kỳ, toast, `Esc` đóng modal — *trang nộp giữa kỳ* |
 | Quản lý tài khoản | `users.html` | Danh sách + hồ sơ đăng ký mới nhập lên đầu (*Đang chờ duyệt*), tìm + lọc vai trò/trạng thái + **phân trang**, skeleton loading, duyệt/khóa/mở khóa/đổi vai trò (ghi ngược `smartagri_registrations_v1`), chọn hàng loạt, modal đổi vai trò validate |
-| Cấu hình hệ thống | `settings.html` | 5 tab (Chung / Mô hình AI / Thông báo / Bảo mật / Dữ liệu), toggle, validate số, lưu `smartagri_settings_v1`, nút Khôi phục mặc định, toast |
+| Cấu hình hệ thống | `settings.html` | 5 tab (Chung / Trí tuệ nhân tạo / Thông báo / Bảo mật / Dữ liệu & Sao lưu), toggle, validate số, lưu `smartagri_settings_v1` (21 khóa; ô API Key mang `data-secret` **không** được lưu — chống VP-01, xem README), nút Khôi phục mặc định, toast |
 
 ## 5. Ma trận thực thể × vai trò
 

@@ -183,10 +183,10 @@
             <!-- ===== AI ===== -->
             <section class="spanel" data-panel="ai" role="tabpanel" aria-label="Cấu hình AI">
               <div class="panel-card">
-                <div class="panel-card-head"><h2>Mô hình nhận diện &amp; tư vấn</h2><p>Kết nối và tinh chỉnh mô hình AI chẩn đoán sâu bệnh.</p></div>
+                <div class="panel-card-head"><h2>Mô hình nhận diện &amp; tư vấn</h2><p>Tham số cho mô-đun chẩn đoán sâu bệnh — bản demo mô phỏng trong trình duyệt, không kết nối dịch vụ bên ngoài.</p></div>
                 <div class="frow">
-                  <div class="frow-label"><label for="apiKey">API Key</label><small>Khóa truy cập dịch vụ mô hình.</small></div>
-                  <input type="password" id="apiKey" name="apiKey" value="sk-demo-1234567890" autocomplete="off">
+                  <div class="frow-label"><label for="apiKey">API Key</label><small>Ô để trống theo thiết kế demo: ứng dụng không gọi dịch vụ mô hình thật và không lưu khóa vào trình duyệt.</small></div>
+                  <input type="password" id="apiKey" name="apiKey" value="" placeholder="(không dùng trong bản demo)" autocomplete="off" data-secret="true">
                 </div>
                 <div class="frow">
                   <div class="frow-label"><label for="model">Mô hình</label></div>

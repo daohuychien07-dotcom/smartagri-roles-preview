@@ -111,7 +111,7 @@ project/
 │   ├── roles-and-features.md      # Chức năng đã code, theo từng màn hình
 │   ├── team-assignment.md         # Phân công + TASK + trách nhiệm chéo
 │   ├── obs-evidence.md            # Danh sách video OBS theo màn hình
-│   └── ai-usage-report.md         # Khai báo sử dụng AI + 10 lỗi đã gặp và cách kiểm chứng
+│   └── ai-usage-report.md         # Khai báo sử dụng AI + 11 lỗi đã gặp và cách kiểm chứng
 ├── design/
 │   ├── figma-link.txt             # Link Canva 35 trang + tình trạng mockup từng khối
 │   └── mockups/                   # Ảnh mockup xuất từ bản thiết kế (README liệt kê 21 ảnh còn thiếu)
@@ -209,6 +209,7 @@ Mở trực tiếp tệp `.html` vẫn chạy được, nhưng nên dùng máy c
 | Console & tài nguyên | mở console từng trang | sạch trên **24/24 HTML**, không thiếu CSS/JS/ảnh |
 | Tràn ngang | `scrollWidth − clientWidth` trong iframe | `= 0` ở 1280 px trên mọi trang đã nạp; khối gốc + Chuyên gia đo thêm ở 336 px: 12/12 không tràn |
 | Tính bền dữ liệu | F5 sau Thêm/Sửa/Archive | còn nguyên (`localStorage`) |
+| An toàn theo quy chế (VP-01/VP-02) | quét mẫu secrets toàn repo; nhập Họ tên chứa `<img onerror>` rồi gửi đăng ký, mở Dashboard + `users.html?status=pending` | `sk-demo` = 0 kết quả ngoài khai báo ô rỗng; `smartagri_settings_v1` không chứa `apiKey`; payload hiển thị nguyên văn dạng text, 0 thẻ `img` chạy trên 3 trang |
 
 **Chưa kiểm chứng (nói rõ):** 10 trang `nong-dan/` chưa đo vỡ layout ở 320/375 px; bảng Trello/Jira công khai chưa có (bảng TASK hiện nằm trong `docs/`); 21/23 video OBS chưa quay.
 
@@ -229,13 +230,16 @@ Bảng đối chiếu TASK ↔ màn hình ↔ tên file video (`SV?-<NN>-<ten>.m
 
 ## Khai báo sử dụng AI
 
-Toàn bộ khai báo theo mẫu Phụ lục F — công cụ, 6 prompt chính, phần AI sinh vs phần sinh viên sửa, **10 lỗi AI thật đã gặp** (sed làm hỏng cú pháp `agrbrain.js` mà không báo lỗi; chữ Hán lẫn vào văn bản tiếng Việt; mojibake `perl -CSD`; `requestAnimationFrame` không chạy ở tab nền; `grid repeat(7,1fr)` vỡ ở 336 px; CSV thiếu BOM; khai quá "AI" cho những chỗ chỉ là công thức JS…), cách kiểm chứng và bài học: **[`docs/ai-usage-report.md`](docs/ai-usage-report.md)**.
+Toàn bộ khai báo theo mẫu Phụ lục F — công cụ, 6 prompt chính, phần AI sinh vs phần sinh viên sửa, **11 lỗi AI thật đã gặp** (sed làm hỏng cú pháp `agrbrain.js` mà không báo lỗi; chữ Hán lẫn vào văn bản tiếng Việt; mojibake `perl -CSD`; `requestAnimationFrame` không chạy ở tab nền; `grid repeat(7,1fr)` vỡ ở 336 px; CSV thiếu BOM; khai quá "AI" cho những chỗ chỉ là công thức JS; để lộ chuỗi trông như API key; ghép HTML chưa escape và **lỗi cùng loại còn sót ở trang thứ hai** …), cách kiểm chứng và bài học: **[`docs/ai-usage-report.md`](docs/ai-usage-report.md)**.
 
-Hai rủi ro quy chế còn tồn, đã chỉ ra đúng dòng để sửa trước khi bảo vệ:
+Hai rủi ro quy chế từng được rà ra bằng chính bảng kiểm kê; **cả hai đã sửa xong ngày 2026-10-24** và có kết quả kiểm chứng kèm theo:
 
-| Quy chế | Vị trí | Hiện trạng | Cách sửa đề xuất |
-|---|---|---|---|
-| **VP-01** (để lộ API key, -1.50) | `settings.html:189` | AI điền sẵn `value="sk-demo-1234567890"` — không phải key thật nhưng trông như key, lại được `js/settings.js` ghi vào `localStorage` | đổi thành `value=""` + `placeholder="Chưa cấu hình"`, hoặc ghi rõ "giá trị chỉ là ví dụ, không được gửi đi đâu" |
-| **VP-02** (XSS do ghép HTML, -1.00) | `js/login.js:140` | `note.innerHTML = '…<strong>' + name + '</strong>…'` với `name` lấy từ ô nhập, không thoát ký tự | dùng `textContent` cho phần tên, hoặc `escapeHtml()` như `js/households.js:43` và `js/users.js:57` đã làm |
+| Quy chế | Vị trí cũ | Vấn đề AI để lại | Đã sửa thành | Kết quả kiểm (iframe cùng origin, `http://127.0.0.1:8124`) |
+|---|---|---|---|---|
+| **VP-01** (để lộ API key, -1.50) | `settings.html:189` | AI điền sẵn `value="sk-demo-1234567890"` — không phải key thật nhưng trông như key, và `js/settings.js` còn ghi nó vào `localStorage` | Ô để trống `value=""` + `placeholder="(không dùng trong bản demo)"` + `data-secret="true"`; `js/settings.js:19-26` loại trường `data-secret` ra khỏi object lưu, `js/settings.js:29-31` xóa khóa khỏi form khi khôi phục mặc định | Giá trị khởi tạo `""`; tìm `sk-demo` trong DOM = **0**; bấm **Lưu cấu hình** → `smartagri_settings_v1` có **21** khóa cấu hình, **không có** `apiKey`; tải lại trang ô vẫn trống |
+| **VP-02** (XSS do ghép HTML, -1.00) | `js/login.js:140`, `js/dashboard.js:92` | `note.innerHTML = '…<strong>' + name + '</strong>…'` với `name` lấy thẳng từ ô nhập; bảng nhật ký Dashboard cũng chèn `${l.text}` chưa escape (mục đầu tiên lấy Họ tên từ hồ sơ đăng ký) | `showSentNote()` dựng DOM từng nút bằng `createElement` + `textContent` (`js/login.js:139-158`); Dashboard thêm `escapeHtml()` cùng quy tắc với `js/users.js:57` rồi áp cho chuỗi động (`js/dashboard.js:42`, `:96`) | Nhập Họ tên `<img src=x onerror="window.__xssFired=1">Ab` rồi gửi đăng ký: `#sentNote` hiển thị **đúng nguyên văn chuỗi**, `img` bên trong = **0**, `window.__xssFired` = **undefined**; Dashboard và `users.html?status=pending` cũng hiển thị dạng text, 0 thẻ img, console sạch |
 
-Mọi tính năng AI của dự án là **mock ở Frontend**; **không có** lời gọi LLM/API bên trong, **không có** khóa bí mật nào trong mã (`grep` toàn repo chỉ thấy đúng chuỗi demo ở `settings.html:189`).
+Quét lại toàn repo theo mẫu `sk-[a-z0-9]{8,} | api_key=… | Bearer … | AIza | ghp_ | AKIA`: chỉ còn đúng 1 kết quả là dòng khai báo ô `apiKey` **rỗng** ở `settings.html:189`. Khối `chuyen-gia/` và `nong-dan/` (mã của bạn) không ghép dữ liệu người dùng vào `innerHTML` — nội dung tự do đều đi qua `textContent` (ví dụ `nong-dan/js/support.js:352`, `chuyen-gia/js/journal.js:796`), nên không sửa mã của bạn ở phần này.
+
+Mọi tính năng AI của dự án là **mock ở Frontend**; **không có** lời gọi LLM/API bên trong, **không có** khóa bí mật nào trong mã.
+

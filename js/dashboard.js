@@ -37,6 +37,10 @@ const LOGS = [
 ];
 
 /* ---------- Vẽ biểu đồ ---------- */
+/* escapeHtml — cùng quy tắc với js/users.js:57: mọi chuỗi động chèn vào
+   innerHTML phải escape, vì mục nhật ký đầu tiên lấy Họ tên từ form đăng ký. */
+const escapeHtml = s => String(s).replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]));
+
 function renderChart(range) {
   const d = CHART_DATA[range];
   const yAxis = document.getElementById('yAxis');
@@ -89,7 +93,7 @@ function renderLogs() {
       <td>
         <div class="log-act">
           <span class="log-ic ${l.tone}">${ICONS[l.icon]}</span>
-          <span>${l.text}</span>
+          <span>${escapeHtml(l.text)}</span>
         </div>
       </td>
       <td class="log-time">${l.time}</td>

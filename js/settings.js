@@ -13,13 +13,21 @@ function fields() {
   return $$('#settingsForm [name]').map(el => el.name);
 }
 
-/* Đọc giá trị hiện tại của form -> object */
+/* Đọc giá trị hiện tại của form -> object
+   Trường khai báo data-secret (API Key) KHÔNG được đưa vào object:
+   bản demo không dùng khóa thật, và không được ghi secrets vào localStorage. */
 function readForm() {
   const data = {};
   $$('#settingsForm [name]').forEach(el => {
+    if (el.dataset.secret) return;
     data[el.name] = el.type === 'checkbox' ? el.checked : el.value;
   });
   return data;
+}
+
+/* Xóa tay các trường secrets khỏi form (dùng khi khôi phục mặc định) */
+function clearSecrets() {
+  $$('#settingsForm [data-secret]').forEach(el => { el.value = ''; });
 }
 
 /* Ghi object -> form */
@@ -95,6 +103,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Khôi phục mặc định
   $('#btnReset').addEventListener('click', () => {
     writeForm(DEFAULTS);
+    clearSecrets();
     $$('#settingsForm .frow.error').forEach(r => r.classList.remove('error'));
     try { localStorage.removeItem(STORAGE_KEY); } catch (e) { /* noop */ }
     $('#savedNote').hidden = true;
