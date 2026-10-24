@@ -26,8 +26,10 @@ roleCards.forEach(card => {
     const role = card.dataset.role;
     const target = card.getAttribute('href');
 
+    // scope là khoá phạm vi giao diện (js/roles.js) - menu + trang vai trò này được dùng
     localStorage.setItem(ROLE_KEY, JSON.stringify({
-      role, short: card.dataset.short, initials: card.dataset.initials, at: Date.now(),
+      role, short: card.dataset.short, initials: card.dataset.initials,
+      scope: card.dataset.scope, at: Date.now(),
     }));
 
     roleCards.forEach(c => c.classList.remove('is-loading'));
