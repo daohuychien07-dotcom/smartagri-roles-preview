@@ -1,4 +1,4 @@
-# CropMate AI (SmartAgri) – Nhật ký mùa vụ và trợ lý canh tác theo trình độ
+# CropMate AI (SmartAgri) – Nhật ký mùa vụ và trợ lý canh tác
 
 > **Học phần:** CSE122 – Phát triển ứng dụng Web cơ bản · **Đề tài:** BTL-04
 > **Sản phẩm:** nguyên mẫu Web Frontend 4 vai trò, 23 màn hình, CRUD có trạng thái nghiệp vụ, 3 trải nghiệm AI mô phỏng, không backend.
