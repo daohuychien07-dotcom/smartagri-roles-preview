@@ -207,11 +207,20 @@ Mở trực tiếp tệp `.html` vẫn chạy được, nhưng nên dùng máy c
 | Phiên & đăng xuất | đọc `localStorage`/`sessionStorage` sau khi bấm Đăng xuất | cả ba nơi lưu bị xóa, không xem lại trang cũ bằng nút Back |
 | Liên kết | sinh 128 link `.html` từ DOM của 12 trang khối gốc + Chuyên gia | 0 link hỏng, 0 lỗi 404; deep link `#alert-1`, `#req-1`, `#req-3`, `#doc-10`, `#journalForm` đều tìm thấy và sáng `is-target` |
 | Console & tài nguyên | mở console từng trang | sạch trên **24/24 HTML**, không thiếu CSS/JS/ảnh |
-| Tràn ngang | `scrollWidth − clientWidth` trong iframe | `= 0` ở 1280 px trên mọi trang đã nạp; khối gốc + Chuyên gia đo thêm ở 336 px: 12/12 không tràn |
+| Tràn ngang | `scrollWidth − clientWidth` trong iframe cùng origin; xác minh bằng `window.scrollTo(30,0)` rồi đọc `scrollX` | `= 0` ở 1280 px trên mọi trang đã nạp; khối gốc + Chuyên gia đo thêm ở 336 px: 12/12 không tràn; khối `nong-dan/` đo ở **320 px và 375 px**: **8/10 trang = 0 px**, còn `diary.html` tràn 39 px ở 320 px và `login.html` tràn 18 px ở cả hai bề rộng (chi tiết trong phần giới hạn ngay dưới) |
 | Tính bền dữ liệu | F5 sau Thêm/Sửa/Archive | còn nguyên (`localStorage`) |
 | An toàn theo quy chế (VP-01/VP-02) | quét mẫu secrets toàn repo; nhập Họ tên chứa `<img onerror>` rồi gửi đăng ký, mở Dashboard + `users.html?status=pending` | `sk-demo` = 0 kết quả ngoài khai báo ô rỗng; `smartagri_settings_v1` không chứa `apiKey`; payload hiển thị nguyên văn dạng text, 0 thẻ `img` chạy trên 3 trang |
 
-**Chưa kiểm chứng (nói rõ):** 10 trang `nong-dan/` chưa đo vỡ layout ở 320/375 px; bảng Trello/Jira công khai chưa có (bảng TASK hiện nằm trong `docs/`); 21/23 video OBS chưa quay.
+**Đo vỡ layout 320 / 375 px cho khối `nong-dan/` (đo ngày 24-10-2026, cùng phương pháp iframe):** 8/10 trang sạch ở cả hai bề rộng — `index`, `season`, `weather`, `ai`, `support`, `settings`, `register`, `forgot-password` đều `scrollWidth − clientWidth = 0`. Hai trang còn tràn thật (bấm `scrollTo(30,0)` thì `scrollX` khác 0, không phải giả dương do thanh cuộn):
+
+| Trang | Mức tràn (bề rộng nội dung 305 px ở khung 320 px) | Phần tử đo được | Nguyên nhân trong CSS | Bản sửa một dòng |
+|---|---|---|---|---|
+| `nong-dan/diary.html` | 39 px ở 320 px; 0 px ở 375 px | `li.entry` mép phải 344 px, `div.entry-body` phải 344 px | lưới `.entry` cột `76px 18px 1fr` (`nong-dan/css/diary.css:566`, bản mobile `64px 14px 1fr` ở `:875`); cột `1fr` không co dưới chiều rộng tối thiểu của nội dung | thêm `min-width: 0` cho `.entry-body` (`:619`) hoặc đổi cột cuối thành `minmax(0, 1fr)` |
+| `nong-dan/login.html` | 18 px ở cả 320 px và 375 px | `svg.deco-branch` mép phải 323 px (khung 320) / 378 px (khung 375) | ảnh trang trí đặt `right: -18px` (`nong-dan/css/login.css:331-333`) trong khi `overflow-x: hidden` chỉ áp cho `body.login-body` (`:33`), còn `html` vẫn `visible` | chuyển `overflow-x: hidden` lên `html`, hoặc để `right: 0` cho `.deco-branch` |
+
+Hai dòng CSS trên thuộc khối màn hình do thành viên phụ trách, nên nhóm chỉ đo, định vị và ghi nguyên văn đường dẫn dòng thay vì tự sửa (giữ đúng ranh giới sở hữu file ở `docs/team-assignment.md`).
+
+**Chưa kiểm chứng (nói rõ):** bảng Trello/Jira công khai chưa có (bảng TASK hiện nằm trong `docs/`); 21/23 video OBS chưa quay.
 
 ## Minh chứng OBS
 
