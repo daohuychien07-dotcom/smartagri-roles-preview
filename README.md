@@ -125,6 +125,7 @@ project/
 ├── chuyen-gia/           # 5 trang Chuyên gia + css/{style,parts,journal}.css + js/{shell,pages,journal,agrbrain,main}.js + assets/
 ├── nong-dan/             # 10 trang Nông dân + 12 css + 11 js + assets/ + README.md riêng của SV1
 └── THUYET_TRINH_GIUKI.md · MA_CODE_THUYET_TRINH.md · TRALOI_KIEM_TRA_GIUA_KI.md   # hồ sơ bài giữa kỳ (giữ để đối chiếu điểm)
+    THUYET_TRINH_CUOIKI_DASHBOARD.md · THUYET_TRINH_CUOIKI_USERS.md               # kịch bản thuyết trình cuối kỳ (TASK-23, TASK-21)
 ```
 
 Tổng: **24 HTML · 24 CSS · 29 JS** (không kể `docs/`, `design/`, ảnh và video).
@@ -236,6 +237,8 @@ Quy tắc: **1 màn hình trong bảng kiểm kê = 1 video OBS có mặt sinh v
 - `youtu.be/SiAEbIB4Tos` — SV3, `index.html` (bản giữa kỳ ~3 phút, chưa đủ 8 ý của quy chế cuối kỳ).
 
 Bảng đối chiếu TASK ↔ màn hình ↔ tên file video (`SV?-<NN>-<ten>.mp4`) ↔ trạng thái ↔ link, kèm 8 nội dung bắt buộc trong mỗi video và checklist rà trước khi nộp: **[`docs/obs-evidence.md`](docs/obs-evidence.md)**.
+
+Kịch bản thuyết trình + checklist quay đã soạn sẵn cho 2 màn hình của SV3: **[`THUYET_TRINH_CUOIKI_DASHBOARD.md`](THUYET_TRINH_CUOIKI_DASHBOARD.md)** (TASK-23, ~454 từ ≈ 3'47") và **[`THUYET_TRINH_CUOIKI_USERS.md`](THUYET_TRINH_CUOIKI_USERS.md)** (TASK-21, ~470 từ ≈ 3'55"). **Video của hai màn hình này vẫn chưa quay** (nằm trong 21 video còn thiếu ở bảng trên); con số đọc trong hai bài là kết quả chạy thật trên máy ngày 25-10-2026 với `js/dashboard.js` / `js/users.js` đang có trong repo, không phải số ước lượng.
 
 ## Khai báo sử dụng AI
 
