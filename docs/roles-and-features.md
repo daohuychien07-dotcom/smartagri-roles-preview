@@ -21,7 +21,7 @@ Bốn vai trò, hai mươi ba màn hình. Tài liệu này mô tả **chức nă
 
 ## 2. Chuyên gia nông nghiệp (`chuyen-gia/` — SV2)
 
-**Mục tiêu:** nhận đủ bối cảnh trước khi tư vấn, duyệt kết quả AI thay vì tin blindly.
+**Mục tiêu:** nhận đủ bối cảnh trước khi tư vấn, duyệt kết quả AI thay vì tin blindly. Cả 5 màn hình dưới đây đều nằm trong menu của vai trò **Chuyên gia** sau khi `js/roles.js` lọc (đo lại 26-10-2026 — trước đó `experts.html` bị sót ngoài menu, xem mục 4 lỗi 15 của [`ai-usage-report.md`](ai-usage-report.md)).
 
 | Màn hình | Tệp | Làm được gì (đã code) |
 |---|---|---|
@@ -45,6 +45,14 @@ Bản `chuyen-gia/` trong repo này là **5/10 màn hình** mà SV2 đã viết.
 | `households.html` 131 · `reports.html` 170 · `settings.html` 167 (bản *chuyên gia*: tư vấn theo nông hộ, báo cáo nhật ký theo tháng/loại hoạt động + xuất báo cáo, mục cài đặt "Tích hợp mô hình AI – Field Issue Classifier") | **Chưa hợp nhất** | Repo ta có 3 trang trùng tên ở thư mục gốc nhưng là bản khối quản trị (294 / 274 / 299 dòng), nội dung khác |
 
 Giới hạn của so sánh này: repo public của SV2 (`api.github.com/users/tachisama95-ux/repos`) chỉ có `BTCSE122_BTL-ThanhDat` (push 2026-10-18T15:19:52Z, đúng giờ tip `team/main`) và `Thanhdat` (3 tệp, không liên quan CropMate). **Repo private của bạn không kiểm tra được**, nên bảng trên chỉ kết luận về những gì đã đẩy lên GitHub.
+
+**Ảnh sidebar 9 mục của bản gốc so với menu 5 mục của bản hợp nhất.** Ngày 26-10-2026 bạn đưa ảnh chụp menu chuyên gia gồm 9 mục (*Tổng quan* đang bật · Nhật ký canh đồng · AI Cảnh báo & Dự báo · Yêu cầu hỗ trợ · Nông hộ & HTX · Thư viện tài nguyên · Quản lý chuyên gia · Báo cáo & Thống kê · Cài đặt hệ thống) kèm thẻ "Trợ lý AI AgrBrain". Đối chiếu từng chữ: ảnh khớp **chính xác** với `js/shell.js` và `dashboard.html` ở tip `d569695` — tức app **độc lập** của SV2, nơi mọi đường dẫn là `dashboard.html` / `index.html` / `settings.html` cùng cấp và **chưa có** `js/roles.js`. Ảnh không phải bản nộp; bản nộp cũng không hiển thị được sidebar đó vì `chuyen-gia/js/shell.js` đã thay `SA_NAV` bằng 12 mục của site hợp nhất.
+
+Bốn chỗ khác nhau giữa hai sidebar và lý do:
+- **Số mục:** bản hợp nhất dựng 12 mục rồi `js/roles.js` lọc còn **5** cho vai trò Chuyên gia. Bảy mục bị ẩn (`dashboard`, `households`, `schedule`, `reports`, `crops`, `users`, `settings`) trỏ sang khối HTX – quản trị, tức **ẩn theo chủ ý phân quyền chứ không phải mất trang**; admin và coop vẫn nhìn thấy chúng.
+- **"Tổng quan":** tương ứng `dashboard.html` của SV2 — hàng "Chưa hợp nhất" ở bảng trên — nên bản nộp không có mục nào thay đúng chức năng đó. `dashboard.html` ở thư mục gốc (224 dòng) là bảng điều khiển **khối quản trị**, đừng nhầm khi thuyết trình.
+- **Nhãn:** "Nhật ký canh đồng" → "Nhật ký canh tác", "Yêu cầu hỗ trợ" → "Yêu cầu tư vấn", "AI Cảnh báo & Dự báo" → "AI Cảnh báo", "Cài đặt hệ thống" → "Cấu hình hệ thống" — do thống nhất nhãn cho 12 trang dùng chung sidebar, không phải đổi tính năng.
+- **Huy hiệu "9+":** hai bản giống nhau ở chỗ này (số việc AgrBrain đếm được — `chuyen-gia/js/agrbrain.js:685`), nên không dùng nó để nhận diện bản nào.
 
 ## 3. Điều phối HTX (thư mục gốc — SV3)
 
@@ -100,9 +108,9 @@ Hai bước đầu là một phần của cùng màn hình `login.html` (`js/log
 |---|---:|---|
 | Quản trị viên | 12 | — |
 | Điều phối HTX | 8 | `index.html`, `users.html`, `settings.html`, `chuyen-gia/experts.html`, cả khối `nong-dan/` |
-| Chuyên gia | 4 | cả khối quản trị + `chuyen-gia/experts.html` + `nong-dan/` |
+| Chuyên gia | 5 (= đúng 5 trang khối `chuyen-gia/`) | cả khối quản trị + cả khối `nong-dan/` |
 | Nông dân | 7 | cả khối quản trị + cả khối chuyên gia |
 
-Cơ chế: bảng `PATH_KEY` (19 đường dẫn → khóa) + `ROLE_MENUS`; lọc phần tử menu (`.nav-item`, `.nav__item`, `.side-link`), đổi link logo/chip về trang nhà vai trò, `guardPage()` chặn truy cập, `MutationObserver` bắt phần tử DOM sinh sau khi trang chạy.
+Cơ chế: bảng `PATH_KEY` (19 đường dẫn → khóa) + `ROLE_MENUS`; lọc phần tử menu (`.nav-item`, `.nav__item`, `.side-link`), đổi link logo/chip về trang nhà vai trò, `guardPage()` chặn truy cập, `recountNotifBadge()` đếm lại huy hiệu quả chuông theo đúng số dòng vai trò đó mở được, và `MutationObserver` bắt cả phần tử DOM sinh sau khi trang chạy (menu do `chuyen-gia/js/shell.js` dựng, danh sách thông báo do `agrbrain.js` dựng).
 
-**Đã kiểm thử:** phân quyền 4 vai trò (số mục menu 12/8/4/7, chặn trang ngoài phạm vi, đăng xuất xóa cả ba nơi lưu phiên) và liên kết chéo khối, chạy trên máy chủ `http://127.0.0.1:8123` **và** bản GitHub Pages đang phát hành. **Đo layout 320/375 px cho 10 trang `nong-dan/` (24-10-2026):** 8 trang sạch hoàn toàn ở cả hai bề rộng; `diary.html` tràn 39 px ở 320 px (lưới `.entry` cột `1fr` không co được — `nong-dan/css/diary.css:566`, `:875`) và `login.html` tràn 18 px ở cả hai bề rộng (`.deco-branch{right:-18px}` trong khi `overflow-x:hidden` chỉ đặt trên `body` — `nong-dan/css/login.css:33`, `:331-333`). Bảng đầy đủ kèm bản sửa đề xuất: README, mục Kiểm thử.
+**Đã kiểm thử:** phân quyền 4 vai trò (số mục menu 12/8/5/7, chặn trang ngoài phạm vi, đăng xuất xóa cả ba nơi lưu phiên) và liên kết chéo khối, chạy trên máy chủ `http://127.0.0.1:8123` **và** bản GitHub Pages đang phát hành; đo lại 26-10-2026 trên `http://127.0.0.1:8129` sau khi sửa lỗi 15 (mục 4 của [`ai-usage-report.md`](ai-usage-report.md)): chuyên gia 5 mục và mở được `chuyen-gia/experts.html`, chuông AgrBrain báo 6/6 dòng thay vì 7/4, admin 12 · coop 8 · nông dân 7 không đổi, chuyên gia gõ `/users.html` vẫn bị đưa về `/chuyen-gia/consult.html`. **Bản GitHub Pages chỉ đổi theo sau khi push commit này.** **Đo layout 320/375 px cho 10 trang `nong-dan/` (24-10-2026):** 8 trang sạch hoàn toàn ở cả hai bề rộng; `diary.html` tràn 39 px ở 320 px (lưới `.entry` cột `1fr` không co được — `nong-dan/css/diary.css:566`, `:875`) và `login.html` tràn 18 px ở cả hai bề rộng (`.deco-branch{right:-18px}` trong khi `overflow-x:hidden` chỉ đặt trên `body` — `nong-dan/css/login.css:33`, `:331-333`). Bảng đầy đủ kèm bản sửa đề xuất: README, mục Kiểm thử.

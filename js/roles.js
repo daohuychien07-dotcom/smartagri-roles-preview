@@ -17,8 +17,10 @@
         chưa đăng nhập -> về login.html,
      3) ẩn link nội bộ trỏ sang trang bị chặn (chuông, footer, panel tài
         khoản, liên kết trong nội dung của cả 3 khối),
-     4) chạy cả sau khi sidebar được JS sinh ra (MutationObserver),
-     5) nối nút Đăng xuất của khối Nông dân với phiên chung.
+     4) đếm lại badge quả chuông sau khi ẩn, để số trên chuông khớp số dòng
+        thông báo vai trò đó thực sự mở được,
+     5) chạy cả sau khi sidebar được JS sinh ra (MutationObserver),
+     6) nối nút Đăng xuất của khối Nông dân với phiên chung.
    Đổi phạm vi một vai trò: chỉ cần sửa ROLE_MENUS ở dưới.
    ============================================================ */
 (function () {
@@ -56,8 +58,10 @@
     /* Điều phối HTX: vận hành hợp tác xã, không quản trị hệ thống */
     coop: ['dashboard', 'households', 'schedule', 'reports',
            'support', 'journal', 'alerts', 'library'],
-    /* Chuyên gia nông nghiệp: chỉ không gian tư vấn + AI */
-    expert: ['support', 'journal', 'alerts', 'library'],
+    /* Chuyên gia nông nghiệp: đúng 5 trang của khối chuyen-gia/ (SV2).
+       Bảy mục còn lại của sidebar 12 mục (dashboard/households/schedule/
+       reports/crops/users/settings) thuộc khối HTX - quản trị nên vẫn ẩn. */
+    expert: ['support', 'journal', 'alerts', 'library', 'experts'],
     /* Nông dân: làm việc trong không gian riêng (Season Dashboard) */
     farmer: ['farm-home', 'farm-season', 'farm-diary', 'farm-weather',
              'farm-ai', 'farm-support', 'farm-settings']
@@ -210,6 +214,26 @@
     }
   }
 
+  /* Đếm lại badge quả chuông ở khối Chuyên gia: AgrBrain ghi tổng số mục nó
+     sinh ra từ dữ liệu, nhưng sau khi lọc theo vai trò vẫn còn mục bị ẩn vì
+     trỏ tới trang ngoài phạm vi (vd. "Duyệt hồ sơ" -> users.html chỉ admin mở
+     được). Badge phải khớp đúng số dòng người dùng nhìn thấy.
+     Chỉ ghi khi giá trị đổi -> tránh vòng lặp MutationObserver. */
+  function recountNotifBadge() {
+    var list = document.getElementById('notifList');
+    var count = document.getElementById('notifCount');
+    if (!list || !count) return;
+    var visible = 0, rows = list.children;
+    for (var i = 0; i < rows.length; i++) {
+      var link = rows[i].querySelector('a');
+      if (!isHidden(rows[i]) && link && !isHidden(link)) visible++;
+    }
+    var label = String(visible);
+    if (count.textContent !== label) count.textContent = label;
+    var wantHidden = visible === 0;
+    if (count.hidden !== wantHidden) count.hidden = wantHidden;
+  }
+
   /* Logo/chip trỏ trang ngoài phạm vi -> đổi về trang nhà của vai trò */
   function fixEntryLinks() {
     var home = urlFor(ROLE_HOME[roleKey]);
@@ -249,6 +273,7 @@
       filterNav();
       filterLinks();
       fixEntryLinks();
+      recountNotifBadge();
       if (BLOCK === 'nong-dan/') wireSharedLogout();
     } finally {
       running = false;
