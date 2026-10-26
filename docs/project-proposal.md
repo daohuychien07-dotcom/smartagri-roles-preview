@@ -51,8 +51,8 @@ Phạm vi này do `js/roles.js` áp dụng thật: menu bị lọc và trang ngo
 ```text
 Nông dân                  Chuyên gia               Điều phối HTX / Admin
 ────────                  ──────────               ─────────────────────
-login.html (chọn vai trò)
-  └▶ nong-dan/index.html
+login.html (chọn vai trò → nhập tài khoản + mật khẩu)
+  └▶ nong-dan/login.html → nong-dan/index.html
        └▶ diary.html: ghi nhật ký ──┐
             AI-1 chẩn đoán sơ bộ    │
        └▶ support.html: gửi yêu cầu ──▶ consult.html: hàng đợi

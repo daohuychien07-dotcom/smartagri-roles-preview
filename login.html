@@ -73,7 +73,7 @@
           <span class="sr-only">Đăng nhập với vai trò Điều phối Hợp tác xã</span>
         </a>
 
-        <a href="nong-dan/index.html" class="role-card" data-role="Nông dân" data-short="Nông dân" data-initials="ND" data-scope="farmer">
+        <a href="nong-dan/login.html" class="role-card" data-role="Nông dân" data-short="Nông dân" data-initials="ND" data-scope="farmer">
           <img class="role-img" src="assets/role-farmer.svg" alt="Minh họa nông dân đội nón rơm đang cầm máy tính bảng giữa cánh đồng" width="112" height="112">
           <h2 class="role-name">Nông dân</h2>
           <span class="role-go" aria-hidden="true">
@@ -91,6 +91,52 @@
           <span class="sr-only">Đăng nhập với vai trò Quản trị viên</span>
         </a>
 
+      </section>
+
+      <!-- ================= MÀN HÌNH NHẬP TÀI KHOẢN =================
+           JS (js/login.js) ẩn lưới vai trò và hiện khối này khi bấm một thẻ
+           role Chuyên gia / Điều phối HTX / Quản trị viên.
+           Riêng Nông dân dùng form riêng của khối nong-dan/ (giữ nguyên 1:1).
+           Không tách thành tệp HTML mới để đúng 1 màn hình = 1 hàng trong
+           docs/screen-inventory.md (hàng 16) và 1 video OBS. -->
+      <section class="cred-panel" id="credPanel" aria-labelledby="credTitle" hidden>
+        <button type="button" class="cred-back" id="credBack">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 6 9 12 15 18"/></svg>
+          Quay lại chọn vai trò
+        </button>
+
+        <h2 class="cred-title" id="credTitle">Đăng nhập: <span id="credRoleName">Quản trị viên</span></h2>
+        <p class="cred-sub" id="credSub">Nhập tài khoản và mật khẩu để vào không gian làm việc của vai trò này.</p>
+
+        <form class="cred-form" id="credForm" novalidate>
+          <div class="form-field" id="cf-user">
+            <label for="credUser">Tài khoản <span class="req">*</span></label>
+            <input type="text" id="credUser" name="username" placeholder="ví dụ: quantri" autocomplete="username" aria-describedby="credUserErr">
+            <p class="err-msg" id="credUserErr"></p>
+          </div>
+
+          <div class="form-field" id="cf-pass">
+            <label for="credPass">Mật khẩu <span class="req">*</span></label>
+            <div class="cred-pass-wrap">
+              <input type="password" id="credPass" name="password" placeholder="••••••••" autocomplete="current-password" aria-describedby="credPassErr">
+              <button type="button" class="cred-eye" id="credEye" aria-pressed="false" aria-label="Hiện mật khẩu">
+                <svg class="eye-on" viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" d="M2 12s3.5-6.5 10-6.5S22 12 22 12s-3.5 6.5-10 6.5S2 12 2 12Z"/><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>
+                <svg class="eye-off" viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" d="M2 12s3.5-6.5 10-6.5S22 12 22 12s-3.5 6.5-10 6.5S2 12 2 12Z"/><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.8"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" d="M4 20 20 4"/></svg>
+              </button>
+            </div>
+            <p class="err-msg" id="credPassErr"></p>
+          </div>
+
+          <button type="submit" class="btn-save cred-submit" id="credSubmit">
+            <span class="cred-spinner" aria-hidden="true"></span><span id="credBtnText">Đăng nhập</span>
+          </button>
+        </form>
+
+        <p class="cred-demo">
+          <span>Tài khoản demo của vai trò này:</span>
+          <code id="credDemoUser">quantri</code> / <code id="credDemoPass">admin2026</code>
+          <button type="button" class="cred-fill" id="credFill">Điền nhanh</button>
+        </p>
       </section>
 
       <p class="sent-note" id="sentNote" hidden></p>

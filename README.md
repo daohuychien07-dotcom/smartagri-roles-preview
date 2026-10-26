@@ -52,7 +52,7 @@ Phạm vi trên **không phải mô tả trên giấy**: `js/roles.js` lọc ph�
 ```text
 Nông dân                          Chuyên gia                      Điều phối HTX / Quản trị viên
 ────────                          ──────────                      ─────────────────────────────
-login.html (chọn vai trò)
+login.html (bấm thẻ vai trò → màn hình nhập tài khoản; thẻ Nông dân dẫn sang nong-dan/login.html)
  └▶ nong-dan/index.html (AI-1)      chuyen-gia/consult.html        dashboard.html (chỉ số hệ thống)
  └▶ nong-dan/season.html (giai đoạn)  └▶ AgrBrain AI-3 tóm tắt       └▶ households.html (giám sát hộ)
  └▶ nong-dan/diary.html (nhật ký)      └▶ đổi trạng thái W→S/R        └▶ schedule.html (AI-2 checklist)
@@ -75,9 +75,9 @@ Chuỗi phân tích đầy đủ (persona → mục tiêu → nhiệm vụ → l
 | Chuyên gia | `chuyen-gia/consult.html` · `journal.html` · `alerts.html` · `library.html` · `experts.html` |
 | Điều phối HTX | `households.html` · `schedule.html` · `reports.html` |
 | Quản trị viên | `dashboard.html` · `index.html` · `users.html` · `settings.html` |
-| Dùng chung | `login.html` (cổng chọn 4 vai trò + form đăng ký) |
+| Dùng chung | `login.html` (cổng chọn 4 vai trò → màn hình nhập tài khoản + mật khẩu cho 3 vai trò gốc, modal đăng ký) |
 
-**Bao phủ trạng thái** (Bình thường / Đang tải / Rỗng / Thành công / Lỗi / Vô hiệu hóa / Đang chờ / Bị từ chối / Đã lưu trữ) được ghi nhận theo từng màn hình ở cột *Trạng thái* của bảng kiểm kê; skeleton có thật ở `users.html`, `schedule.html`, `chuyen-gia/*`, `nong-dan/login.html`.
+**Bao phủ trạng thái** (Bình thường / Đang tải / Rỗng / Thành công / Lỗi / Vô hiệu hóa / Đang chờ / Bị từ chối / Đã lưu trữ) được ghi nhận theo từng màn hình ở cột *Trạng thái* của bảng kiểm kê; skeleton có thật ở `users.html`, `schedule.html`, `chuyen-gia/*`, `nong-dan/login.html`. Màn hình nhập tài khoản trong `login.html` có đủ *Đang tải* (nút bị `disabled` + spinner trong 800 ms giả lập gọi API), *Lỗi* (dòng đỏ dưới từng trường + toast + khung rung) và *Thành công* (ghi phiên rồi chuyển trang).
 
 ## Tính năng AI
 
@@ -111,11 +111,11 @@ project/
 │   ├── roles-and-features.md      # Chức năng đã code, theo từng màn hình
 │   ├── team-assignment.md         # Phân công + TASK + trách nhiệm chéo
 │   ├── obs-evidence.md            # Danh sách video OBS theo màn hình
-│   └── ai-usage-report.md         # Khai báo sử dụng AI + 11 lỗi đã gặp và cách kiểm chứng
+│   └── ai-usage-report.md         # Khai báo sử dụng AI + 13 lỗi đã gặp và cách kiểm chứng
 ├── design/
 │   ├── figma-link.txt             # Link Canva 35 trang + tình trạng mockup từng khối
 │   └── mockups/                   # Ảnh mockup xuất từ bản thiết kế (README liệt kê 21 ảnh còn thiếu)
-├── login.html            # Cổng đăng nhập 4 vai trò + form đăng ký
+├── login.html            # Cổng đăng nhập 4 vai trò + màn hình nhập tài khoản + form đăng ký
 ├── dashboard.html households.html schedule.html reports.html
 ├── index.html users.html settings.html giuaki.html
 ├── css/                  # style.css (dùng chung) + 8 css theo trang + notifications.css
@@ -197,12 +197,22 @@ python -m http.server 8000
 
 Mở trực tiếp tệp `.html` vẫn chạy được, nhưng nên dùng máy chủ tĩnh vì `file://` làm mất query string của deep link và `localStorage` bị tách theo origin. Python chỉ để xem thử, không phải một phần bài nộp.
 
-**Luồng demo liền mạch 6 phút (đề xuất):** `login.html` chọn Quản trị viên → `dashboard.html` (chờ duyệt tính từ kho đăng ký thật) → `users.html?status=pending` → `households.html?health=alert` → `schedule.html` chạy AI-2 tới **trạng thái lỗi** rồi áp dụng checklist → `reports.html` xuất CSV → `index.html` thêm + ngừng dùng một cây trồng → Đăng xuất → chọn **Nông dân** → `nong-dan/ai.html` chạy AI-1 → `support.html` gửi yêu cầu → Đăng xuất → chọn **Chuyên gia** → `chuyen-gia/consult.html` mở AgrBrain (AI-3) → `journal.html` duyệt và sửa kết quả AI.
+**Tài khoản demo (2 bước đăng nhập).** `login.html` là cổng chung: bấm một thẻ vai trò → hiện màn hình nhập tài khoản/mật khẩu của vai trò đó (nút "Điền nhanh" đổ sẵn ô demo để khỏi gõ lúc thuyết trình). Dự án không có backend nên tài khoản là mảng giả lập `DEMO_ACCOUNTS` trong `js/login.js:27`, chỉ dùng cho buổi demo:
+
+| Vai trò | Thẻ bấm ở `login.html` | Tài khoản | Mật khẩu | Trang nhà sau khi đăng nhập |
+|---|---|---|---|---|
+| Quản trị viên | **Quản trị viên** | `quantri` | `admin2026` | `dashboard.html` (12 mục menu) |
+| Điều phối HTX | **Điều phối Hợp tác xã** | `dieopho` | `htx2026` | `households.html` (8 mục menu) |
+| Chuyên gia | **Chuyên gia nông nghiệp** | `chuyengia` | `agri2026` | `chuyen-gia/consult.html` (4 mục menu) |
+| Nông dân | **Nông dân** | — | — | thẻ dẫn thẳng sang `nong-dan/login.html`, form đăng nhập riêng của SV1 (`nongdan` / `123456`) → `nong-dan/index.html` (7 mục menu) |
+
+**Luồng demo liền mạch 6 phút (đề xuất):** `login.html` chọn Quản trị viên → nhập `quantri` / `admin2026` → `dashboard.html` (chờ duyệt tính từ kho đăng ký thật) → `users.html?status=pending` → `households.html?health=alert` → `schedule.html` chạy AI-2 tới **trạng thái lỗi** rồi áp dụng checklist → `reports.html` xuất CSV → `index.html` thêm + ngừng dùng một cây trồng → Đăng xuất → chọn **Nông dân** → `nong-dan/ai.html` chạy AI-1 → `support.html` gửi yêu cầu → Đăng xuất → chọn **Chuyên gia** → `chuyen-gia/consult.html` mở AgrBrain (AI-3) → `journal.html` duyệt và sửa kết quả AI.
 
 **Kết quả kiểm thử đã thực hiện**
 
 | Hạng mục | Cách kiểm | Kết quả |
 |---|---|---|
+| Màn hình nhập tài khoản (đăng nhập 2 bước ở `login.html`) | điều khiển DOM qua iframe cùng origin trên `http://127.0.0.1:8128`, đo ngày 26-10-2026 | bấm thẻ → khung hiện, lưới vai trò ẩn (`display: none`), tiêu đề đúng vai trò, ô "demo" hiện `quantri/admin2026` · để trống rồi gửi: 2 dòng "Bạn chưa nhập tài khoản/mật khẩu." và không ghi phiên · sai mật khẩu: dòng "Sai tài khoản hoặc mật khẩu. Xem lại dòng demo bên dưới." + toast + khung rung, `localStorage` vẫn `null` · đang gửi: nút `disabled`, nhãn "Đang đăng nhập..." + spinner · đúng: phiên có thêm khoá `user` rồi chuyển trang — admin → `/dashboard.html` (12 mục menu hiện, chip "QT Quản trị viên", `h1` "Bảng điều khiển hệ thống"), coop → `/households.html` (8 mục), expert → `/chuyen-gia/consult.html` (4 mục `.nav__item`) · thẻ Nông dân giữ `href="nong-dan/login.html"` (form riêng của SV1) · Esc và nút "Quay lại chọn vai trò" đóng khung · "Điền nhanh" đổ đúng cặp demo · `scrollWidth − clientWidth = 0` ở 320/375/768/1280 px khi khung đang mở và đang hiện lỗi · console sạch |
 | Phân quyền 4 vai trò | nạp từng trang trong iframe cùng origin qua `http://127.0.0.1:8123`, đếm mục menu theo computed-style (đi hết chuỗi phần tử cha) | admin 12/12, coop 8 (+3 nhãn nhóm, 7 link bị ẩn), expert 4 (26 phần tử ẩn), farmer 7/7 — đúng như bảng vai trò |
 | Chặn trang ngoài phạm vi | gõ URL tay sau khi đăng nhập vai trò khác | coop → `index.html`/`users.html`/`settings.html`/`experts.html`/`nong-dan/*` bị đưa về `households.html`; expert mở `dashboard.html` → `consult.html`; farmer mở `chuyen-gia/consult.html` → `nong-dan/index.html` |
 | Phiên & đăng xuất | đọc `localStorage`/`sessionStorage` sau khi bấm Đăng xuất | cả ba nơi lưu bị xóa, không xem lại trang cũ bằng nút Back |
@@ -242,7 +252,7 @@ Kịch bản thuyết trình + checklist quay đã soạn sẵn cho 2 màn hình
 
 ## Khai báo sử dụng AI
 
-Toàn bộ khai báo theo mẫu Phụ lục F — công cụ, 6 prompt chính, phần AI sinh vs phần sinh viên sửa, **11 lỗi AI thật đã gặp** (sed làm hỏng cú pháp `agrbrain.js` mà không báo lỗi; chữ Hán lẫn vào văn bản tiếng Việt; mojibake `perl -CSD`; `requestAnimationFrame` không chạy ở tab nền; `grid repeat(7,1fr)` vỡ ở 336 px; CSV thiếu BOM; khai quá "AI" cho những chỗ chỉ là công thức JS; để lộ chuỗi trông như API key; ghép HTML chưa escape và **lỗi cùng loại còn sót ở trang thứ hai** …), cách kiểm chứng và bài học: **[`docs/ai-usage-report.md`](docs/ai-usage-report.md)**.
+Toàn bộ khai báo theo mẫu Phụ lục F — công cụ, 7 prompt chính, phần AI sinh vs phần sinh viên sửa, **13 lỗi AI thật đã gặp** (sed làm hỏng cú pháp `agrbrain.js` mà không báo lỗi; chữ Hán lẫn vào văn bản tiếng Việt; mojibake `perl -CSD`; `requestAnimationFrame` không chạy ở tab nền; `grid repeat(7,1fr)` vỡ ở 336 px; CSV thiếu BOM; khai quá "AI" cho những chỗ chỉ là công thức JS; để lộ chuỗi trông như API key; ghép HTML chưa escape và **lỗi cùng loại còn sót ở trang thứ hai**; đề xuất tách thêm tệp HTML mới cho bước nhập tài khoản — trái quy tắc "1 màn hình = 1 video OBS" và dễ bị coi là trang rác; tài liệu chép sai tên thẻ đăng nhập thành "Quản trị hệ thống" trong khi thẻ thật là "Quản trị viên" …), cách kiểm chứng và bài học: **[`docs/ai-usage-report.md`](docs/ai-usage-report.md)**.
 
 Hai rủi ro quy chế từng được rà ra bằng chính bảng kiểm kê; **cả hai đã sửa xong ngày 2026-10-24** và có kết quả kiểm chứng kèm theo:
 

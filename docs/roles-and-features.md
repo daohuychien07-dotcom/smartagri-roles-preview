@@ -52,6 +52,16 @@ Bốn vai trò, hai mươi ba màn hình. Tài liệu này mô tả **chức nă
 | Quản lý tài khoản | `users.html` | Danh sách + hồ sơ đăng ký mới nhập lên đầu (*Đang chờ duyệt*), tìm + lọc vai trò/trạng thái + **phân trang**, skeleton loading, duyệt/khóa/mở khóa/đổi vai trò (ghi ngược `smartagri_registrations_v1`), chọn hàng loạt, modal đổi vai trò validate |
 | Cấu hình hệ thống | `settings.html` | 5 tab (Chung / Trí tuệ nhân tạo / Thông báo / Bảo mật / Dữ liệu & Sao lưu), toggle, validate số, lưu `smartagri_settings_v1` (21 khóa; ô API Key mang `data-secret` **không** được lưu — chống VP-01, xem README), nút Khôi phục mặc định, toast |
 
+### Cổng đăng nhập chung (`login.html` — mọi vai trò, SV3)
+
+| Lớp | Tệp | Làm được gì (đã code) |
+|---|---|---|
+| Lưới 4 thẻ vai trò | `login.html` + `js/login.js` | thẻ cho biết vai trò + minh họa SVG; thẻ **Nông dân** là link thật sang `nong-dan/login.html` (giữ form riêng của SV1); 3 thẻ còn lại mở bước 2 ngay trong trang; nhãn "Gần nhất" cho vai trò đã dùng lần trước (`localStorage`) |
+| Màn hình nhập tài khoản | `#credPanel` trong `login.html` | validate tài khoản ≥ 4 ký tự / mật khẩu ≥ 6 ký tự (dòng lỗi `.err-msg` + `aria-describedby`), nút hiện/ẩn mật khẩu (`aria-pressed` + đổi `aria-label`), "Điền nhanh" cặp demo, trạng thái **Đang tải** (nút `disabled` + spinner, giả lập độ trễ API 800 ms), trạng thái **Lỗi** (dòng đỏ + toast + khung rung `.is-shaking`, không ghi phiên), **Thành công** (ghi phiên rồi chuyển trang), nút "Quay lại chọn vai trò" và `Esc` đóng khung |
+| Đăng ký hồ sơ mới | modal `#regForm` | validate 7 trường (email regex, SĐT `0\d{9}`, xác nhận mật khẩu, điều khoản), đẩy hồ sơ vào `smartagri_registrations_v1` → `users.html` đọc ra ở trạng thái *Đang chờ duyệt*; dựng DOM bằng `textContent`/`append` nên họ tên chứa `<img onerror>` không thành markup |
+
+Tài khoản demo là mảng giả lập `DEMO_ACCOUNTS` (`js/login.js:27`) — `quantri/admin2026`, `dieopho/htx2026`, `chuyengia/agri2026`; không backend, không gọi API, không chứa khóa bí mật. Phiên đăng nhập ghi `smartagri_role_v1` (`{role, short, initials, scope, at}`), từ bản có màn hình nhập tài khoản thì ghi thêm khoá `user` là tên đăng nhập vừa nhập; form của khối `nong-dan/` vẫn ghi đúng cấu trúc cũ nên `js/roles.js` không phải đổi.
+
 ## 5. Ma trận thực thể × vai trò
 
 | Thực thể | Nông dân | Chuyên gia | Điều phối | Quản trị |
@@ -68,7 +78,9 @@ Bốn vai trò, hai mươi ba màn hình. Tài liệu này mô tả **chức nă
 
 ## 6. Phân quyền giao diện (`js/roles.js`)
 
-Đăng nhập ở `login.html` → chọn vai trò → toàn bộ site chỉ hiện màn hình thuộc vai trò đó.
+Đăng nhập ở `login.html` → bấm thẻ vai trò → nhập tài khoản + mật khẩu → toàn bộ site chỉ hiện màn hình thuộc vai trò đó.
+
+Hai bước đầu là một phần của cùng màn hình `login.html` (`js/login.js`): thẻ **Quản trị viên / Điều phối HTX / Chuyên gia** mở khung nhập tài khoản ngay trong trang (lưới vai trò bị ẩn bằng class `.is-auth`), thẻ **Nông dân** chuyển sang form riêng của khối `nong-dan/` do SV1 phụ trách. Tài khoản demo cố định theo vai trò (`quantri/admin2026` · `dieopho/htx2026` · `chuyengia/agri2026`) nằm trong mảng `DEMO_ACCOUNTS` ở `js/login.js:27` — không có backend, không có khóa bí mật. Đăng nhập thành công ghi `localStorage['smartagri_role_v1'] = {role, short, initials, scope, user, at}` rồi `js/roles.js` đọc `scope` để lọc menu.
 
 | Vai trò | Số mục menu | Trang bị chặn khi gõ URL thẳng |
 |---|---:|---|

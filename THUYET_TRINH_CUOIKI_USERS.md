@@ -15,7 +15,7 @@
 **4 cảnh:** ① `users.html` trên trình duyệt (phần 1, 3, 5) · ② Canva (phần 2) · ③ VS Code mở `users.html` + `css/users.css` + `js/users.js` + `js/store.js`, font 16–18 px · ④ webcam (bắt buộc).
 
 **Kiểm trước khi quay**
-- [ ] Đăng nhập card **Quản trị hệ thống** ở `login.html` → vào `users.html`, menu hiện đủ 12 mục của admin.
+- [ ] Đăng nhập **2 bước** ở `login.html`: bấm thẻ **Quản trị viên** → nhập `quantri` / `admin2026` → vào `users.html`, menu hiện đủ 12 mục của admin.
 - [ ] **Tạo sẵn 1 hồ sơ đăng ký thật**: ở `login.html` điền Họ tên / Email / SĐT rồi gửi, sau đó mở `users.html` → hồ sơ xuất hiện **trên cùng** với nhãn "Mới đăng ký". Đây là chi tiết ăn điểm "luồng dữ liệu thật, không lorem-ipsum".
 - [ ] F5 một lần, Console sạch trước khi nói phần 3.
 - [ ] 1920×1080, 30 fps; cửa sổ ẩn danh hoặc cổng server mới để không chạy JS bản cache.

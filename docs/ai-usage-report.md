@@ -23,6 +23,7 @@
 | 4 | "Sửa lại: khi đăng nhập vào đâu thì chỉ xuất hiện giao diện đó" | phân quyền giao diện theo vai trò | `js/roles.js` (298 dòng): lọc menu + chặn trang theo `PATH_KEY` |
 | 5 | "Khối nông dân đã có trên GitHub, đưa vào dùng cổng đăng nhập chung" | 10 trang `nong-dan/` + login chung | đạt; 3 tệp CRLF phải xử lý bằng `sed` có `\r?` |
 | 6 | "Đọc file barem và lập bộ hồ sơ docs/" | `docs/` + README 15 mục | chính tài liệu này |
+| 7 | "Sửa lại cho tôi, khi ấn đăng nhập thì sẽ hiển thị ra màn hình đăng nhập" | cổng 4 vai trò → có bước nhập tài khoản/mật khẩu | khung nhập tài khoản **ngay trong `login.html`** (`#credPanel`) + `DEMO_ACCOUNTS` trong `js/login.js`; thẻ Nông dân giữ form riêng của SV1 (`nong-dan/login.html`) vì khối đó bạn phụ trách — phương án này đạt vì **không có backend**, chỉ là đăng nhập giả lập phía Frontend |
 
 ## 3. Phần AI sinh ra và phần sinh viên chỉnh sửa
 
@@ -30,6 +31,7 @@
 |---|---|---|---|
 | Bộ 8 trang quản trị (HTML/CSS/JS) | khung lặp, class, biểu mẫu | cấu trúc lại heading, thêm `label`/`alt`/`aria-*`, đổi màu theo token `:root`, tự viết nội dung nghiệp vụ tiếng Việt | `git log` các commit `feat:` trên `origin/main` |
 | `js/roles.js` (phân quyền) | bản đầu dùng `requestAnimationFrame` để chờ menu | **bản hiện tại áp dụng đồng bộ** + `MutationObserver` + `guardPage()`; sinh viên phát hiện rAF không chạy | comment `js/roles.js:244` |
+| Màn hình nhập tài khoản trong `login.html` (bước 2 của đăng nhập) | khung form + CSS panel + handler submit | quyết định **dựng panel trong cùng trang** thay vì tệp mới (mục 4, lỗi 12), giữ nguyên form của SV1 cho vai trò Nông dân, thêm `aria-describedby` cho từng dòng lỗi, `aria-pressed` cho nút hiện mật khẩu, `Esc` ưu tiên đóng modal rồi mới đóng khung | `login.html` (`#credPanel`), `css/login.css` (khối `.cred-*`), `js/login.js:20-214`; kết quả chạy thật ghi ở mục 5 bước 8 |
 | `js/schedule.js` — AI-2 checklist | danh sách công việc mẫu | ràng buộc kiểm tra giống cây với `js/catalog.js`, luồng lỗi, nút chấp nhận/sửa/hủy | `js/schedule.js:305`, `:338` |
 | `nong-dan/js/ai.js` — AI-1 | bộ luật từ khóa → bệnh cây | hàm `hashOf()` để **cùng một ảnh luôn cho cùng kết quả**, khoảng tin cậy 72–97 %, câu trả lời "chưa chắc chắn" | `nong-dan/js/ai.js:192-238`, `:557` |
 | `chuyen-gia/js/agrbrain.js` — AI-3 | khung gom việc | đọc `localStorage` thật của 6 khối, không bịa khi thiếu dữ liệu | `agrbrain.js:153-266` |
@@ -51,6 +53,8 @@
 | 9 | **Tệp CSV tiếng Việt bị Excel dựng dấu** khi mở | mở tệp xuất ra bằng Excel | thêm BOM `U+FEFF` trước nội dung CSV (commit `277b20c`) |
 | 10 | **Trang giả định đã tồn tại.** Khi kiểm tra phân quyền, AI mở `chuyen-gia/support.html` (không có) và đọc kết quả "menu 0 mục" như một lỗi phân quyền | console báo 404; đối chiếu bảng `PATH_KEY` trong `js/roles.js` | khóa `support` thật ánh xạ tới `chuyen-gia/consult.html`; ghi lại để không lặp lại |
 | 11 | **Khai quá số lượng/khả năng.** Bản nháp README viết "AI (điểm rủi ro)" cho `households.html` và "AI-3 (nhận xét tự động)" cho `reports.html` trong khi hai chỗ đó chỉ là bộ đếm và công thức JS | mở đúng hàm sinh nội dung (`buildAdvice()` trong `nong-dan/js/weather.js:454`, `renderStats/#rpSummary` trong `js/reports.js:175`) | bảng AI trong `docs/screen-inventory.md` mục 9 chỉ giữ 3 tính năng thật, có kèm dòng "Không phải AI" để người đọc không nhầm |
+| 12 | **Đề xuất sai hướng khi thêm màn hình đăng nhập.** Bản tính đầu của AI là tạo hẳn tệp `login-form.html` mới cho bước nhập tài khoản — nghĩa là thêm một màn hình, kéo theo một video OBS bắt buộc (quy tắc 1 màn hình = 1 video) và dễ bị quy chế coi là "tạo trang rác" | đọc lại mục Screen Inventory + checklist khối 1 của barem trước khi code | bỏ tệp mới, dựng khung `#credPanel` **trong cùng `login.html`** (lưới vai trò bị `.is-auth` ẩn đi), hàng 16 của `docs/screen-inventory.md` vẫn là một màn hình, chỉ đổi mô tả thành "Portal / Role Login + Login Form" |
+| 13 | **Tài liệu tham chiếu một cái tên không tồn tại.** Checklist của hai kịch bản thuyết trình cuối kỳ viết "đăng nhập bằng card **Quản trị hệ thống**", trong khi `login.html` không có thẻ nào tên như vậy | `grep` các thẻ trong `login.html`: `data-role="Quản trị viên"` + `data-short="Quản trị viên"` (dòng 85); chuỗi "Quản trị hệ thống" chỉ là **nhãn nhóm menu** ở sidebar (`dashboard.html:74`) | sửa hai checklist thành "thẻ **Quản trị viên**" và bổ sung đúng cặp tài khoản demo `quantri` / `admin2026` |
 
 ## 5. Cách sinh viên kiểm chứng (dùng lại được, không dựa vào AI tự tin)
 
@@ -61,6 +65,7 @@
 5. **Đối chiếu mã gốc:** clone repo nhóm (`E:\_inspect-cropmate`) để `diff` khi nghi ngờ sửa hỏng.
 6. **Kiểm chứng trên bản phát hành thật:** GitHub Pages của repo nộp bài (không chỉ máy cục bộ).
 7. **Thử vai trò thật:** đăng nhập lần lượt 4 vai trò, cố tình gõ URL trang ngoài phạm vi, bấm Đăng xuất rồi mở `localStorage` để chắc chắn đã xóa.
+8. **Thử màn hình nhập tài khoản bằng DOM thật (26-10-2026, `http://127.0.0.1:8128`):** chạy đủ nhánh lỗi rồi mới tin — để trống → 2 dòng "Bạn chưa nhập tài khoản/mật khẩu."; sai mật khẩu → dòng "Sai tài khoản hoặc mật khẩu. Xem lại dòng demo bên dưới." + toast + khung rung, và `localStorage.getItem('smartagri_role_v1')` **vẫn `null`** (kiểm kỹ chỗ này vì quy chế chấm bên C bắt buộc "sai phân quyền / sai dữ liệu phải có trạng thái lỗi, không được ghi phiên"); đúng → phiên có khoá `user` và trình duyệt thật sự rơi vào `/dashboard.html` (12 mục menu `.nav-item` hiện, chip "QT Quản trị viên"), `/households.html` (8 mục), `/chuyen-gia/consult.html` (4 mục `.nav__item`); thẻ Nông dân vẫn trỏ `nong-dan/login.html`; `Esc` và nút "Quay lại" đóng khung; đo `scrollWidth − clientWidth = 0` ở 320 / 375 / 768 / 1280 px **khi khung đang mở và đang hiện lỗi** (thao tác: đổi `iframe.style.width` rồi nạp lại); console không có message nào.
 
 ## 6. Tính năng mock vs gọi API thật
 

@@ -30,6 +30,7 @@ Chứa (để) ảnh xuất trực tiếp từ bản thiết kế Canva/Figma, �
 12-expert-resource-library-desktop.png        -> chuyen-gia/library.html
 13-expert-roster-desktop.png                  -> chuyen-gia/experts.html
 14-common-role-portal-desktop.png             -> login.html
+14b-common-login-form-desktop.png             -> login.html (màn hình nhập tài khoản + mật khẩu, cả trạng thái lỗi)
 15-coop-farm-overview-desktop.png             -> households.html
 16-coop-calendar-desktop.png                  -> schedule.html
 16b-coop-calendar-ai-checklist-desktop.png    -> schedule.html (trạng thái kết quả AI-2)

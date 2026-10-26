@@ -41,7 +41,7 @@ Cách đọc cột **Trạng thái**: `N`=Bình thường, `L`=Đang tải, `E`=
 
 | # | Vai trò | Mục tiêu người dùng | Nhiệm vụ người dùng | Màn hình | Tệp | CRUD | Trạng thái | AI | Phụ trách | Công việc | Nhánh | OBS |
 |---:|---|---|---|---|---|---|---|---|---|---|---|---|
-| 16 | Mọi vai trò | Vào đúng không gian của mình | Chọn vai trò, đăng ký hồ sơ mới | Portal / Role Login | `login.html` | C (đăng ký) / R (phiên) | N L E S X W | — | SV3 | TASK-16 | `main` (origin) | CẦN QUAY |
+| 16 | Mọi vai trò | Vào đúng không gian của mình | Chọn vai trò → nhập tài khoản + mật khẩu (3 vai trò gốc; thẻ Nông dân dẫn sang `nong-dan/login.html`), đăng ký hồ sơ mới | Portal / Role Login + Login Form | `login.html` | C (đăng ký) / R (phiên, tài khoản demo giả lập trong `js/login.js`) | N L E S X W | — | SV3 | TASK-16 | `main` (origin) | CẦN QUAY |
 | 17 | Điều phối HTX | Giám sát toàn bộ nông hộ | Tìm/lọc/đổi kiểu xem, mở hồ sơ hộ | Farm Overview | `households.html` | R (deep link `?q=`, `?health=`) | N E S X W D | — | SV3 | TASK-17 | `main` (origin) | CẦN QUAY |
 | 18 | Điều phối HTX | Không bỏ sót công việc chung | Thêm/sửa sự kiện, tạo lịch bằng AI, chuyển tuần/tháng | Coordinator Calendar | `schedule.html` | C/R/U | N L E S X W | **AI-2** (Season Checklist Generator) | SV3 | TASK-18 | `main` (origin) | CẦN QUAY |
 | 19 | Điều phối HTX | Tổng kết và báo cáo mùa vụ | Chọn mùa vụ, sắp xếp, xuất CSV, lưu trữ | Season Summary | `reports.html` | R/U/D (archive) | N E S X D A | Tổng hợp bằng công thức JS (không phải AI) | SV3 | TASK-19 | `main` (origin) | CẦN QUAY |
