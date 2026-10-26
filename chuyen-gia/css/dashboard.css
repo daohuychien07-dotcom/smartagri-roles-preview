@@ -1,0 +1,637 @@
+/* =========================================================
+   SmartAgri — dashboard.css
+   Trang: Tổng quan (Season Dashboard)
+   ========================================================= */
+
+/* ---------- Lời chào dưới tiêu đề ---------- */
+.topbar__greet {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 6px 0 0;
+  font-size: 13.5px;
+  color: var(--muted);
+}
+
+.topbar__greet .icon {
+  width: 16px;
+  height: 16px;
+  color: var(--green);
+}
+
+/* ---------- Nền card trắng cho các khối ---------- */
+.weather,
+.activity,
+.aicard {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 6px 18px rgba(31, 84, 48, 0.06);
+}
+
+/* ---------- Thẻ mùa vụ ---------- */
+.season {
+  position: relative;
+  overflow: hidden;
+  border-radius: 18px;
+  padding: 24px;
+  background: url("../assets/ruong-lua-hien-truong.png") right center / cover no-repeat;
+  box-shadow: 0 10px 26px rgba(31, 84, 48, 0.12);
+}
+
+.season::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(96deg, #e9f4e0 0%, #ddefd2 42%, rgba(221, 239, 210, 0.72) 66%, rgba(221, 239, 210, 0) 88%);
+}
+
+.season > * { position: relative; }
+
+.season__head {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.season__icon {
+  width: 46px;
+  height: 46px;
+  flex: none;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: #f2f8ec;
+  color: var(--green);
+  box-shadow: inset 0 0 0 1px #cfe3c2;
+}
+
+.season__head h2 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--green-dark);
+}
+
+.season__head p {
+  margin: 4px 0 0;
+  font-size: 13.5px;
+  color: #4c5f50;
+}
+
+.season__head b { color: var(--green-dark); }
+
+.season__progress {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 20px 0 8px;
+  max-width: 420px;
+}
+
+.season__pct {
+  font-size: 30px;
+  font-weight: 700;
+  color: var(--green-dark);
+}
+
+.season__bar {
+  flex: 1;
+  height: 10px;
+  border-radius: 99px;
+  background: rgba(255, 255, 255, 0.75);
+  overflow: hidden;
+}
+
+.season__bar span {
+  display: block;
+  height: 100%;
+  border-radius: 99px;
+  background: linear-gradient(90deg, #2e7d4f, #58a86b);
+}
+
+.season__note {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0 0 18px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #2c6b41;
+}
+
+.season__note .icon { width: 16px; height: 16px; }
+
+.season__harvest {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 16px 10px 12px;
+  background: #fdfdf9;
+  border-radius: 12px;
+  box-shadow: 0 4px 14px rgba(31, 84, 48, 0.12);
+}
+
+.season__harvest-icon {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border-radius: 9px;
+  background: #eaf5e6;
+  color: var(--green);
+}
+
+.season__harvest-text { display: flex; flex-direction: column; }
+
+.season__harvest-text small {
+  font-size: 11.5px;
+  color: var(--muted);
+}
+
+.season__harvest-text strong {
+  font-size: 15px;
+  color: var(--green-dark);
+}
+
+/* ---------- Card AI phân loại ---------- */
+.aicard__desc {
+  margin: -6px 0 14px;
+  font-size: 13.5px;
+  color: var(--muted);
+}
+
+.ai-drop {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 30px 20px;
+  border: 2px dashed #bcd6ae;
+  border-radius: 14px;
+  background: #f7fbf3;
+  color: #4c5f50;
+  text-align: center;
+  cursor: pointer;
+  transition: background 0.18s, border-color 0.18s;
+}
+
+.ai-drop:hover,
+.ai-drop.is-over {
+  background: #eef7e7;
+  border-color: var(--green);
+}
+
+.ai-drop__cam {
+  width: 52px;
+  height: 52px;
+  display: grid;
+  place-items: center;
+  margin-bottom: 8px;
+  border-radius: 50%;
+  background: #e2f0da;
+  color: var(--green);
+}
+
+.ai-drop__cam .icon { width: 26px; height: 26px; }
+
+.ai-drop__main {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--green-dark);
+}
+
+.ai-drop__hint {
+  margin: 0;
+  font-size: 12.5px;
+  color: var(--muted);
+}
+
+/* ---------- AI đang quét ảnh ---------- */
+.ai-scan {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 12px;
+  padding: 12px;
+  border: 1px solid #cfe6c4;
+  border-radius: 14px;
+  background: #f7fbf3;
+}
+
+.ai-scan__thumb {
+  width: 66px;
+  height: 66px;
+  flex: none;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: #fff;
+}
+
+.ai-scan__meta { flex: 1; min-width: 0; }
+
+.ai-scan__name {
+  display: block;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--green-dark);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ai-scan__step {
+  margin: 3px 0 8px;
+  font-size: 12.5px;
+  color: var(--muted);
+}
+
+.ai-scan__bar {
+  display: block;
+  height: 6px;
+  border-radius: 999px;
+  background: #e2f0da;
+  overflow: hidden;
+}
+
+.ai-scan__fill {
+  display: block;
+  height: 100%;
+  width: 0;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--green), #6bbf7f);
+  transition: width 0.26s ease;
+}
+
+/* ---------- Kết quả phân tích ---------- */
+.ai-result {
+  margin-top: 12px;
+  padding: 14px;
+  border: 1px solid #cfe6c4;
+  border-radius: 14px;
+  background: #fbfdf8;
+}
+
+.ai-result__head { display: flex; align-items: flex-start; gap: 12px; }
+
+.ai-result__thumb {
+  width: 74px;
+  height: 74px;
+  flex: none;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: #fff;
+}
+
+.ai-result__info { min-width: 0; }
+
+.ai-result__badge {
+  display: inline-block;
+  padding: 2px 9px;
+  border-radius: 999px;
+  font-size: 11.5px;
+  font-weight: 600;
+  background: #e2f0da;
+  color: var(--green-dark);
+}
+
+.ai-result__badge--ok { background: #e2f0da; color: var(--green-dark); }
+.ai-result__badge--soft { background: var(--amber-soft); color: var(--amber); }
+.ai-result__badge--warn { background: #f9dcc4; color: #a85b12; }
+.ai-result__badge--danger { background: var(--red-soft); color: var(--red); }
+.ai-result__badge--muted { background: #eceae2; color: var(--muted); }
+
+.ai-result__name {
+  display: block;
+  margin-top: 6px;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--green-dark);
+}
+
+.ai-result__sci { display: block; font-size: 12.5px; color: var(--muted); }
+
+.ai-result__metrics {
+  display: grid;
+  gap: 10px;
+  margin: 14px 0;
+}
+
+.ai-metric__head {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 12.5px;
+  color: var(--muted);
+}
+
+.ai-metric__head b { color: #34473a; font-size: 13px; }
+
+.ai-metric__bar {
+  display: block;
+  height: 7px;
+  margin-top: 4px;
+  border-radius: 999px;
+  background: #eee7da;
+  overflow: hidden;
+}
+
+.ai-metric__fill { display: block; height: 100%; border-radius: 999px; }
+.ai-metric__fill--green { background: var(--green); }
+.ai-metric__fill--amber { background: #d79a2f; }
+.ai-metric__fill--red { background: var(--red); }
+.ai-metric__fill--blue { background: var(--blue); }
+
+.ai-block { margin-top: 12px; }
+
+.ai-block__title {
+  margin: 0 0 6px;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #34473a;
+}
+
+.ai-list { margin: 0; padding-left: 18px; }
+
+.ai-list li {
+  font-size: 13px;
+  line-height: 1.55;
+  color: #4a5a4e;
+  margin-bottom: 4px;
+}
+
+.ai-result__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.ai-result__actions .btn { font-size: 13px; padding: 9px 13px; }
+
+.ai-result__note {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 12px 0 0;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+.ai-result__note .icon { width: 15px; height: 15px; flex: none; margin-top: 1px; color: var(--green); }
+
+/* ---------- Hộp báo cáo đầy đủ ---------- */
+.ai-desc { margin: 0 0 12px; font-size: 13.5px; color: var(--muted); }
+
+.ai-report__facts {
+  display: grid;
+  grid-template-columns: minmax(140px, 40%) 1fr;
+  gap: 6px 12px;
+  margin: 0 0 4px;
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #fffdf8;
+  font-size: 13px;
+}
+
+.ai-report__facts dt { color: var(--muted); }
+.ai-report__facts dd { margin: 0; font-weight: 600; color: #34473a; }
+
+.aicard__secure {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 14px 0 0;
+  font-size: 12.5px;
+  color: var(--muted);
+}
+
+.aicard__secure .icon { width: 16px; height: 16px; color: var(--green); }
+
+/* ---------- Thời tiết ---------- */
+.weather__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.weather__head h2 {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin: 0;
+  font-size: 16.5px;
+  font-weight: 700;
+  color: var(--green-dark);
+}
+
+.weather__head h2 .icon { width: 20px; height: 20px; color: #d99a2b; }
+
+.weather__loc {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12.5px;
+  color: var(--muted);
+}
+
+.weather__loc .icon { width: 15px; height: 15px; color: var(--green); }
+
+.weather__body {
+  display: grid;
+  grid-template-columns: 1fr 1.15fr;
+  gap: 18px;
+  align-items: center;
+}
+
+.weather__main strong {
+  display: block;
+  font-size: 44px;
+  font-weight: 700;
+  color: #23583a;
+  line-height: 1;
+}
+
+.weather__main p {
+  margin: 8px 0 0;
+  font-size: 13.5px;
+  color: var(--muted);
+}
+
+.weather__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.weather__list li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 2px;
+  border-top: 1px dashed var(--line);
+  font-size: 13.5px;
+  color: #41504a;
+}
+
+.weather__list li:first-child { border-top: 0; }
+
+.weather__list .icon { width: 18px; height: 18px; color: #3d7fb5; }
+
+.weather__list span { flex: 1; }
+
+.weather__list b { color: var(--green-dark); }
+
+/* ---------- Hành động nhanh ---------- */
+.quick-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.qa {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  border: 0;
+  border-radius: 14px;
+  color: #fff;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+  font: inherit;
+  transition: filter 0.18s, transform 0.08s;
+}
+
+.qa:hover { filter: brightness(1.06); }
+.qa:active { transform: translateY(1px); }
+
+.qa--green { background: linear-gradient(120deg, #2f8f4e, #25703d); }
+.qa--blue { background: linear-gradient(120deg, #3a7ec6, #2c62a0); }
+
+.qa__plus {
+  width: 34px;
+  height: 34px;
+  flex: none;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.22);
+}
+
+.qa__plus .icon { width: 18px; height: 18px; }
+
+.qa__text { display: flex; flex-direction: column; gap: 2px; }
+
+.qa__text strong { font-size: 15px; font-weight: 700; }
+
+.qa__text small { font-size: 12px; opacity: 0.9; }
+
+/* ---------- Hoạt động gần đây ---------- */
+.activity__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 6px;
+}
+
+.activity__head h2 {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin: 0;
+  font-size: 16.5px;
+  font-weight: 700;
+  color: var(--green-dark);
+}
+
+.activity__head h2 .icon { width: 19px; height: 19px; color: var(--green); }
+
+.activity__head a {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--muted);
+  text-decoration: none;
+}
+
+.activity__head a:hover { color: var(--green); }
+
+.activity__head a .icon { width: 14px; height: 14px; }
+
+.activity__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.activity__list li {
+  display: grid;
+  grid-template-columns: 34px 112px 96px 1fr auto;
+  gap: 12px;
+  align-items: center;
+  padding: 11px 2px;
+  border-top: 1px dashed var(--line);
+}
+
+.activity__list li:first-child { border-top: 0; }
+
+.activity__icon {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border-radius: 10px;
+  background: #eef6e9;
+  color: var(--green);
+}
+
+.activity__icon .icon { width: 18px; height: 18px; }
+
+.activity__time { font-size: 12.5px; color: var(--muted); }
+
+.activity__kind { font-size: 13px; font-weight: 600; color: #41504a; }
+
+.activity__text { font-size: 13.5px; color: #2b3a31; }
+
+.activity__status {
+  padding: 4px 10px;
+  border-radius: 99px;
+  font-size: 11.5px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.activity__status--done { background: #e2f2e0; color: #25703d; }
+.activity__status--wait { background: #fdf1d8; color: #a06a12; }
+
+/* ---------- Responsive ---------- */
+@media (max-width: 1180px) {
+  .quick-actions { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 760px) {
+  .weather__body { grid-template-columns: 1fr; }
+
+  .activity__list li {
+    grid-template-columns: 34px 1fr auto;
+    row-gap: 4px;
+  }
+
+  .activity__time { grid-column: 2; }
+  .activity__kind { grid-column: 2; }
+  .activity__text { grid-column: 2 / 4; }
+  .activity__status { grid-column: 3; grid-row: 1; }
+}

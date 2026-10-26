@@ -883,7 +883,7 @@
       openModal('Hồ sơ nông hộ — ' + x.name, wrap, [
         { label: 'Sửa hồ sơ', onClick: () => { closeModal(); openForm(x); } },
         { label: 'Xóa', danger: true, onClick: () => { closeModal(); confirmDelete(x); } },
-        x.rating || x.topic ? { label: 'Gửi tư vấn', primary: true, onClick: () => { location.href = 'consult.html'; } } : { label: 'Đóng', onClick: closeModal }
+        x.rating || x.topic ? { label: 'Gửi tư vấn', primary: true, onClick: () => { location.href = 'index.html'; } } : { label: 'Đóng', onClick: closeModal }
       ]);
     }
 

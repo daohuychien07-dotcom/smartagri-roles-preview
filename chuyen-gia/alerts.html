@@ -6,25 +6,8 @@
   <title>SmartAgri — AI Cảnh báo &amp; Dự báo</title>
   <meta name="description" content="Tổng hợp cảnh báo sâu bệnh, nguy cơ theo khu vực, dự báo thời tiết 7 ngày và cấu hình nhận cảnh báo.">
   <script>
-    // Nối phiên giữa khối quản trị (localStorage) và không gian Chuyên gia (sessionStorage).
-    (function () {
-      var ok = sessionStorage.getItem('smartagri_auth') === '1';
-      if (!ok) {
-        try {
-          var r = JSON.parse(localStorage.getItem('smartagri_role_v1') || 'null');
-          if (r && r.role) {
-            sessionStorage.setItem('smartagri_auth', '1');
-            sessionStorage.setItem('smartagri_user', r.short || r.role);
-            ok = true;
-          }
-        } catch (e) { ok = false; }
-      }
-      if (!ok) { location.replace('../login.html'); }
-    })();
+    if (sessionStorage.getItem('smartagri_auth') !== '1') { location.replace('login.html'); }
   </script>
-  <!-- Phan quyen giao dien theo vai tro: menu + trang -->
-  <script src="../js/roles.js"></script>
-
   <link rel="icon" type="image/svg+xml" href="assets/logo.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

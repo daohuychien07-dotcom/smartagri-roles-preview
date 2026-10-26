@@ -5,7 +5,7 @@
    Site gồm 3 khối, mỗi khối giữ HTML/CSS/JS riêng:
      * gốc         : 7 trang quản trị HTX (dashboard/households/schedule/
                      reports/index(cây trồng)/users/settings)
-     * chuyen-gia/ : 5 trang không gian Chuyên gia + AI (AgrBrain)
+     * chuyen-gia/ : 9 trang không gian Chuyên gia + AI (app độc lập của SV2)
      * nong-dan/   : 7 trang không gian Nông dân (Season Dashboard +
                      mùa vụ, nhật ký, thời tiết, trợ lý AI, hỗ trợ, cài đặt)
 
@@ -34,10 +34,13 @@
     'dashboard.html': 'dashboard', 'households.html': 'households',
     'schedule.html': 'schedule', 'reports.html': 'reports',
     'index.html': 'crops', 'users.html': 'users', 'settings.html': 'settings',
-    /* khối Chuyên gia */
-    'chuyen-gia/consult.html': 'support', 'chuyen-gia/journal.html': 'journal',
-    'chuyen-gia/alerts.html': 'alerts', 'chuyen-gia/library.html': 'library',
-    'chuyen-gia/experts.html': 'experts',
+    /* khối Chuyên gia: app độc lập của SV2, 9 trang + login riêng */
+    'chuyen-gia/dashboard.html': 'exp-home', 'chuyen-gia/index.html': 'support',
+    'chuyen-gia/journal.html': 'journal', 'chuyen-gia/alerts.html': 'alerts',
+    'chuyen-gia/households.html': 'exp-households',
+    'chuyen-gia/library.html': 'library', 'chuyen-gia/experts.html': 'experts',
+    'chuyen-gia/reports.html': 'exp-reports',
+    'chuyen-gia/settings.html': 'exp-settings',
     /* khối Nông dân */
     'nong-dan/index.html': 'farm-home', 'nong-dan/season.html': 'farm-season',
     'nong-dan/diary.html': 'farm-diary', 'nong-dan/weather.html': 'farm-weather',
@@ -51,7 +54,7 @@
      Mỗi vai trò chỉ thấy đúng khối trang của mình, không dùng chung mục nào:
        admin  -> 4 trang quản trị hệ thống (thư mục gốc)
        coop   -> 3 trang vận hành hợp tác xã (thư mục gốc)
-       expert -> 5 trang không gian chuyên gia (thư mục chuyen-gia/)
+       expert -> 9 trang không gian chuyên gia (thư mục chuyen-gia/)
        farmer -> 7 trang không gian nông dân (thư mục nong-dan/)
      Đổi phạm vi: sửa mảng bên dưới, không cần đụng HTML. */
   var ROLE_MENUS = {
@@ -59,14 +62,15 @@
     admin: ['dashboard', 'crops', 'users', 'settings'],
     /* Điều phối HTX: vận hành hợp tác xã */
     coop: ['households', 'schedule', 'reports'],
-    /* Chuyên gia nông nghiệp: tư vấn, nhật ký, cảnh báo AI, tài nguyên, danh bạ */
-    expert: ['support', 'journal', 'alerts', 'library', 'experts'],
+    /* Chuyên gia nông nghiệp: đúng 9 trang của app SV2 */
+    expert: ['exp-home', 'support', 'journal', 'alerts', 'exp-households',
+             'library', 'experts', 'exp-reports', 'exp-settings'],
     /* Nông dân: làm việc trong không gian riêng (Season Dashboard) */
     farmer: ['farm-home', 'farm-season', 'farm-diary', 'farm-weather',
              'farm-ai', 'farm-support', 'farm-settings']
   };
 
-  var ROLE_HOME = { admin: 'dashboard', coop: 'households', expert: 'support', farmer: 'farm-home' };
+  var ROLE_HOME = { admin: 'dashboard', coop: 'households', expert: 'exp-home', farmer: 'farm-home' };
   var LABEL = { admin: 'Quản trị viên', coop: 'Điều phối HTX', expert: 'Chuyên gia', farmer: 'Nông dân' };
 
   var ITEM_SEL = '.nav-item, .nav__item, .side-link';

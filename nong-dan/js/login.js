@@ -147,8 +147,12 @@ loginForm.addEventListener('submit', function (event) {
       at: Date.now()
     }));
     showToast('Xin chào ' + account.role + '! Đang mở bảng điều khiển...', false);
+    if (scope === 'expert') {
+      sessionStorage.setItem('smartagri_auth', '1');
+      sessionStorage.setItem('smartagri_user', account.name || 'Nguyễn Văn Nam');
+    }
     setTimeout(function () {
-      window.location.href = scope === 'expert' ? '../chuyen-gia/consult.html' : 'index.html';
+      window.location.href = scope === 'expert' ? '../chuyen-gia/dashboard.html' : 'index.html';
     }, 1000);
   }, 1200);
 });

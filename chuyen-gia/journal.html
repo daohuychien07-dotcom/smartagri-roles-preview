@@ -3,28 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SmartAgri — Nhật ký canh tác</title>
+  <title>SmartAgri — Nhật ký canh đồng</title>
   <meta name="description" content="Ghi lại và theo dõi mọi hoạt động trên đồng ruộng: bón phân, phun thuốc, tưới nước, làm cỏ, thu hoạch kèm trợ lý AI chẩn đoán sâu bệnh.">
   <script>
-    // Nối phiên giữa khối quản trị (localStorage) và không gian Chuyên gia (sessionStorage).
-    (function () {
-      var ok = sessionStorage.getItem('smartagri_auth') === '1';
-      if (!ok) {
-        try {
-          var r = JSON.parse(localStorage.getItem('smartagri_role_v1') || 'null');
-          if (r && r.role) {
-            sessionStorage.setItem('smartagri_auth', '1');
-            sessionStorage.setItem('smartagri_user', r.short || r.role);
-            ok = true;
-          }
-        } catch (e) { ok = false; }
-      }
-      if (!ok) { location.replace('../login.html'); }
-    })();
+    if (sessionStorage.getItem('smartagri_auth') !== '1') {
+      location.replace('login.html');
+    }
   </script>
-  <!-- Phan quyen giao dien theo vai tro: menu + trang -->
-  <script src="../js/roles.js"></script>
-
   <link rel="icon" type="image/svg+xml" href="assets/logo.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -71,7 +56,7 @@
   <div class="layout" id="layout">
     <!-- ================= SIDEBAR ================= -->
     <aside class="sidebar" id="sidebar" aria-label="Menu chính">
-      <a class="brand" href="../dashboard.html" aria-label="SmartAgri — Trang tổng quan">
+      <a class="brand" href="dashboard.html" aria-label="SmartAgri — Trang tổng quan">
         <img class="brand__logo" src="assets/logo.svg" alt="">
         <span class="brand__text">
           <span class="brand__name">SmartAgri</span>
@@ -81,18 +66,15 @@
 
       <nav class="nav" aria-label="Điều hướng chính">
         <ul class="nav__list">
-          <li><a class="nav__item" href="../dashboard.html"><svg class="icon"><use href="#i-home"></use></svg><span>Dashboard</span></a></li>
-          <li><a class="nav__item" href="../households.html"><svg class="icon"><use href="#i-users"></use></svg><span>Tổng quan nông hộ</span></a></li>
-          <li><a class="nav__item" href="../schedule.html"><svg class="icon"><use href="#i-calendar"></use></svg><span>Lịch trình mùa vụ</span></a></li>
-          <li><a class="nav__item" href="../reports.html"><svg class="icon"><use href="#i-chart"></use></svg><span>Báo cáo tổng kết</span></a></li>
-          <li><a class="nav__item" href="consult.html"><svg class="icon"><use href="#i-chat"></use></svg><span>Yêu cầu tư vấn</span></a></li>
-          <li><a class="nav__item nav__item--active" href="journal.html" aria-current="page"><svg class="icon"><use href="#i-sprout"></use></svg><span>Nhật ký canh tác</span></a></li>
-          <li><a class="nav__item" href="alerts.html"><svg class="icon"><use href="#i-ai"></use></svg><span>AI Cảnh báo</span></a></li>
+          <li><a class="nav__item" href="dashboard.html"><svg class="icon"><use href="#i-home"></use></svg><span>Tổng quan</span></a></li>
+          <li><a class="nav__item nav__item--active" href="journal.html" aria-current="page"><svg class="icon"><use href="#i-sprout"></use></svg><span>Nhật ký canh đồng</span></a></li>
+          <li><a class="nav__item" href="alerts.html"><svg class="icon"><use href="#i-ai"></use></svg><span>AI Cảnh báo &amp; Dự báo</span></a></li>
+          <li><a class="nav__item" href="index.html"><svg class="icon"><use href="#i-chat"></use></svg><span>Yêu cầu hỗ trợ</span></a></li>
+          <li><a class="nav__item" href="households.html"><svg class="icon"><use href="#i-users"></use></svg><span>Nông hộ &amp; HTX</span></a></li>
           <li><a class="nav__item" href="library.html"><svg class="icon"><use href="#i-book"></use></svg><span>Thư viện tài nguyên</span></a></li>
           <li><a class="nav__item" href="experts.html"><svg class="icon"><use href="#i-user"></use></svg><span>Quản lý chuyên gia</span></a></li>
-          <li><a class="nav__item" href="../index.html"><svg class="icon"><use href="#i-leaf"></use></svg><span>Danh mục cây trồng</span></a></li>
-          <li><a class="nav__item" href="../users.html"><svg class="icon"><use href="#i-shield"></use></svg><span>Tài khoản người dùng</span></a></li>
-          <li><a class="nav__item" href="../settings.html"><svg class="icon"><use href="#i-gear"></use></svg><span>Cấu hình hệ thống</span></a></li>
+          <li><a class="nav__item" href="reports.html"><svg class="icon"><use href="#i-chart"></use></svg><span>Báo cáo &amp; Thống kê</span></a></li>
+          <li><a class="nav__item" href="settings.html"><svg class="icon"><use href="#i-gear"></use></svg><span>Cài đặt hệ thống</span></a></li>
         </ul>
       </nav>
 
@@ -125,7 +107,7 @@
         </button>
 
         <div class="topbar__titles">
-          <h1>Nhật ký canh tác</h1>
+          <h1>Nhật ký canh đồng</h1>
           <p class="topbar__greet">
             <svg class="icon"><use href="#i-leaf"></use></svg>
             Ghi lại và theo dõi mọi hoạt động trên đồng ruộng
@@ -164,9 +146,9 @@
               </header>
               <ul class="account__menu">
                 <li><a href="experts.html"><svg class="icon"><use href="#i-user"></use></svg> Hồ sơ chuyên gia</a></li>
-                <li><a href="consult.html"><svg class="icon"><use href="#i-chat"></use></svg> Yêu cầu đang phụ trách</a></li>
-                <li><a href="journal.html"><svg class="icon"><use href="#i-sprout"></use></svg> Nhật ký canh tác</a></li>
-                <li><a href="../settings.html"><svg class="icon"><use href="#i-gear"></use></svg> Cài đặt hệ thống</a></li>
+                <li><a href="index.html"><svg class="icon"><use href="#i-chat"></use></svg> Yêu cầu đang phụ trách</a></li>
+                <li><a href="journal.html"><svg class="icon"><use href="#i-sprout"></use></svg> Nhật ký canh đồng</a></li>
+                <li><a href="settings.html"><svg class="icon"><use href="#i-gear"></use></svg> Cài đặt hệ thống</a></li>
               </ul>
               <button class="account__logout" type="button" id="accLogout">
                 <svg class="icon"><use href="#i-logout"></use></svg> Đăng xuất

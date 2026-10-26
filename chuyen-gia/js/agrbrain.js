@@ -328,7 +328,7 @@
         pri: 1,
         title: 'Duyệt hồ sơ — ' + p.name,
         detail: p.type + ' · ' + p.detail + ' · chờ ' + when(p.at),
-        href: '../users.html?status=pending',
+        href: 'households.html#pending-' + p.id,
         cta: 'Duyệt hồ sơ'
       });
     });

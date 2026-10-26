@@ -6,25 +6,10 @@
   <title>SmartAgri — Chi tiết yêu cầu &amp; Tư vấn</title>
   <meta name="description" content="Trang chi tiết yêu cầu hỗ trợ và soạn lời khuyên cho chuyên gia nông nghiệp trong hệ thống SmartAgri.">
   <script>
-    // Nối phiên giữa khối quản trị (localStorage) và không gian Chuyên gia (sessionStorage).
-    (function () {
-      var ok = sessionStorage.getItem('smartagri_auth') === '1';
-      if (!ok) {
-        try {
-          var r = JSON.parse(localStorage.getItem('smartagri_role_v1') || 'null');
-          if (r && r.role) {
-            sessionStorage.setItem('smartagri_auth', '1');
-            sessionStorage.setItem('smartagri_user', r.short || r.role);
-            ok = true;
-          }
-        } catch (e) { ok = false; }
-      }
-      if (!ok) { location.replace('../login.html'); }
-    })();
+    if (sessionStorage.getItem('smartagri_auth') !== '1') {
+      location.replace('login.html');
+    }
   </script>
-  <!-- Phan quyen giao dien theo vai tro: menu + trang -->
-  <script src="../js/roles.js"></script>
-
   <link rel="icon" type="image/svg+xml" href="assets/logo.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -42,7 +27,7 @@
     <symbol id="i-book" viewBox="0 0 24 24"><path d="M5 4h6a2 2 0 0 1 2 2v14a2 2 0 0 0-2-2H5V4Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M19 4h-6v14h6V4Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></symbol>
     <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.5" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M5 20c0-3.6 3.1-6 7-6s7 2.4 7 6" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></symbol>
     <symbol id="i-chart" viewBox="0 0 24 24"><path d="M4 20h16M7 20v-6m5 6V7m5 13v-9" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></symbol>
-    <symbol id="i-gear" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.2" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M12 3v2.5M12 18.5V21M3 12h2.5M18.5 12H21M5.6 5.6l1.8 1.8M16.6 16.6l1.8 1.8M18.4 5.6l-1.8 1.8M7.4 16.6l-1.8 1.8" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></symbol><symbol id="i-calendar" viewBox="0 0 24 24"><rect x="4" y="5.5" width="16" height="15" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M4 10.5h16M8.5 3.5v4M15.5 3.5v4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></symbol><symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l7 2.6v5.2c0 4.6-3 8.2-7 10.2-4-2-7-5.6-7-10.2V5.6Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="m9 11.6 2.2 2.2 4.2-4.2" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-gear" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.2" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M12 3v2.5M12 18.5V21M3 12h2.5M18.5 12H21M5.6 5.6l1.8 1.8M16.6 16.6l1.8 1.8M18.4 5.6l-1.8 1.8M7.4 16.6l-1.8 1.8" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></symbol>
     <symbol id="i-bell" viewBox="0 0 24 24"><path d="M7 10a5 5 0 0 1 10 0c0 4 1.5 5.5 1.5 5.5h-13S7 14 7 10Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M10.2 18.5a2 2 0 0 0 3.6 0" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></symbol>
     <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
     <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M12 8v4.5l3 1.8" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></symbol>
@@ -63,7 +48,7 @@
   <div class="layout" id="layout">
     <!-- ================= SIDEBAR ================= -->
     <aside class="sidebar" id="sidebar" aria-label="Menu chính">
-      <a class="brand" href="../dashboard.html" aria-label="SmartAgri — Trang tổng quan">
+      <a class="brand" href="dashboard.html" aria-label="SmartAgri — Trang tổng quan">
         <img class="brand__logo" src="assets/logo.svg" alt="">
         <span class="brand__text">
           <span class="brand__name">SmartAgri</span>
@@ -73,18 +58,15 @@
 
       <nav class="nav" aria-label="Điều hướng chính">
         <ul class="nav__list">
-          <li><a class="nav__item" href="../dashboard.html"><svg class="icon"><use href="#i-home"></use></svg><span>Dashboard</span></a></li>
-          <li><a class="nav__item" href="../households.html"><svg class="icon"><use href="#i-users"></use></svg><span>Tổng quan nông hộ</span></a></li>
-          <li><a class="nav__item" href="../schedule.html"><svg class="icon"><use href="#i-calendar"></use></svg><span>Lịch trình mùa vụ</span></a></li>
-          <li><a class="nav__item" href="../reports.html"><svg class="icon"><use href="#i-chart"></use></svg><span>Báo cáo tổng kết</span></a></li>
-          <li><a class="nav__item nav__item--active" href="consult.html" aria-current="page"><svg class="icon"><use href="#i-chat"></use></svg><span>Yêu cầu tư vấn</span></a></li>
-          <li><a class="nav__item" href="journal.html"><svg class="icon"><use href="#i-sprout"></use></svg><span>Nhật ký canh tác</span></a></li>
-          <li><a class="nav__item" href="alerts.html"><svg class="icon"><use href="#i-ai"></use></svg><span>AI Cảnh báo</span></a></li>
+          <li><a class="nav__item" href="dashboard.html"><svg class="icon"><use href="#i-home"></use></svg><span>Tổng quan</span></a></li>
+          <li><a class="nav__item" href="journal.html"><svg class="icon"><use href="#i-sprout"></use></svg><span>Nhật ký canh đồng</span></a></li>
+          <li><a class="nav__item" href="alerts.html"><svg class="icon"><use href="#i-ai"></use></svg><span>AI Cảnh báo &amp; Dự báo</span></a></li>
+          <li><a class="nav__item nav__item--active" href="index.html" aria-current="page"><svg class="icon"><use href="#i-chat"></use></svg><span>Yêu cầu hỗ trợ</span></a></li>
+          <li><a class="nav__item" href="households.html"><svg class="icon"><use href="#i-users"></use></svg><span>Nông hộ &amp; HTX</span></a></li>
           <li><a class="nav__item" href="library.html"><svg class="icon"><use href="#i-book"></use></svg><span>Thư viện tài nguyên</span></a></li>
           <li><a class="nav__item" href="experts.html"><svg class="icon"><use href="#i-user"></use></svg><span>Quản lý chuyên gia</span></a></li>
-          <li><a class="nav__item" href="../index.html"><svg class="icon"><use href="#i-leaf"></use></svg><span>Danh mục cây trồng</span></a></li>
-          <li><a class="nav__item" href="../users.html"><svg class="icon"><use href="#i-shield"></use></svg><span>Tài khoản người dùng</span></a></li>
-          <li><a class="nav__item" href="../settings.html"><svg class="icon"><use href="#i-gear"></use></svg><span>Cấu hình hệ thống</span></a></li>
+          <li><a class="nav__item" href="reports.html"><svg class="icon"><use href="#i-chart"></use></svg><span>Báo cáo &amp; Thống kê</span></a></li>
+          <li><a class="nav__item" href="settings.html"><svg class="icon"><use href="#i-gear"></use></svg><span>Cài đặt hệ thống</span></a></li>
         </ul>
       </nav>
 
@@ -157,9 +139,9 @@
               </header>
               <ul class="account__menu">
                 <li><a href="experts.html"><svg class="icon"><use href="#i-user"></use></svg> Hồ sơ chuyên gia</a></li>
-                <li><a href="consult.html"><svg class="icon"><use href="#i-chat"></use></svg> Yêu cầu đang phụ trách</a></li>
-                <li><a href="journal.html"><svg class="icon"><use href="#i-sprout"></use></svg> Nhật ký canh tác</a></li>
-                <li><a href="../settings.html"><svg class="icon"><use href="#i-gear"></use></svg> Cài đặt hệ thống</a></li>
+                <li><a href="index.html"><svg class="icon"><use href="#i-chat"></use></svg> Yêu cầu đang phụ trách</a></li>
+                <li><a href="journal.html"><svg class="icon"><use href="#i-sprout"></use></svg> Nhật ký canh đồng</a></li>
+                <li><a href="settings.html"><svg class="icon"><use href="#i-gear"></use></svg> Cài đặt hệ thống</a></li>
               </ul>
               <button class="account__logout" type="button" id="accLogout">
                 <svg class="icon"><use href="#i-logout"></use></svg> Đăng xuất

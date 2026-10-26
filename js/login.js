@@ -194,6 +194,14 @@ credForm.addEventListener('submit', e => {
       scope: pendingCard.dataset.scope, user: acc.username, at: Date.now(),
     }));
 
+    // Khoi chuyen-gia/ la app doc lap cua SV2, moi trang kiem tra phien bang
+    // sessionStorage. Cong chung phai ghi hai khoa nay thi chuyen gia moi vao
+    // duoc ma khong bi do ve chuyen-gia/login.html.
+    if (pendingCard.dataset.scope === 'expert') {
+      sessionStorage.setItem('smartagri_auth', '1');
+      sessionStorage.setItem('smartagri_user', 'Nguyễn Văn Nam');
+    }
+
     roleCards.forEach(c => c.classList.remove('is-loading'));
     pendingCard.classList.add('is-loading');
     showToast('Đăng nhập thành công với vai trò ' + role);

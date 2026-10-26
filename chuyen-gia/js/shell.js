@@ -50,22 +50,16 @@ const SA_ICONS = `
 <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2.5 12S6 5.8 12 5.8 21.5 12 21.5 12S18 18.2 12 18.2 2.5 12 2.5 12Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><circle cx="12" cy="12" r="2.8" fill="none" stroke="currentColor" stroke-width="1.7"/></symbol>
 <symbol id="i-sliders" viewBox="0 0 24 24"><path d="M4 8h11M19 8h1M4 16h5M13 16h7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="17" cy="8" r="2.2" fill="none" stroke="currentColor" stroke-width="1.7"/><circle cx="11" cy="16" r="2.2" fill="none" stroke="currentColor" stroke-width="1.7"/></symbol>`;
 
-/* Menu chung của toàn bộ hệ thống 12 trang — thứ tự phải khớp với sidebar
-   ở 7 trang quản trị (dashboard/households/schedule/reports/index/users/settings).
-   Trang nào nằm ngoài thư mục này thì dùng dấu ../  */
 const SA_NAV = [
-  { key: 'dashboard', href: '../dashboard.html', icon: 'i-home', label: 'Dashboard' },
-  { key: 'households', href: '../households.html', icon: 'i-users', label: 'Tổng quan nông hộ' },
-  { key: 'schedule', href: '../schedule.html', icon: 'i-calendar', label: 'Lịch trình mùa vụ' },
-  { key: 'reports', href: '../reports.html', icon: 'i-chart', label: 'Báo cáo tổng kết' },
-  { key: 'support', href: 'consult.html', icon: 'i-chat', label: 'Yêu cầu tư vấn' },
-  { key: 'journal', href: 'journal.html', icon: 'i-sprout', label: 'Nhật ký canh tác' },
-  { key: 'alerts', href: 'alerts.html', icon: 'i-ai', label: 'AI Cảnh báo' },
+  { key: 'overview', href: 'dashboard.html', icon: 'i-home', label: 'Tổng quan' },
+  { key: 'journal', href: 'journal.html', icon: 'i-sprout', label: 'Nhật ký canh đồng' },
+  { key: 'alerts', href: 'alerts.html', icon: 'i-ai', label: 'AI Cảnh báo & Dự báo' },
+  { key: 'support', href: 'index.html', icon: 'i-chat', label: 'Yêu cầu hỗ trợ' },
+  { key: 'households', href: 'households.html', icon: 'i-users', label: 'Nông hộ & HTX' },
   { key: 'library', href: 'library.html', icon: 'i-book', label: 'Thư viện tài nguyên' },
   { key: 'experts', href: 'experts.html', icon: 'i-user', label: 'Quản lý chuyên gia' },
-  { key: 'crops', href: '../index.html', icon: 'i-leaf', label: 'Danh mục cây trồng' },
-  { key: 'users', href: '../users.html', icon: 'i-shield', label: 'Tài khoản người dùng' },
-  { key: 'settings', href: '../settings.html', icon: 'i-gear', label: 'Cấu hình hệ thống' }
+  { key: 'reports', href: 'reports.html', icon: 'i-chart', label: 'Báo cáo & Thống kê' },
+  { key: 'settings', href: 'settings.html', icon: 'i-gear', label: 'Cài đặt hệ thống' }
 ];
 
 /* Danh sách thông báo do Trợ lý AI AgrBrain sinh từ dữ liệu 6 trang. */
@@ -87,7 +81,7 @@ const SA_NAV = [
     '<svg hidden aria-hidden="true">' + SA_ICONS + '</svg>' +
     '<div class="layout" id="layout">' +
       '<aside class="sidebar" id="sidebar" aria-label="Menu chính">' +
-        '<a class="brand" href="../dashboard.html" aria-label="SmartAgri — Trang tổng quan">' +
+        '<a class="brand" href="dashboard.html" aria-label="SmartAgri — Trang tổng quan">' +
           '<img class="brand__logo" src="assets/logo.svg" alt="">' +
           '<span class="brand__text"><span class="brand__name">SmartAgri</span>' +
           '<span class="brand__tag">Trí tuệ cho mùa vàng</span></span></a>' +
@@ -131,9 +125,9 @@ const SA_NAV = [
                 '<small id="accMail">chuyengia@smartagri.vn</small></span></header>' +
               '<ul class="account__menu">' +
                 '<li><a href="experts.html"><svg class="icon"><use href="#i-user"></use></svg> Hồ sơ chuyên gia</a></li>' +
-                '<li><a href="consult.html"><svg class="icon"><use href="#i-chat"></use></svg> Yêu cầu đang phụ trách</a></li>' +
-                '<li><a href="journal.html"><svg class="icon"><use href="#i-sprout"></use></svg> Nhật ký canh tác</a></li>' +
-                '<li><a href="../settings.html"><svg class="icon"><use href="#i-gear"></use></svg> Cài đặt hệ thống</a></li>' +
+                '<li><a href="index.html"><svg class="icon"><use href="#i-chat"></use></svg> Yêu cầu đang phụ trách</a></li>' +
+                '<li><a href="journal.html"><svg class="icon"><use href="#i-sprout"></use></svg> Nhật ký canh đồng</a></li>' +
+                '<li><a href="settings.html"><svg class="icon"><use href="#i-gear"></use></svg> Cài đặt hệ thống</a></li>' +
               '</ul>' +
               '<button class="account__logout" type="button" id="accLogout">' +
                 '<svg class="icon"><use href="#i-logout"></use></svg> Đăng xuất</button>' +
@@ -197,8 +191,7 @@ const SA_NAV = [
   function doLogout() {
     sessionStorage.removeItem('smartagri_auth');
     sessionStorage.removeItem('smartagri_user');
-    localStorage.removeItem('smartagri_role_v1'); // đồng thời xoá vai trò ở khối quản trị
-    location.replace('../login.html');
+    location.replace('login.html');
   }
   $('#btnLogout').addEventListener('click', doLogout);
 

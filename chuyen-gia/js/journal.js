@@ -217,9 +217,8 @@ scrim.addEventListener('click', () => setNav(false));
 /* ---------- 2. Đăng xuất ---------- */
 function doLogout() {
   sessionStorage.removeItem(AUTH_KEY);
-  sessionStorage.removeItem('smartagri_user');
-  localStorage.removeItem('smartagri_role_v1'); // đồng thời xoá vai trò ở khối quản trị
-  location.replace('../login.html');
+  sessionStorage.removeItem(USER_KEY);
+  location.replace('login.html');
 }
 $('#btnLogout').addEventListener('click', doLogout);
 
