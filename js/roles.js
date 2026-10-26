@@ -47,25 +47,20 @@
   var KEY_PATH = {};
   Object.keys(PATH_KEY).forEach(function (p) { KEY_PATH[PATH_KEY[p]] = p; });
 
-  /* ---- 2) MENU RIÊNG CỦA TỪNG VAI TRÒ ---- */
-  var HTX_SPACE = ['dashboard', 'households', 'schedule', 'reports',
-                   'support', 'journal', 'alerts', 'library', 'experts',
-                   'crops', 'users', 'settings'];
-
+  /* ---- 2) MENU RIÊNG CỦA TỪNG VAI TRÒ ----
+     Mỗi vai trò chỉ thấy đúng khối trang của mình, không dùng chung mục nào:
+       admin  -> 4 trang quản trị hệ thống (thư mục gốc)
+       coop   -> 3 trang vận hành hợp tác xã (thư mục gốc)
+       expert -> 5 trang không gian chuyên gia (thư mục chuyen-gia/)
+       farmer -> 7 trang không gian nông dân (thư mục nong-dan/)
+     Đổi phạm vi: sửa mảng bên dưới, không cần đụng HTML. */
   var ROLE_MENUS = {
-    /* Quản trị viên: toàn bộ khối quản trị + không gian Chuyên gia */
-    admin: HTX_SPACE,
-    /* Điều phối HTX: vận hành hợp tác xã, không quản trị hệ thống */
-    coop: ['dashboard', 'households', 'schedule', 'reports',
-           'support', 'journal', 'alerts', 'library'],
-    /* Chuyên gia nông nghiệp: 5 trang của khối chuyen-gia/ (SV2) + 4 trang
-       dùng chung của khối HTX - quản trị mà sidebar gốc của SV2 vẫn dành cho
-       chuyên gia: Tổng quan (dashboard), Nông hộ & HTX (households),
-       Báo cáo (reports), Cấu hình hệ thống (settings).
-       Ba trang vẫn cấm: index.html (danh mục cây trồng), users.html (tài
-       khoản), schedule.html (lịch trình) + cả khối nong-dan/. */
-    expert: ['dashboard', 'households', 'reports', 'settings',
-             'support', 'journal', 'alerts', 'library', 'experts'],
+    /* Quản trị viên: hệ thống, con người, cấu hình */
+    admin: ['dashboard', 'crops', 'users', 'settings'],
+    /* Điều phối HTX: vận hành hợp tác xã */
+    coop: ['households', 'schedule', 'reports'],
+    /* Chuyên gia nông nghiệp: tư vấn, nhật ký, cảnh báo AI, tài nguyên, danh bạ */
+    expert: ['support', 'journal', 'alerts', 'library', 'experts'],
     /* Nông dân: làm việc trong không gian riêng (Season Dashboard) */
     farmer: ['farm-home', 'farm-season', 'farm-diary', 'farm-weather',
              'farm-ai', 'farm-support', 'farm-settings']
