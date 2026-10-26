@@ -76,6 +76,8 @@ Cách đọc cột **Trạng thái**: `N`=Bình thường, `L`=Đang tải, `E`=
 | `admin-user-management.html` | `users.html` | Khớp |
 | Màn hình **vượt** nền tảng | `nong-dan/{season,weather,ai,settings,login,register,forgot-password}.html`, `chuyen-gia/{journal,alerts,experts}.html`, `login.html`, `settings.html` | Phát sinh từ phân tích vai trò + luồng, không phải trang trang trí |
 
+**Chưa hợp nhất từ mã gốc của SV2** (để hồ sơ không nói quá số màn hình khối Chuyên gia): nhánh `team/main` = `smartagri-agrbrain` (tip `d569695`, 18-10-2026) còn 5 màn hình chưa vào bảng trên — `dashboard.html` 288 dòng (Season Dashboard của chuyên gia + mô-đun quét ảnh lá `analyzeImage`/`classifyImage`, grep toàn repo = 0 kết quả), `login.html` 131 dòng (đã thay bằng cổng chung `login.html`), và `households.html` 131 / `reports.html` 170 / `settings.html` 167 bản *chuyên gia* (khác 3 trang trùng tên của khối quản trị ở gốc). Chi tiết + lý do: [`roles-and-features.md`](roles-and-features.md), mục "Đối chiếu với mã gốc của SV2".
+
 ## 6. Ma trận thực thể & CRUD (đối chứng với bảng ở mục 1–3)
 
 | Thực thể đề bài | Chỗ tạo (C) | Chỗ đọc (R) | Chỗ sửa (U) | Chỗ hủy/lưu trữ (D) | Nơi lưu |

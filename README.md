@@ -47,6 +47,8 @@ CropMate AI gom **bốn vai trò** (Nông dân · Chuyên gia · Điều phối 
 
 Phạm vi trên **không phải mô tả trên giấy**: `js/roles.js` lọc phần tử menu theo vai trò, ẩn link ngoài phạm vi, đổi logo/chip về trang nhà vai trò, và `guardPage()` chặn việc gõ URL tay (dùng `location.replace` để nút Back không quay lại trang bị cấm). Kiểm thử 4 vai trò ở mục **Demo**.
 
+Số "5 trang" của khối Chuyên gia là số đã **hợp nhất**, không phải toàn bộ những gì SV2 viết: mã gốc của bạn ấy ở nhánh `team/main` (= `smartagri-agrbrain`, tip `d569695`) có **10 màn hình**. Năm trang chưa đưa vào bản tích hợp — `dashboard.html` (Season Dashboard của chuyên gia, kèm mô-đun quét ảnh lá `analyzeImage`/`classifyImage`), `login.html` (đã thay bằng cổng chung) và bộ `households`/`reports`/`settings` bản chuyên gia — được liệt kê kèm số dòng và lý do trong [`docs/roles-and-features.md`](docs/roles-and-features.md), mục "Đối chiếu với mã gốc của SV2".
+
 ## Luồng người dùng
 
 ```text

@@ -9,12 +9,12 @@
 | Mã | Thành viên | Tài khoản GitHub / tác giả commit | Khối phụ trách | Số màn hình |
 |---|---|---|---|---:|
 | **SV1** | `<HỌ TÊN>` — MSSV `<…>` | `daohuychien07-dotcom` (repo `BTCKcuachien`, nhánh `season-dashboard`) | Khối **Nông dân** — 10 trang `nong-dan/` | 10 |
-| **SV2** | `<HỌ TÊN>` — MSSV `<…>` | `tachisama95-ux` (git name `Thanh Dat`) + các commit early có git name `Ten Cua Ban`, nhánh `smartagri-agrbrain` | Khối **Chuyên gia** — 5 trang `chuyen-gia/` | 5 |
+| **SV2** | `<HỌ TÊN>` — MSSV `<…>` | `tachisama95-ux` (git name `Thanh Dat`) + các commit early có git name `Ten Cua Ban`, nhánh `smartagri-agrbrain` | Khối **Chuyên gia** — 5 trang `chuyen-gia/` (mã gốc ở tip `d569695` có 10 màn hình; 5 màn chưa hợp nhất, kê khai trong `roles-and-features.md`) | 5 |
 | **SV3** | `<HỌ TÊN>` — MSSV `<…>` | `ducnhatnguyen18-svg` (repo `CSE122-BTL-NGUYENDUCNHAT`, nhánh `main`) | Khối **HTX + Quản trị** (8 trang gốc) **+ tích hợp toàn site** | 8 |
 
 ## 2. Lát cắt dọc (mỗi người tự làm end-to-end)
 
-| Thành viên | Luồng end-to-end tự hoàn thành | Chuứng minh |
+| Thành viên | Luồng end-to-end tự hoàn thành | Chứng minh |
 |---|---|---|
 | SV1 | Đăng ký → đăng nhập nông hộ → Season Dashboard → Trợ lý AI (upload ảnh → chẩn đoán → lưu lịch sử) → gửi yêu cầu hỗ trợ | `https://github.com/daohuychien07-dotcom/BTCKcuachien` (16 commit, 2026-10-12 → 10-21) + video `youtu.be/r-eW5GXDfPM` |
 | SV2 | Hàng đợi yêu cầu → đọc bối cảnh → Trợ lý AI AgrBrain tóm tắt → trả lời / từ chối → duyệt kết quả AI trong nhật ký → quản lý thư viện | nhánh `smartagri-agrbrain` (7 commit: 4 `Ten Cua Ban`, 3 `Thanh Dat`, 2026-10-12 → 10-18) |

@@ -33,6 +33,19 @@ Bốn vai trò, hai mươi ba màn hình. Tài liệu này mô tả **chức nă
 
 **Trợ lý AI AgrBrain (`chuyen-gia/js/agrbrain.js`)** đọc `localStorage` của 6 loại dữ liệu (nhật ký, cảnh báo, nông hộ, thư viện, chuyên gia, cài đặt), sinh danh sách việc ưu tiên + lời khuyên, đẩy vào chuông của cả 5 trang. Không có dữ liệu → không bịa: badge ẩn, panel báo rỗng.
 
+### Đối chiếu với mã gốc của SV2 (`tachisama95-ux` / git name `Thanh Dat`)
+
+Bản `chuyen-gia/` trong repo này là **5/10 màn hình** mà SV2 đã viết. Số liệu đo bằng `git show refs/remotes/team/main:<tệp> | wc -l` ngày 26-10-2026; branch chuẩn là `team/main` = `team/smartagri-agrbrain` = `team/repo` (cùng tip `d569695`, 18-10-2026 22:19 +07, 7 commit), còn commit chép vào repo ta là `253355b` ngày **22-10-2026** → **không có commit nào của SV2 bị bỏ lỡ**.
+
+| Tệp trong mã gốc của SV2 | Trong repo ta | Kiểm chứng được gì |
+|---|---|---|
+| `index.html` 306 · `journal.html` · `alerts.html` · `library.html` · `experts.html` + `js/{agrbrain,journal,main,pages,shell}.js` + `css/{style,journal,parts}.css` + 8 assets | **Đã hợp nhất** (`index.html` → `consult.html`, bản ta 324 dòng) | Không mất hàm nào: `css/style.css` 704/704, `css/journal.css` 590/590, `js/pages.js` 3634/3634 **giống hệt**; phần chênh ở các trang là thay đổi chủ ý (đường dẫn `../`, cầu nối phiên inline `smartagri_role_v1` → `smartagri_auth`, nav 12 mục, điểm rơi đăng xuất `../login.html`) |
+| `dashboard.html` 288 + `js/dashboard.js` 809 + `css/dashboard.css` 637 — "Season Dashboard – Bảng điều khiển mùa vụ" của chuyên gia, có **mô-đun quét ảnh lá** (`analyzeImage`, `rgbToHsv`, `classifyImage`, `renderScanShell`, `playScanSteps`) | **Chưa hợp nhất** | `grep` 4 hàm đó trên toàn cây làm việc = **0 kết quả** → tính năng AI phân tích ảnh của SV2 hiện không chạy trong bản tích hợp. Không làm vỡ mục "≥ 3 tính năng AI" của barem (đã có AI-1/2/3), nhưng `dashboard.html` ở gốc (224 dòng) là trang **quản trị**, không phải bản thay thế |
+| `login.html` 131 + `js/login.js` 101 + `css/login.css` 302, tài khoản demo `chuyengia` / `123456` | **Thay bằng cổng chung** `login.html` | Cổng chung dùng cặp `chuyengia` / `agri2026`; ai quen mật khẩu cũ của SV2 phải dùng mật khẩu mới khi demo |
+| `households.html` 131 · `reports.html` 170 · `settings.html` 167 (bản *chuyên gia*: tư vấn theo nông hộ, báo cáo nhật ký theo tháng/loại hoạt động + xuất báo cáo, mục cài đặt "Tích hợp mô hình AI – Field Issue Classifier") | **Chưa hợp nhất** | Repo ta có 3 trang trùng tên ở thư mục gốc nhưng là bản khối quản trị (294 / 274 / 299 dòng), nội dung khác |
+
+Giới hạn của so sánh này: repo public của SV2 (`api.github.com/users/tachisama95-ux/repos`) chỉ có `BTCSE122_BTL-ThanhDat` (push 2026-10-18T15:19:52Z, đúng giờ tip `team/main`) và `Thanhdat` (3 tệp, không liên quan CropMate). **Repo private của bạn không kiểm tra được**, nên bảng trên chỉ kết luận về những gì đã đẩy lên GitHub.
+
 ## 3. Điều phối HTX (thư mục gốc — SV3)
 
 **Mục tiêu:** nhìn toàn hợp tác xã và không bỏ sót công việc chung.

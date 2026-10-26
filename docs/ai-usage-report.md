@@ -81,12 +81,14 @@
 | Đăng nhập / phân quyền | ✔ | ✘ | `localStorage['smartagri_role_v1']` + `js/roles.js` |
 | CRUD dữ liệu | ✔ | ✘ | `localStorage` 17 khóa (họ `smartagri_*` / `smartagri.*`) + 3 khóa `sessionStorage` — không có máy chủ, không có `fetch`/`XMLHttpRequest` nào trong mã |
 
+Bảng trên là **đủ những gì chạy trong bản tích hợp**. Mã gốc của SV2 ở nhánh `team/main` (tip `d569695`) còn một mô-đun AI nữa chưa được đưa vào site này: `js/dashboard.js` 809 dòng với `analyzeImage` / `rgbToHsv` / `classifyImage` / `playScanSteps` — quét ảnh lá và phân loại bệnh ngay trong trình duyệt. `grep` bốn hàm đó trên toàn cây làm việc = 0 kết quả, nên **không dám kê** nó thành AI-4; khai báo chi tiết ở [`roles-and-features.md`](roles-and-features.md), mục "Đối chiếu với mã gốc của SV2".
+
 **Yêu cầu mạng duy nhất của toàn site:** phông chữ `Be Vietnam Pro` qua `fonts.googleapis.com` ở 5 trang `chuyen-gia/*.html`. **Không có khóa bí mật, không có endpoint LLM, không gửi dữ liệu ra ngoài.** Tab "Trí tuệ nhân tạo" của `settings.html` chỉ là ô cấu hình hiển thị: trường API Key để trống (`value=""`) và bị `js/settings.js:19-26` loại khỏi bộ lưu, nên không có chuỗi nào dạng khóa xuất hiện trong mã hay trong `localStorage` của người xem.
 
 ## 7. Điều sinh viên học được
 
 - **AI nhanh ở phần khung, chậm ở phần nghiệp vụ.** Mọi lỗi nghiêm trọng đều nằm ở ngữ cảnh: tên giống cây phải khớp `catalog.js`, `1fr` không co dưới `min-content`, `file://` làm mất query string.
-- **Không được tin "AI nói đã sửa xong".** Bốn trong mười một lỗi ở mục 4 chỉ phát hiện được bằng công cụ khách quan (`diff` với bản gốc, đo `scrollWidth`, quét ký tự lạ, `grep innerHTML` toàn bộ 29 tệp JS), không phát hiện bằng cách nhìn màn hình.
+- **Bốn trong mười bốn lỗi ở mục 4 chỉ phát hiện được bằng công cụ khách quan** (`diff` với bản gốc, đo `scrollWidth`, quét ký tự lạ, `grep innerHTML` toàn bộ 29 tệp JS), không phát hiện bằng cách nhìn màn hình. Ngược lại lỗi 14 (`hidden` bị `display:flex` đè) lại **chỉ** thấy bằng mắt — console hoàn toàn sạch — nên hai cách kiểm tra phải đi đôi với nhau.
 - **Cái trông nhỏ vẫn thành mất điểm.** Hai rủi ro VP-01 (chuỗi `sk-demo-…` trong `settings.html`) và VP-02 (`innerHTML` ghép chuỗi) từng đủ để bị trừ -1.50 và -1.00; cả hai đã sửa và kiểm chứng ngày 2026-10-24 (mục 4, dòng 5–7). Bài học thật là lỗi VP-02 **còn lặp ở một chỗ khác** mà lần rà đầu không thấy — phải quét toàn bộ mới đủ.
 - **Phải viết lại mô-đun sinh sau khi AI sửa hỏng**, chứ không copy-paste khối mã lớn: bản `agrbrain.js` sau khi vá đường dẫn vẫn chạy vì đã kiểm tra lại bằng parse, không phải vì AI xin lỗi.
 - **AI không thay được bảng kiểm kê.** Khi rà lại theo barem, ba chỗ AI tự gán nhãn "AI" cho những thứ chỉ là công thức JS — nếu không đọc lại mã để đối chiếu thì nhóm sẽ tự khai sai và bị trừ vì khai không trung thực.
