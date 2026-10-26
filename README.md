@@ -31,7 +31,7 @@ CropMate AI gom **bốn vai trò** (Nông dân · Chuyên gia · Điều phối 
 - **O2** Đủ giao diện cho từng vai trò, mỗi vai trò ≥ 3 màn hình (thực tế: Nông dân 10, Chuyên gia 5, Điều phối 3, Quản trị 4).
 - **O3** CRUD có ý nghĩa nghiệp vụ: `chờ → đã tư vấn / từ chối → lưu trữ`, không xóa cứng dữ liệu.
 - **O4** JavaScript thuần cho tìm kiếm, lọc đa tiêu chí, sắp xếp, phân trang, validate, modal + `Esc`, tab, toast, render dữ liệu.
-- **O5** Dữ liệu giả lập qua mảng JS + **19 khóa `localStorage`** (`smartagri_*`), giữ nguyên sau `F5`.
+- **O5** Dữ liệu giả lập qua mảng JS + **20 khóa lưu trữ trình duyệt** (17 khóa `localStorage` + 3 khóa `sessionStorage`, đều thuộc họ `smartagri_*` / `smartagri.*`), giữ nguyên sau `F5`.
 - **O6** ≥ 3 trải nghiệm AI đủ 6 bước và có kịch bản thất bại/không chắc chắn.
 - **O7** Làm việc nhóm qua Git/GitHub theo nhánh; bảng công việc ghi trong `docs/`.
 - **O8** *(nhóm bổ sung)* Một hệ thống thống nhất thay vì 3 "website con": cổng đăng nhập chung, menu 12 mục đồng bộ, phân quyền giao diện theo vai trò.
@@ -52,7 +52,7 @@ Phạm vi trên **không phải mô tả trên giấy**: `js/roles.js` lọc ph�
 ```text
 Nông dân                          Chuyên gia                      Điều phối HTX / Quản trị viên
 ────────                          ──────────                      ─────────────────────────────
-login.html (bấm thẻ vai trò → màn hình nhập tài khoản; thẻ Nông dân dẫn sang nong-dan/login.html)
+login.html (bấm thẻ vai trò → màn hình nhập tài khoản, có "Quên mật khẩu?"; thẻ Nông dân dẫn sang nong-dan/login.html)
  └▶ nong-dan/index.html (AI-1)      chuyen-gia/consult.html        dashboard.html (chỉ số hệ thống)
  └▶ nong-dan/season.html (giai đoạn)  └▶ AgrBrain AI-3 tóm tắt       └▶ households.html (giám sát hộ)
  └▶ nong-dan/diary.html (nhật ký)      └▶ đổi trạng thái W→S/R        └▶ schedule.html (AI-2 checklist)
@@ -75,9 +75,9 @@ Chuỗi phân tích đầy đủ (persona → mục tiêu → nhiệm vụ → l
 | Chuyên gia | `chuyen-gia/consult.html` · `journal.html` · `alerts.html` · `library.html` · `experts.html` |
 | Điều phối HTX | `households.html` · `schedule.html` · `reports.html` |
 | Quản trị viên | `dashboard.html` · `index.html` · `users.html` · `settings.html` |
-| Dùng chung | `login.html` (cổng chọn 4 vai trò → màn hình nhập tài khoản + mật khẩu cho 3 vai trò gốc, modal đăng ký) |
+| Dùng chung | `login.html` (cổng chọn 4 vai trò → màn hình nhập tài khoản + mật khẩu cho 3 vai trò gốc, luồng "Quên mật khẩu?" 2 bước cùng màn hình, modal đăng ký) |
 
-**Bao phủ trạng thái** (Bình thường / Đang tải / Rỗng / Thành công / Lỗi / Vô hiệu hóa / Đang chờ / Bị từ chối / Đã lưu trữ) được ghi nhận theo từng màn hình ở cột *Trạng thái* của bảng kiểm kê; skeleton có thật ở `users.html`, `schedule.html`, `chuyen-gia/*`, `nong-dan/login.html`. Màn hình nhập tài khoản trong `login.html` có đủ *Đang tải* (nút bị `disabled` + spinner trong 800 ms giả lập gọi API), *Lỗi* (dòng đỏ dưới từng trường + toast + khung rung) và *Thành công* (ghi phiên rồi chuyển trang).
+**Bao phủ trạng thái** (Bình thường / Đang tải / Rỗng / Thành công / Lỗi / Vô hiệu hóa / Đang chờ / Bị từ chối / Đã lưu trữ) được ghi nhận theo từng màn hình ở cột *Trạng thái* của bảng kiểm kê; skeleton có thật ở `users.html`, `schedule.html`, `chuyen-gia/*`, `nong-dan/login.html`. Màn hình nhập tài khoản trong `login.html` có đủ *Đang tải* (nút bị `disabled` + spinner trong 800 ms giả lập gọi API), *Lỗi* (dòng đỏ dưới từng trường + toast + khung rung) và *Thành công* (ghi phiên rồi chuyển trang). Khối "Quên mật khẩu?" cùng trang dùng chung các trạng thái đó, thêm trạng thái *Rỗng* khi chưa gửi mã (bước 2 và ô mã bị ẩn).
 
 ## Tính năng AI
 
@@ -111,11 +111,11 @@ project/
 │   ├── roles-and-features.md      # Chức năng đã code, theo từng màn hình
 │   ├── team-assignment.md         # Phân công + TASK + trách nhiệm chéo
 │   ├── obs-evidence.md            # Danh sách video OBS theo màn hình
-│   └── ai-usage-report.md         # Khai báo sử dụng AI + 13 lỗi đã gặp và cách kiểm chứng
+│   └── ai-usage-report.md         # Khai báo sử dụng AI + 14 lỗi đã gặp và cách kiểm chứng
 ├── design/
 │   ├── figma-link.txt             # Link Canva 35 trang + tình trạng mockup từng khối
 │   └── mockups/                   # Ảnh mockup xuất từ bản thiết kế (README liệt kê 21 ảnh còn thiếu)
-├── login.html            # Cổng đăng nhập 4 vai trò + màn hình nhập tài khoản + form đăng ký
+├── login.html            # Cổng đăng nhập 4 vai trò + màn hình nhập tài khoản + quên mật khẩu + form đăng ký
 ├── dashboard.html households.html schedule.html reports.html
 ├── index.html users.html settings.html giuaki.html
 ├── css/                  # style.css (dùng chung) + 8 css theo trang + notifications.css
@@ -206,6 +206,8 @@ Mở trực tiếp tệp `.html` vẫn chạy được, nhưng nên dùng máy c
 | Chuyên gia | **Chuyên gia nông nghiệp** | `chuyengia` | `agri2026` | `chuyen-gia/consult.html` (4 mục menu) |
 | Nông dân | **Nông dân** | — | — | thẻ dẫn thẳng sang `nong-dan/login.html`, form đăng nhập riêng của SV1 (`nongdan` / `123456`) → `nong-dan/index.html` (7 mục menu) |
 
+**Quên mật khẩu (không cần màn hình mới).** Trong màn hình nhập tài khoản có nút "Quên mật khẩu?" (`js/login.js:261`), mở khối `#resetPanel` ngay trong `login.html` (`js/login.js:236-259`) — cố ý không tách tệp HTML mới vì quy chế bắt buộc mỗi màn hình là một video OBS. Luồng 2 bước: (1) nhập tài khoản demo của vai trò đang chọn **hoặc** email đã đăng ký qua modal "Đăng ký / Tạo tài khoản" (kiểm bằng `REG.all()` trong `js/store.js`) → sau 800 ms giả lập gửi mail, mã xác nhận 6 số hiện tại chỗ, sinh tất định từ tên tài khoản (`demoCodeFor`, `js/login.js:53`) nên bấm lại vẫn ra cùng mã; (2) nhập mã + mật khẩu mới (≥ 6 ký tự) + xác nhận mật khẩu → mật khẩu mới ghi vào `localStorage['smartagri_demo_pwd_v1']` (`js/login.js:35`) và được `accountFor()` (`js/login.js:44`) ưu tiên khi đăng nhập, nên lần sau phải dùng mật khẩu mới — vẫn còn sau `F5`. Bản demo **không gửi email**; `nong-dan/login.html` đã có trang `forgot-password.html` riêng của SV1 nên khối nông dân giữ nguyên.
+
 **Luồng demo liền mạch 6 phút (đề xuất):** `login.html` chọn Quản trị viên → nhập `quantri` / `admin2026` → `dashboard.html` (chờ duyệt tính từ kho đăng ký thật) → `users.html?status=pending` → `households.html?health=alert` → `schedule.html` chạy AI-2 tới **trạng thái lỗi** rồi áp dụng checklist → `reports.html` xuất CSV → `index.html` thêm + ngừng dùng một cây trồng → Đăng xuất → chọn **Nông dân** → `nong-dan/ai.html` chạy AI-1 → `support.html` gửi yêu cầu → Đăng xuất → chọn **Chuyên gia** → `chuyen-gia/consult.html` mở AgrBrain (AI-3) → `journal.html` duyệt và sửa kết quả AI.
 
 **Kết quả kiểm thử đã thực hiện**
@@ -213,6 +215,7 @@ Mở trực tiếp tệp `.html` vẫn chạy được, nhưng nên dùng máy c
 | Hạng mục | Cách kiểm | Kết quả |
 |---|---|---|
 | Màn hình nhập tài khoản (đăng nhập 2 bước ở `login.html`) | điều khiển DOM qua iframe cùng origin trên `http://127.0.0.1:8128`, đo ngày 26-10-2026 | bấm thẻ → khung hiện, lưới vai trò ẩn (`display: none`), tiêu đề đúng vai trò, ô "demo" hiện `quantri/admin2026` · để trống rồi gửi: 2 dòng "Bạn chưa nhập tài khoản/mật khẩu." và không ghi phiên · sai mật khẩu: dòng "Sai tài khoản hoặc mật khẩu. Xem lại dòng demo bên dưới." + toast + khung rung, `localStorage` vẫn `null` · đang gửi: nút `disabled`, nhãn "Đang đăng nhập..." + spinner · đúng: phiên có thêm khoá `user` rồi chuyển trang — admin → `/dashboard.html` (12 mục menu hiện, chip "QT Quản trị viên", `h1` "Bảng điều khiển hệ thống"), coop → `/households.html` (8 mục), expert → `/chuyen-gia/consult.html` (4 mục `.nav__item`) · thẻ Nông dân giữ `href="nong-dan/login.html"` (form riêng của SV1) · Esc và nút "Quay lại chọn vai trò" đóng khung · "Điền nhanh" đổ đúng cặp demo · `scrollWidth − clientWidth = 0` ở 320/375/768/1280 px khi khung đang mở và đang hiện lỗi · console sạch |
+| Luồng "Quên mật khẩu?" (`login.html`) + sửa lỗi `hidden` bị đè | cùng cách đo qua iframe trên `http://127.0.0.1:8128`, ngày 26-10-2026 | **Lỗi bạn thấy**: khung "Đăng nhập: Quản trị viên" hiện sẵn khi vừa mở trang — nguyên nhân `.cred-panel { display: flex }` trong `css/login.css` thắng quy tắc `[hidden] { display: none }` của trình duyệt; đã thêm `[hidden] { display: none !important; }` (sửa chung, che luôn `#resetPanel`, `#fpForm2`, `#fpCodeBox`). Sau sửa: nạp trang → lưới vai trò hiện, 2 khối ẩn (`{cred:false, reset:false, gridVisible:true}`). Bấm "Quên mật khẩu?" → khối đổi mật khẩu hiện, khung đăng nhập và lưới vai trò ẩn, tiêu đề "Quên mật khẩu: Quản trị viên" · bước 1: để trống → "Bạn chưa nhập tài khoản hoặc email."; chuỗi lạ → "Không tìm thấy tài khoản này..."; `test@smartagri.vn` vừa đăng ký ở modal → chấp nhận; hợp lệ → sau 800 ms hiện mã 6 số, tất định theo tài khoản (`quantri`→`039713`, `dieopho`→`059797`, `chuyengia`→`709510`) · bước 2: sai mã → "Mã xác nhận không đúng."; mật khẩu < 6 ký tự → "Mật khẩu phải có ít nhất 6 ký tự."; hai ô không khớp → "Mật khẩu nhập lại không khớp."; đúng → `localStorage['smartagri_demo_pwd_v1'] = {"admin":"matkhaumoi123"}`, quay lại khung đăng nhập và mật khẩu mới đăng nhập được thật vào `dashboard.html` (12 mục menu), còn nguyên sau `F5` · Esc đóng theo thứ tự modal → khối quên mật khẩu → khung đăng nhập · `scrollWidth − clientWidth = 0` ở 320/375/768/1280 px · console sạch |
 | Phân quyền 4 vai trò | nạp từng trang trong iframe cùng origin qua `http://127.0.0.1:8123`, đếm mục menu theo computed-style (đi hết chuỗi phần tử cha) | admin 12/12, coop 8 (+3 nhãn nhóm, 7 link bị ẩn), expert 4 (26 phần tử ẩn), farmer 7/7 — đúng như bảng vai trò |
 | Chặn trang ngoài phạm vi | gõ URL tay sau khi đăng nhập vai trò khác | coop → `index.html`/`users.html`/`settings.html`/`experts.html`/`nong-dan/*` bị đưa về `households.html`; expert mở `dashboard.html` → `consult.html`; farmer mở `chuyen-gia/consult.html` → `nong-dan/index.html` |
 | Phiên & đăng xuất | đọc `localStorage`/`sessionStorage` sau khi bấm Đăng xuất | cả ba nơi lưu bị xóa, không xem lại trang cũ bằng nút Back |
@@ -252,7 +255,7 @@ Kịch bản thuyết trình + checklist quay đã soạn sẵn cho 2 màn hình
 
 ## Khai báo sử dụng AI
 
-Toàn bộ khai báo theo mẫu Phụ lục F — công cụ, 7 prompt chính, phần AI sinh vs phần sinh viên sửa, **13 lỗi AI thật đã gặp** (sed làm hỏng cú pháp `agrbrain.js` mà không báo lỗi; chữ Hán lẫn vào văn bản tiếng Việt; mojibake `perl -CSD`; `requestAnimationFrame` không chạy ở tab nền; `grid repeat(7,1fr)` vỡ ở 336 px; CSV thiếu BOM; khai quá "AI" cho những chỗ chỉ là công thức JS; để lộ chuỗi trông như API key; ghép HTML chưa escape và **lỗi cùng loại còn sót ở trang thứ hai**; đề xuất tách thêm tệp HTML mới cho bước nhập tài khoản — trái quy tắc "1 màn hình = 1 video OBS" và dễ bị coi là trang rác; tài liệu chép sai tên thẻ đăng nhập thành "Quản trị hệ thống" trong khi thẻ thật là "Quản trị viên" …), cách kiểm chứng và bài học: **[`docs/ai-usage-report.md`](docs/ai-usage-report.md)**.
+Toàn bộ khai báo theo mẫu Phụ lục F — công cụ, 8 prompt chính, phần AI sinh vs phần sinh viên sửa, **14 lỗi AI thật đã gặp** (sed làm hỏng cú pháp `agrbrain.js` mà không báo lỗi; chữ Hán lẫn vào văn bản tiếng Việt; mojibake `perl -CSD`; `requestAnimationFrame` không chạy ở tab nền; `grid repeat(7,1fr)` vỡ ở 336 px; CSV thiếu BOM; khai quá "AI" cho những chỗ chỉ là công thức JS; để lộ chuỗi trông như API key; ghép HTML chưa escape và **lỗi cùng loại còn sót ở trang thứ hai**; đề xuất tách thêm tệp HTML mới cho bước nhập tài khoản — trái quy tắc "1 màn hình = 1 video OBS" và dễ bị coi là trang rác; tài liệu chép sai tên thẻ đăng nhập thành "Quản trị hệ thống" trong khi thẻ thật là "Quản trị viên"; đặt `display:flex` cho khối có thuộc tính `hidden` nên khung "Đăng nhập: Quản trị viên" hiện ngay trên màn hình chọn vai trò — bạn thấy bằng mắt, code không báo lỗi …), cách kiểm chứng và bài học: **[`docs/ai-usage-report.md`](docs/ai-usage-report.md)**.
 
 Hai rủi ro quy chế từng được rà ra bằng chính bảng kiểm kê; **cả hai đã sửa xong ngày 2026-10-24** và có kết quả kiểm chứng kèm theo:
 

@@ -195,8 +195,11 @@
 /* ============ MÀN HÌNH NHẬP TÀI KHOẢN ============
    js/login.js ẩn lưới thẻ (.role-grid) và hiện khối này khi bấm một vai trò. */
 .login-main.is-auth .role-grid { display: none; }
+/* Đang ở màn hình quên mật khẩu -> ẩn khung đăng nhập, giữ nguyên lưới đã ẩn */
+.login-main.is-auth.is-forgot .cred-panel { display: none; }
 
-.cred-panel {
+.cred-panel,
+.reset-panel {
   width: 100%;
   max-width: 430px;
   background: #fff;
@@ -208,6 +211,11 @@
   flex-direction: column;
   gap: 6px;
 }
+/* Thuộc tính `hidden` trong HTML bị các quy tắc `display:flex` của trang đè mất
+   (quy tắc của trang thắng mặc định của trình duyệt) -> khai báo lại một lần,
+   áp cho MỌI phần tử có hidden trên trang này. Nếu bỏ dòng này thì khung đăng nhập
+   và khung quên mật khẩu hiện ra ngay từ đầu dù chưa bấm vai trò nào. */
+[hidden] { display: none !important; }
 .cred-back {
   align-self: flex-start;
   display: inline-flex; align-items: center; gap: 8px;
@@ -221,8 +229,10 @@
 .cred-back:focus-visible { outline: 3px solid var(--green-100); outline-offset: 2px; }
 
 .cred-title { font-size: 24px; font-weight: 800; color: var(--green-900); margin-top: 8px; }
-.cred-title #credRoleName { color: var(--green-700); }
+.cred-title #credRoleName,
+.cred-title #resetRoleName { color: var(--green-700); }
 .cred-sub { font-size: 14px; color: var(--gray-500); margin-bottom: 14px; }
+.cred-sub strong { color: var(--green-800); }
 
 .cred-form { display: flex; flex-direction: column; gap: 16px; }
 
@@ -257,8 +267,9 @@
   animation: cred-spin .7s linear infinite; }
 .cred-submit.is-loading .cred-spinner { display: inline-block; }
 @keyframes cred-spin { to { transform: rotate(360deg); } }
-/* rung khi sai mật khẩu — báo lỗi mà không cần đọc dòng chữ */
-.cred-panel.is-shaking { animation: cred-shake .4s ease; }
+/* rung khi sai mật khẩu / sai mã — báo lỗi mà không cần đọc dòng chữ */
+.cred-panel.is-shaking,
+.reset-panel.is-shaking { animation: cred-shake .4s ease; }
 @keyframes cred-shake {
   10%, 90% { transform: translateX(-2px); }
   30%, 70% { transform: translateX(4px); }
@@ -285,6 +296,36 @@
 }
 .cred-fill:hover { background: var(--green-50); }
 .cred-fill:focus-visible { outline: 3px solid var(--green-100); outline-offset: 2px; }
+
+/* link "Quên mật khẩu?" ngay dưới ô mật khẩu */
+.cred-forgot-row { margin: -6px 0 2px; text-align: right; }
+.cred-forgot {
+  background: none; border: none; cursor: pointer;
+  font: inherit; font-size: 13px; font-weight: 600;
+  color: var(--green-700); padding: 2px 4px; border-radius: 6px;
+  text-decoration: underline; text-underline-offset: 3px;
+}
+.cred-forgot:hover { color: var(--green-900); background: var(--green-50); }
+.cred-forgot:focus-visible { outline: 3px solid var(--green-100); outline-offset: 2px; }
+
+/* mã xác nhận của bước 2 (chỉ hiện sau khi bấm "Gửi mã") */
+.fp-code {
+  display: flex; align-items: center; flex-wrap: wrap; gap: 10px;
+  background: var(--green-50); border: 1px solid var(--green-100);
+  border-radius: 12px; padding: 12px 14px;
+  font-size: 14px; color: var(--green-800); margin-bottom: 14px;
+}
+.fp-code code {
+  background: #fff; color: var(--green-900);
+  border: 1px solid var(--green-100); border-radius: 8px;
+  padding: 4px 12px; font-size: 18px; font-weight: 800; letter-spacing: 3px;
+}
+.fp-note {
+  margin-top: 14px; padding-top: 12px;
+  border-top: 1px dashed var(--gray-200);
+  font-size: 13px; color: var(--gray-500);
+}
+.fp-note code { color: var(--green-800); background: var(--green-50); border-radius: 5px; padding: 1px 5px; }
 
 /* ============ RESPONSIVE ============ */
 @media (max-width: 1180px) {
@@ -315,15 +356,17 @@
   .login-foot { flex-direction: column; align-items: stretch; text-align: center; }
   .btn-register { justify-content: center; }
   .leaf-deco { width: 140px; }
-  .cred-panel { padding: 16px 16px 18px; }
+  .cred-panel, .reset-panel { padding: 16px 16px 18px; }
   .cred-title { font-size: 20px; }
   .cred-demo { font-size: 12px; }
   .cred-fill { margin-left: 0; }
+  .fp-code { font-size: 13px; }
+  .fp-code code { font-size: 16px; letter-spacing: 2px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .role-card, .role-go, .btn-register { transition: none; }
   .role-card.is-loading .role-go { animation: none; }
   .cred-submit.is-loading .cred-spinner { animation: none; }
-  .cred-panel.is-shaking { animation: none; }
+  .cred-panel.is-shaking, .reset-panel.is-shaking { animation: none; }
 }

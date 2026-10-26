@@ -13,7 +13,7 @@
 **4 cảnh:** ① `dashboard.html` trên trình duyệt (phần 1, 3, 5) · ② bản Canva (phần 2) · ③ VS Code mở `dashboard.html` + `css/dashboard.css` + `js/dashboard.js`, font 16–18 px (phần 4) · ④ webcam (bắt buộc — quy chế yêu cầu có mặt sinh viên).
 
 **Kiểm trước khi quay**
-- [ ] Đăng nhập **2 bước** ở `login.html`: bấm thẻ **Quản trị viên** → màn hình nhập tài khoản hiện ra trong cùng trang → `quantri` / `admin2026` (hoặc bấm "Điền nhanh") → vào `dashboard.html`. Menu chỉ còn đúng nhóm trang của vai trò admin (đây là điểm cộng phân quyền, nói được 1 câu). Nếu thầy hỏi "sai mật khẩu thì sao": nhập sai → dòng đỏ + toast, `localStorage` **không** bị ghi phiên.
+- [ ] Đăng nhập **2 bước** ở `login.html`: bấm thẻ **Quản trị viên** → màn hình nhập tài khoản hiện ra trong cùng trang → `quantri` / `admin2026` (hoặc bấm "Điền nhanh") → vào `dashboard.html`. Menu chỉ còn đúng nhóm trang của vai trò admin (đây là điểm cộng phân quyền, nói được 1 câu). Nếu thầy hỏi "sai mật khẩu thì sao": nhập sai → dòng đỏ + toast, `localStorage` **không** bị ghi phiên. Nếu hỏi "quên mật khẩu thì sao": bấm "Quên mật khẩu?" ngay trong màn hình → bước 1 nhập tài khoản (hoặc email đã đăng ký) → hiện mã 6 số → bước 2 đặt mật khẩu mới, lưu `localStorage` và đăng nhập lại bằng mật khẩu mới (trang nông dân có `forgot-password.html` riêng của bạn SV1).
 - [ ] Mở sẵn **F5 xong** tab Console (phần 3 khẳng định "console sạch" → phải thấy thật).
 - [ ] Output 1920×1080, 30 fps; âm lượng không chạm đỏ; tắt Zalo/Teams/Mail.
 - [ ] Dùng cửa sổ ẩn danh hoặc cổng server mới để trình duyệt không chạy JS bản cũ.

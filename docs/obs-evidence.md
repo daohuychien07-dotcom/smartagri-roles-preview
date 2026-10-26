@@ -34,7 +34,7 @@
 | TASK-13 | Alert Center | `chuyen-gia/alerts.html` | SV2 | `SV2-03-expert-alert-center.mp4` | CẦN QUAY | |
 | TASK-14 | Resource Library | `chuyen-gia/library.html` | SV2 | `SV2-04-expert-resource-library.mp4` | CẦN QUAY | |
 | TASK-15 | Expert Roster | `chuyen-gia/experts.html` | SV2 | `SV2-05-expert-roster.mp4` | CẦN QUAY | |
-| TASK-16 | Cổng đăng nhập đa vai trò | `login.html` | SV3 | `SV3-01-role-portal.mp4` | CẦN QUAY — quay đủ 2 bước: bấm thẻ vai trò → màn hình nhập tài khoản (demo `quantri` / `admin2026`) → trang nhà; chèn cảnh nhập sai mật khẩu để thấy trạng thái Lỗi; thẻ Nông dân dẫn sang `nong-dan/login.html` | |
+| TASK-16 | Cổng đăng nhập đa vai trò | `login.html` | SV3 | `SV3-01-role-portal.mp4` | CẦN QUAY — quay đủ 2 bước: bấm thẻ vai trò → màn hình nhập tài khoản (demo `quantri` / `admin2026`) → trang nhà; chèn cảnh nhập sai mật khẩu để thấy trạng thái Lỗi; quay nốt nút "Quên mật khẩu?" (bước 1 gửi mã → bước 2 đổi mật khẩu → đăng nhập lại bằng mật khẩu mới, vẫn trên cùng một màn hình nên không cần thêm video); thẻ Nông dân dẫn sang `nong-dan/login.html` | |
 | TASK-17 | Farm Overview | `households.html` | SV3 | `SV3-02-coop-farm-overview.mp4` | CẦN QUAY | |
 | TASK-18 | Calendar + AI-2 | `schedule.html` | SV3 | `SV3-03-coop-calendar-ai-checklist.mp4` | CẦN QUAY — **bắt buộc show cả trạng thái lỗi AI** | |
 | TASK-19 | Season Summary | `reports.html` | SV3 | `SV3-04-coop-season-summary.mp4` | CẦN QUAY | |

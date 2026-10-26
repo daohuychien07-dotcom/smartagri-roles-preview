@@ -26,7 +26,7 @@
 
 | Trách nhiệm ngang | Người chịu | Chứng minh bằng mã nào |
 |---|---|---|
-| **Hệ thống thiết kế / điều hướng / tiếp cận** | SV3 | `css/style.css` (`:root` token màu + font), cổng đăng nhập 2 bước ở `login.html` (chọn vai trò → màn hình nhập tài khoản: `label` + `aria-describedby` cho từng dòng lỗi, `aria-pressed` cho nút hiện mật khẩu, `Esc` đóng khung), `aria-label`/`role="tabpanel"`/`alt` trên các trang gốc |
+| **Hệ thống thiết kế / điều hướng / tiếp cận** | SV3 | `css/style.css` (`:root` token màu + font), cổng đăng nhập 2 bước ở `login.html` (chọn vai trò → màn hình nhập tài khoản + luồng "Quên mật khẩu?" 2 bước ngay cùng màn hình: `label` + `aria-describedby` cho từng dòng lỗi, `aria-pressed` cho nút hiện mật khẩu, `Esc` đóng khung theo thứ tự modal → khối quên mật khẩu → khung đăng nhập), `aria-label`/`role="tabpanel"`/`alt` trên các trang gốc |
 | **JavaScript / dữ liệu / tương tác AI** | SV2 | `chuyen-gia/js/agrbrain.js` 766 dòng (AI-3 đọc dữ liệu liên trang), `chuyen-gia/js/journal.js` 1 089 dòng, chuẩn `localStorage` cho 6 thực thể |
 | **Tích hợp / phát hành / QA** | SV3 | `js/roles.js` (19 ánh xạ đường dẫn ↔ vai trò), cầu nối phiên trong `<head>` 5 trang `chuyen-gia/`, GitHub Pages `ducnhatnguyen18-svg.github.io/CSE122-BTL-NGUYENDUCNHAT` |
 | **Responsive & nội dung ngành cho khối nông dân** | SV1 | `nong-dan/css/*.css` (12 tệp: layout, ui, ai, diary, season, support, weather…), dữ liệu mùa vụ/thời tiết theo vùng |

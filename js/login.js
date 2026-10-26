@@ -1,8 +1,8 @@
 /* ============================================================
    SmartAgri - Trang Đăng nhập với tư cách
    CropMate AI - CSE122 BTL
-   Vanilla JS: chọn vai trò (lưu localStorage + chuyển trang),
-   mở/đóng modal đăng ký, form validation, toast.
+   Vanilla JS: chọn vai trò -> màn hình nhập tài khoản (lưu localStorage + chuyển
+   trang), màn hình Quên mật khẩu 2 bước, mở/đóng modal đăng ký, form validation, toast.
    ============================================================ */
 
 const ROLE_KEY = 'smartagri_role_v1';
@@ -30,6 +30,33 @@ const DEMO_ACCOUNTS = {
   expert: { username: 'chuyengia', password: 'agri2026' },
 };
 
+// Mật khẩu mới sau bước "Quên mật khẩu" ghi đè lên mật khẩu demo mặc định.
+// Lưu riêng một khóa để không đụng vào DEMO_ACCOUNTS (mảng hằng, không đổi được).
+const PWD_KEY = 'smartagri_demo_pwd_v1';
+
+function pwdOverrides() {
+  let saved = null;
+  try { saved = JSON.parse(localStorage.getItem(PWD_KEY)); } catch (err) { saved = null; }
+  return saved && typeof saved === 'object' ? saved : {};
+}
+
+// Tài khoản thật dùng để kiểm tra khi đăng nhập = demo + bản ghi đè (nếu đã đổi)
+function accountFor(scope) {
+  const base = DEMO_ACCOUNTS[scope];
+  if (!base) return null;
+  const over = pwdOverrides();
+  return { username: base.username, password: typeof over[scope] === 'string' ? over[scope] : base.password };
+}
+
+// Sinh mã xác nhận 6 chữ số từ chính chuỗi tài khoản (không dùng Math.random):
+// bấm lại vẫn ra cùng một mã, tiện quay video demo và giải thích được.
+function demoCodeFor(account) {
+  let h = 5381;
+  const s = String(account).toLowerCase().trim();
+  for (let i = 0; i < s.length; i += 1) h = ((h * 33) ^ s.charCodeAt(i)) >>> 0;
+  return String(h % 1000000).padStart(6, '0');
+}
+
 roleCards.forEach(card => {
   card.addEventListener('click', e => {
     e.preventDefault();
@@ -54,17 +81,19 @@ let pendingCard = null; // thẻ vai trò vừa bấm: {role, short, initials, s
 
 function openCred(card) {
   pendingCard = card;
-  const acc = DEMO_ACCOUNTS[card.dataset.scope];
+  const acc = accountFor(card.dataset.scope);
 
   // textContent (không phải innerHTML): tên vai trò chỉ tới từ dataset của thẻ,
   // nhưng giữ nguyên tắc dựng DOM an toàn như chỗ khác trong site.
   document.getElementById('credRoleName').textContent = card.dataset.short;
   document.getElementById('credDemoUser').textContent = acc.username;
   document.getElementById('credDemoPass').textContent = acc.password;
+  credUser.placeholder = 'ví dụ: ' + acc.username;
 
   credForm.reset();
   clearFieldError('cf-user'); clearFieldError('cf-pass');
   setLoading(false);
+  closeReset();
 
   mainEl.classList.add('is-auth');
   credPanel.hidden = false;
@@ -73,6 +102,7 @@ function openCred(card) {
 
 function closeCred() {
   credPanel.hidden = true;
+  closeReset();
   mainEl.classList.remove('is-auth');
   if (pendingCard) pendingCard.focus();
   pendingCard = null;
@@ -93,7 +123,7 @@ credEye.addEventListener('click', () => {
 // "Điền nhanh" cho buổi demo/thuyết trình: đổ đúng tài khoản demo của vai trò đang chọn
 document.getElementById('credFill').addEventListener('click', () => {
   if (!pendingCard) return;
-  const acc = DEMO_ACCOUNTS[pendingCard.dataset.scope];
+  const acc = accountFor(pendingCard.dataset.scope);
   credUser.value = acc.username;
   credPass.value = acc.password;
   clearFieldError('cf-user'); clearFieldError('cf-pass');
@@ -123,7 +153,7 @@ credForm.addEventListener('submit', e => {
 
   const user = credUser.value.trim();
   const pass = credPass.value;
-  const acc = DEMO_ACCOUNTS[pendingCard.dataset.scope];
+  const acc = accountFor(pendingCard.dataset.scope);
 
   let ok = true;
   if (!user) { setFieldError('cf-user', 'Bạn chưa nhập tài khoản.'); ok = false; }
@@ -176,6 +206,163 @@ credForm.addEventListener('submit', e => {
 credUser.addEventListener('input', () => clearFieldError('cf-user'));
 credPass.addEventListener('input', () => clearFieldError('cf-pass'));
 
+// ==================== MÀN HÌNH QUÊN MẬT KHẨU (2 bước, cùng trang) ====================
+const resetPanel = document.getElementById('resetPanel');
+const fpForm1 = document.getElementById('fpForm1');
+const fpForm2 = document.getElementById('fpForm2');
+const fpAccount = document.getElementById('fpAccount');
+const fpCodeBox = document.getElementById('fpCodeBox');
+const fpCodeEl = document.getElementById('fpCode');
+const fpCodeInput = document.getElementById('fpCodeInput');
+const fpPass = document.getElementById('fpPass');
+const fpRepass = document.getElementById('fpRepass');
+const fpSend = document.getElementById('fpSend');
+const fpSendText = document.getElementById('fpSendText');
+const fpSave = document.getElementById('fpSave');
+const fpSaveText = document.getElementById('fpSaveText');
+let fpExpectedCode = '';            // mã demo của lần "gửi mã" gần nhất
+
+function setBtnLoading(btn, textEl, isLoading, loadingText, idleText) {
+  btn.disabled = isLoading;
+  btn.classList.toggle('is-loading', isLoading);
+  textEl.textContent = isLoading ? loadingText : idleText;
+}
+
+function shakeReset() {
+  resetPanel.classList.add('is-shaking');
+  setTimeout(() => resetPanel.classList.remove('is-shaking'), 450);
+}
+
+function openReset() {
+  if (!pendingCard) return;
+  document.getElementById('resetRoleName').textContent = pendingCard.dataset.short;
+  fpAccount.placeholder = 'ví dụ: ' + accountFor(pendingCard.dataset.scope).username;
+
+  fpForm1.reset();
+  fpForm2.reset();
+  fpForm1.hidden = false;
+  fpForm2.hidden = true;
+  fpCodeBox.hidden = true;
+  fpExpectedCode = '';
+  ['ff-account', 'ff-code', 'ff-pass', 'ff-repass'].forEach(clearFieldError);
+  setBtnLoading(fpSend, fpSendText, false, '', 'Gửi mã xác nhận');
+  setBtnLoading(fpSave, fpSaveText, false, '', 'Đổi mật khẩu');
+
+  mainEl.classList.add('is-forgot');
+  resetPanel.hidden = false;
+  fpAccount.focus();
+}
+
+function closeReset() {
+  resetPanel.hidden = true;
+  mainEl.classList.remove('is-forgot');
+}
+
+document.getElementById('credForgot').addEventListener('click', openReset);
+document.getElementById('resetBack').addEventListener('click', () => {
+  closeReset();
+  credUser.focus();
+});
+
+// BƯỚC 1: xin tài khoản / email -> "gửi" mã demo
+fpForm1.addEventListener('submit', e => {
+  e.preventDefault();
+  if (!pendingCard) return;
+
+  const value = fpAccount.value.trim();
+  const acc = accountFor(pendingCard.dataset.scope);
+
+  if (!value) {
+    setFieldError('ff-account', 'Bạn chưa nhập tài khoản hoặc email.');
+    fpAccount.focus();
+    return;
+  }
+
+  const isEmail = EMAIL_RE.test(value);
+  const isDemoUser = value.toLowerCase() === acc.username.toLowerCase();
+  // Email hợp lệ nhưng chưa từng đăng ký -> trạng thái lỗi có chủ đích:
+  // người dùng phải qua nút "Đăng ký" trước, đúng luồng dữ liệu thật của site.
+  const isRegisteredEmail = isEmail && REG.all().some(u => (u.email || '').toLowerCase() === value.toLowerCase());
+
+  if (isDemoUser || isRegisteredEmail) {
+    clearFieldError('ff-account');
+  } else if (isEmail) {
+    setFieldError('ff-account', 'Email này chưa có trong hệ thống. Hãy dùng tài khoản "' +
+      acc.username + '" hoặc bấm Đăng ký ở cuối trang trước.');
+    shakeReset();
+    return;
+  } else {
+    setFieldError('ff-account', 'Không tìm thấy "' + value + '". Tài khoản của vai trò này là "' +
+      acc.username + '" (hoặc email đã đăng ký).');
+    shakeReset();
+    return;
+  }
+
+  setBtnLoading(fpSend, fpSendText, true, 'Đang gửi mã...', 'Gửi mã xác nhận');
+
+  // Cùng nhịp giả lập API 800 ms như bước đăng nhập
+  setTimeout(() => {
+    setBtnLoading(fpSend, fpSendText, false, '', 'Gửi mã xác nhận');
+    fpExpectedCode = demoCodeFor(value);
+    fpCodeEl.textContent = fpExpectedCode;   // textContent: chuỗi người nhập không thành markup
+    fpCodeBox.hidden = false;
+    fpForm1.hidden = true;
+    fpForm2.hidden = false;
+    showToast('Mã xác nhận (demo) đã hiển thị — bản này không gửi email thật');
+    fpCodeInput.focus();
+  }, 800);
+});
+
+// BƯỚC 2: nhập mã + mật khẩu mới
+fpForm2.addEventListener('submit', e => {
+  e.preventDefault();
+  if (!pendingCard || !fpExpectedCode) return;
+
+  const code = fpCodeInput.value.trim();
+  const pass = fpPass.value;
+  const repass = fpRepass.value;
+  let ok = true;
+
+  if (!code) { setFieldError('ff-code', 'Bạn chưa nhập mã xác nhận.'); ok = false; }
+  else if (code !== fpExpectedCode) { setFieldError('ff-code', 'Mã không đúng. Xem lại mã in đậm phía trên.'); ok = false; }
+  else clearFieldError('ff-code');
+
+  if (!pass) { setFieldError('ff-pass', 'Bạn chưa nhập mật khẩu mới.'); ok = false; }
+  else if (pass.length < 6) { setFieldError('ff-pass', 'Mật khẩu phải có ít nhất 6 ký tự.'); ok = false; }
+  else clearFieldError('ff-pass');
+
+  if (!repass) { setFieldError('ff-repass', 'Bạn chưa nhập lại mật khẩu mới.'); ok = false; }
+  else if (repass !== pass) { setFieldError('ff-repass', 'Mật khẩu nhập lại chưa khớp.'); ok = false; }
+  else clearFieldError('ff-repass');
+
+  if (!ok) { shakeReset(); return; }
+
+  setBtnLoading(fpSave, fpSaveText, true, 'Đang đổi mật khẩu...', 'Đổi mật khẩu');
+
+  setTimeout(() => {
+    setBtnLoading(fpSave, fpSaveText, false, '', 'Đổi mật khẩu');
+
+    // Ghi đè mật khẩu demo -> lần đăng nhập sau dùng được luôn (giữ nguyên sau F5)
+    const scope = pendingCard.dataset.scope;
+    const over = pwdOverrides();
+    over[scope] = pass;
+    localStorage.setItem(PWD_KEY, JSON.stringify(over));
+
+    showToast('Đã đổi mật khẩu cho vai trò ' + pendingCard.dataset.short);
+
+    const card = pendingCard;
+    openCred(card);                      // hiện lại khung đăng nhập + dòng demo đã đổi
+    credUser.value = accountFor(scope).username;
+    credPass.focus();
+  }, 800);
+});
+
+['fpAccount:ff-account', 'fpCodeInput:ff-code', 'fpPass:ff-pass', 'fpRepass:ff-repass']
+  .forEach(pair => {
+    const [inputId, fieldId] = pair.split(':');
+    document.getElementById(inputId).addEventListener('input', () => clearFieldError(fieldId));
+  });
+
 // Đánh dấu vai trò đã chọn lần trước
 (function markLastRole() {
   let saved = null;
@@ -205,11 +392,12 @@ document.getElementById('btnRegister').addEventListener('click', openRegister);
 document.getElementById('regClose').addEventListener('click', closeRegister);
 document.getElementById('regCancel').addEventListener('click', closeRegister);
 backdrop.addEventListener('click', e => { if (e.target === backdrop) closeRegister(); });
-// Escape: ưu tiên đóng modal đăng ký; nếu chỉ có màn hình nhập tài khoản đang
-// mở thì quay lại lưới chọn vai trò (quy chế A11y: Esc đóng được lớp phủ).
+// Escape: ưu tiên đóng modal đăng ký; nếu chỉ có màn hình phụ đang mở thì quay
+// lại bước trước (quên mật khẩu -> khung đăng nhập -> lưới vai trò).
 document.addEventListener('keydown', e => {
   if (e.key !== 'Escape') return;
   if (backdrop.classList.contains('open')) { closeRegister(); return; }
+  if (!resetPanel.hidden) { closeReset(); credUser.focus(); return; }
   if (!credPanel.hidden) closeCred();
 });
 

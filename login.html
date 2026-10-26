@@ -127,6 +127,10 @@
             <p class="err-msg" id="credPassErr"></p>
           </div>
 
+          <p class="cred-forgot-row">
+            <button type="button" class="cred-forgot" id="credForgot">Quên mật khẩu?</button>
+          </p>
+
           <button type="submit" class="btn-save cred-submit" id="credSubmit">
             <span class="cred-spinner" aria-hidden="true"></span><span id="credBtnText">Đăng nhập</span>
           </button>
@@ -137,6 +141,62 @@
           <code id="credDemoUser">quantri</code> / <code id="credDemoPass">admin2026</code>
           <button type="button" class="cred-fill" id="credFill">Điền nhanh</button>
         </p>
+      </section>
+
+      <!-- ============ MÀN HÌNH QUÊN MẬT KHẨU (cùng trang, 2 bước) ============
+           Mở từ nút "Quên mật khẩu?" ở khung đăng nhập. Không tách tệp HTML mới
+           vì mỗi tệp mới = thêm 1 màn hình + 1 video OBS bắt buộc.
+           Bản demo không gửi email: mã xác nhận 6 số sinh từ chính chuỗi tài khoản
+           (hàm demoCodeFor) nên bấm lại vẫn ra cùng mã - quay demo không bị lệch. -->
+      <section class="reset-panel" id="resetPanel" aria-labelledby="resetTitle" hidden>
+        <button type="button" class="cred-back" id="resetBack">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 6 9 12 15 18"/></svg>
+          Quay lại đăng nhập
+        </button>
+
+        <h2 class="cred-title" id="resetTitle">Quên mật khẩu: <span id="resetRoleName">Quản trị viên</span></h2>
+
+        <!-- Bước 1: xin tài khoản / email -->
+        <form class="cred-form" id="fpForm1" novalidate>
+          <p class="cred-sub">Nhập tài khoản của vai trò này hoặc email đã đăng ký ở form Đăng ký. Bản demo <strong>không gửi email</strong> — mã xác nhận sẽ hiện ngay dưới nút.</p>
+          <div class="form-field" id="ff-account">
+            <label for="fpAccount">Tài khoản hoặc email <span class="req">*</span></label>
+            <input type="text" id="fpAccount" name="account" placeholder="ví dụ: quantri" autocomplete="username" aria-describedby="fpAccountErr">
+            <p class="err-msg" id="fpAccountErr"></p>
+          </div>
+          <button type="submit" class="btn-save cred-submit" id="fpSend">
+            <span class="cred-spinner" aria-hidden="true"></span><span id="fpSendText">Gửi mã xác nhận</span>
+          </button>
+        </form>
+
+        <p class="fp-code" id="fpCodeBox" hidden>
+          <span>Mã xác nhận của bạn (chỉ hiển thị trong bản demo):</span>
+          <code id="fpCode">••••••</code>
+        </p>
+
+        <!-- Bước 2: nhập mã + mật khẩu mới -->
+        <form class="cred-form" id="fpForm2" novalidate hidden>
+          <div class="form-field" id="ff-code">
+            <label for="fpCodeInput">Mã xác nhận <span class="req">*</span></label>
+            <input type="text" id="fpCodeInput" name="code" inputmode="numeric" maxlength="6" placeholder="6 chữ số" autocomplete="one-time-code" aria-describedby="fpCodeErr">
+            <p class="err-msg" id="fpCodeErr"></p>
+          </div>
+          <div class="form-field" id="ff-pass">
+            <label for="fpPass">Mật khẩu mới <span class="req">*</span></label>
+            <input type="password" id="fpPass" name="new-password" placeholder="ít nhất 6 ký tự" autocomplete="new-password" aria-describedby="fpPassErr">
+            <p class="err-msg" id="fpPassErr"></p>
+          </div>
+          <div class="form-field" id="ff-repass">
+            <label for="fpRepass">Nhập lại mật khẩu mới <span class="req">*</span></label>
+            <input type="password" id="fpRepass" name="confirm-password" placeholder="••••••••" autocomplete="new-password" aria-describedby="fpRepassErr">
+            <p class="err-msg" id="fpRepassErr"></p>
+          </div>
+          <button type="submit" class="btn-save cred-submit" id="fpSave">
+            <span class="cred-spinner" aria-hidden="true"></span><span id="fpSaveText">Đổi mật khẩu</span>
+          </button>
+        </form>
+
+        <p class="fp-note">Đổi xong thì mật khẩu mới được lưu vào <code>localStorage</code> và dùng để đăng nhập vai trò này — kể cả sau khi bấm F5.</p>
       </section>
 
       <p class="sent-note" id="sentNote" hidden></p>

@@ -30,7 +30,7 @@ P1–P4 là bốn vấn đề đề bài nêu; P5–P6 do nhóm bổ sung từ v
 - **O2.** Đủ giao diện cho từng vai trò, **mỗi vai trò ≥ 3 màn hình** (xem `docs/screen-inventory.md`: Nông dân 10, Chuyên gia 5, Điều phối 3 dùng chung + 4 trang quản trị). ✔
 - **O3.** CRUD/trạng thái nghiệp vụ có ý nghĩa: `pending → approved/done → rejected → archived`, không xóa cứng dữ liệu nghiệp vụ. ✔
 - **O4.** JavaScript/DOM thuần cho tìm kiếm, lọc đa tiêu chí, sắp xếp, phân trang, kiểm tra hợp lệ biểu mẫu, modal + `Esc`, tab, toast, kết xuất dữ liệu. ✔
-- **O5.** JSON giả lập + `localStorage`: **19 khóa** `smartagri_*` dùng chung cho cả ba khối, dữ liệu vẫn còn sau `F5`. ✔
+- **O5.** JSON giả lập + bộ lưu trữ trình duyệt: **17 khóa `localStorage` + 3 khóa `sessionStorage`** (đều thuộc họ `smartagri_*` / `smartagri.*`) dùng chung cho cả ba khối, dữ liệu vẫn còn sau `F5`. ✔
 - **O6.** ≥ 3 trải nghiệm AI mô phỏng, đủ 6 bước và có kịch bản thất bại. ✔
 - **O7.** Làm việc nhóm bằng Git/GitHub theo nhánh + cơ chế phân khối độc lập; bảng công việc ghi trong `docs/`. ⚠ (một phần — xem mục 7)
 - **O8.** *(bổ sung)* Một hệ thống duy nhất thay vì 3 "website con": cổng đăng nhập chung, menu dùng chung, **phân quyền giao diện theo vai trò** (`js/roles.js`). ✔

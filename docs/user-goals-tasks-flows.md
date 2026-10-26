@@ -145,6 +145,6 @@ Trạng thái: danh sách rỗng · đang tải · trùng dữ liệu (lỗi val
 
 ## 5. Luồng dùng chung (mọi vai trò)
 ```text
-index.html (khám phá) → login.html (chọn vai trò → nhập tài khoản) → dashboard vai trò
+index.html (khám phá) → login.html (chọn vai trò → nhập tài khoản; quên mật khẩu → gửi mã → đặt lại trong cùng màn hình) → dashboard vai trò
 → điều hướng sidebar (nav.js) → [trang của vai trò khác = 403] → đăng xuất → login
 ```
