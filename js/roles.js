@@ -58,10 +58,14 @@
     /* Điều phối HTX: vận hành hợp tác xã, không quản trị hệ thống */
     coop: ['dashboard', 'households', 'schedule', 'reports',
            'support', 'journal', 'alerts', 'library'],
-    /* Chuyên gia nông nghiệp: đúng 5 trang của khối chuyen-gia/ (SV2).
-       Bảy mục còn lại của sidebar 12 mục (dashboard/households/schedule/
-       reports/crops/users/settings) thuộc khối HTX - quản trị nên vẫn ẩn. */
-    expert: ['support', 'journal', 'alerts', 'library', 'experts'],
+    /* Chuyên gia nông nghiệp: 5 trang của khối chuyen-gia/ (SV2) + 4 trang
+       dùng chung của khối HTX - quản trị mà sidebar gốc của SV2 vẫn dành cho
+       chuyên gia: Tổng quan (dashboard), Nông hộ & HTX (households),
+       Báo cáo (reports), Cấu hình hệ thống (settings).
+       Ba trang vẫn cấm: index.html (danh mục cây trồng), users.html (tài
+       khoản), schedule.html (lịch trình) + cả khối nong-dan/. */
+    expert: ['dashboard', 'households', 'reports', 'settings',
+             'support', 'journal', 'alerts', 'library', 'experts'],
     /* Nông dân: làm việc trong không gian riêng (Season Dashboard) */
     farmer: ['farm-home', 'farm-season', 'farm-diary', 'farm-weather',
              'farm-ai', 'farm-support', 'farm-settings']

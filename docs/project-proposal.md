@@ -40,11 +40,11 @@ P1–P4 là bốn vấn đề đề bài nêu; P5–P6 do nhóm bổ sung từ v
 | Vai trò | Không gian | Số màn hình trong menu | Trang nhà sau đăng nhập |
 |---|---|---:|---|
 | **Nông dân** | `nong-dan/` | 7 | `nong-dan/index.html` |
-| **Chuyên gia nông nghiệp** | `chuyen-gia/` | 4 | `chuyen-gia/consult.html` |
+| **Chuyên gia nông nghiệp** | `chuyen-gia/` (5 trang) + 4 trang dùng chung `dashboard` / `households` / `reports` / `settings` | 9 | `chuyen-gia/consult.html` |
 | **Điều phối HTX** | thư mục gốc + `chuyen-gia/` (ch Chế độ xem) | 8 | `households.html` |
 | **Quản trị viên** | toàn bộ site | 12 | `dashboard.html` |
 
-Phạm vi này do `js/roles.js` áp dụng thật: menu bị lọc và trang ngoài phạm vi bị chặn đưa về trang nhà vai trò.
+Phạm vi này do `js/roles.js` áp dụng thật: menu bị lọc và trang ngoài phạm vi bị chặn đưa về trang nhà vai trò. Riêng 4 mục dùng chung của Chuyên gia là 4 trang **của khối SV3** (`ROLE_MENUS.expert`, `js/roles.js:67-68`), không phải 4 trang chuyên gia chưa hợp nhất trong mã gốc của SV2 — kê khai ở [`screen-inventory.md`](screen-inventory.md) mục 5.
 
 ## 5. Hành trình người dùng (luồng nghiệp vụ chính)
 
